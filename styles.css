@@ -23,25 +23,26 @@ body {
   vertical-align: top;
 }
 
-.profile-table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  border-spacing: 0;
+.profile-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  gap: 24px;
+  align-items: start;
+  padding-top: 24px;
 }
 
-.profile-table td {
-  padding: 0;
-  vertical-align: middle;
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: calc(200px * 4 / 3);
+  padding: 6px 0 10px;
 }
 
-.profile-table .profile-details {
-  padding-right: 24px;
-}
-
-.profile-table .profile-photo {
+.profile-photo {
   width: 200px;
-  height: 300px;
 }
 
 .portrait-frame {
@@ -85,7 +86,7 @@ body {
 }
 
 #toptitle {
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .profile-affiliation p {
@@ -105,7 +106,7 @@ body {
 }
 
 .profile-contact {
-  margin-top: 26px;
+  margin-top: 0;
 }
 
 .profile-email {
@@ -567,17 +568,23 @@ li p {
 }
 
 #footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
   border-top: 1px solid #c0c0c0;
   padding-top: 4px;
   margin-top: 3.25em;
 }
 
 .footer-copyright {
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .footer-credit {
-  margin: 6px 0 0;
+  margin: 0 0 0 auto;
+  text-align: right;
   color: #666666;
   font-size: small;
 }
