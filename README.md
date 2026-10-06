@@ -34,7 +34,7 @@ pdftoppm -f 1 -singlefile -cropbox -scale-to 2400 -png assets/images/reasonplan.
 
 新论文可复制 `#publications` 标题之后列表中的 `li`，按“标题、作者、链接与会议、简短介绍”的顺序修改；项目在同一列表中注明贡献角色。新的教育、科研经历或奖项可以按相邻条目的格式添加。联系方式已使用北大学生邮箱，并加入 GitHub、Google Scholar、知乎、小红书、X 和微信二维码。没有提供的北大院系和简历下载链接暂未添加。
 
-简介集中介绍当前博士身份、长视频理解与稀疏注意力研究、导师与合作指导关系，以及费曼学习法和知乎笔记，不再复述完整本科和实习经历。学位、就读日期、本科导师与社团职务留在 Education，实习时间、项目贡献和实习导师留在 Research Experience。荣誉栏目完整保留七项奖项，放在教育经历之后，让研究成果与经历先呈现。
+简介按用户指定保留五段：博士身份、入学时间与导师，以及合并在首段的本科背景简述；当前研究兴趣及合作指导；小红书实习与 FireRed-OCR 贡献；自动化所实习、ReasonPlan 与导师；费曼学习法及知乎笔记。本科起止日期和社团职务在 Education 中列出，完整实习时间在 Research Experience 中列出。荣誉栏目完整保留七项奖项，放在教育经历之后，让研究成果与经历先呈现。
 
 News 位于简介与论文列表之间，仅保留 🚀 FireRed-OCR 开源和 🎉 ReasonPlan 接收两条研究动态；今后用于论文、项目发布与重要近况，奖项统一维护在 Honors & Awards。复制 `.news-list` 中的条目即可添加新消息，中英文和 `time` 日期一起更新。ReasonPlan 的接收月份采用用户补充的 2025.08，写出 Conference on Robot Learning 全称。FireRed-OCR 的 News 简述开源及发布时的端到端方案 SOTA，具体分数与核心贡献者身份在项目条目中保留；发布时 OmniDocBench v1.5 的 92.94 分已由[官方榜单](https://github.com/FireRedTeam/FireRed-OCR#-benchmark)与[技术报告](https://arxiv.org/abs/2603.01840)核对，不泛化为所有方案或当前排名。
 
@@ -47,13 +47,13 @@ News 位于简介与论文列表之间，仅保留 🚀 FireRed-OCR 开源和 �
 ## 内容依据
 
 - 用户提供的《北京科技大学_钟祚栋_简历+科研材料.pdf》。原文件包含完整申请材料，未将原始 PDF 复制到主页；公开介绍和原始论文配图从中整理，当前头像采用用户后来指定的照片。
-- 用户补充：北京大学博士研究生，2026.09–至今（英文 Present）；就读日期统一列在教育经历中。博士介绍中补充受到[黄益星助理教授（Asst. Prof. Yixing Huang）](https://imt.bjmu.edu.cn/szll/yjsds/yxyxjs_2/65ee71d8a924471d8e44ddec9a3ecbc6.htm)指导；姓名与职称由北大官方教师主页核对，院系待补充。
+- 用户补充：北京大学博士研究生，2026.09–至今（英文 Present）；简介保留 2026 年 9 月入学时间。博士介绍中补充受到[黄益星助理教授（Asst. Prof. Yixing Huang）](https://imt.bjmu.edu.cn/szll/yjsds/yxyxjs_2/65ee71d8a924471d8e44ddec9a3ecbc6.htm)指导；姓名与职称由北大官方教师主页核对，院系待补充。
 - 用户补充当前研究兴趣为长视频理解的高效架构，聚焦稀疏注意力机制，以提升多模态大模型处理长视频的效率与效果；受到[郭龙腾副教授（Assoc. Prof.）](https://people.ucas.ac.cn/~ltguo)和[刘静教授（Prof.）](https://ia.cas.cn/rcdw/yxqnjj/202404/t20240422_7129861.html)指导，职称采用用户明确提供的表述。当前兴趣与网页简介元数据同步更新，既往自动驾驶科研经历保留。
 - ReasonPlan 的作者顺序和发表信息采用 [PMLR 正式论文集](https://proceedings.mlr.press/v305/liu25e.html)，与早期材料中的作者顺序存在差异。
 - PlanCoT 在原材料中处于投稿状态，未将其列为已发表论文；更新状态后可继续补充。
 - 用户确认于 2025.11–2026.04 在[小红书超级智能团队](https://fireredteam.github.io/)担任科研实习生，是 FireRed-OCR 的核心贡献者，并提供[项目介绍](https://mp.weixin.qq.com/s/UTJ1qNW9GLM8N4y09Q-Vhw)正文。技术概述、2026 年和 OmniDocBench v1.5 的 92.94 分由[官方仓库](https://github.com/FireRedTeam/FireRed-OCR)核实；技术报告使用官方仓库链接的 [arXiv 版本](https://arxiv.org/abs/2603.01840)，模型使用用户指定的 [Hugging Face 链接](https://huggingface.co/FireRedTeam/FireRed-OCR)，演示保留 ModelScope 链接。条目注明项目贡献角色，不推测个人具体职责；项目简介与 News 均注明发布时达到端到端方案 SOTA，不将发布时的榜单排名表述为持续有效的当前排名。
 - 用户补充在北京科技大学期间受到[李擎教授](https://saee.ustb.edu.cn/szdw/xsjs2/kzkxygcx/346c13ee30504a0cb64c4bc213693ee2.htm)指导；按要求移除独立的深度伪造检测科研经历。
-- 用户确认已取得自动化专业工学学士学位，教育经历写作“B.Eng. in Automation”（Bachelor of Engineering in Automation）；中文教育经历使用“自动化专业工学学士，自动化学院（2022.08–2026.06）”，避免相邻翻译片段出现重复逗号。正式博士导师用“advised by”表述，合作指导用“I also work with …, who provide research guidance”，不表述为联合导师。
+- 用户确认已取得自动化专业工学学士学位，简介和教育经历写作“B.Eng. in Automation”（Bachelor of Engineering in Automation）；中文教育经历使用“自动化专业工学学士，自动化学院（2022.08–2026.06）”，避免相邻翻译片段出现重复逗号。正式博士导师用“advised by”表述，合作指导用“I am grateful for research guidance from …”，不表述为联合导师。
 - 北京科技大学教育经历在导师信息上方注明“期间曾担任索奥科技中心社团主席”，名称链接到用户提供的[社团介绍](https://oldsaee.ustb.edu.cn/xueshenggongzuo/tuanxuezuzhi/suoaokejizhongxin/)。学院名称链接到[学院官网](https://saee.ustb.edu.cn/)，中文版学院名称使用“自动化学院”。
 - 页脚左侧保留版权说明，右侧右对齐显示对[路橙学长](https://luchengthu.github.io/)的模板支持致谢。
 - 用户澄清自动化所经历：2024.07–2025.08 在[中国科学院自动化研究所](http://www.ia.cas.cn/)担任科研实习生，受到[张启超副教授（Assoc. Prof.）](https://people.ucas.ac.cn/~0044631)和[赵冬斌教授（Prof.）](https://people.ucas.ac.cn/~zhaodongbin)指导，按最新要求不再额外注明“直接指导”。前半年（2024.07–2025.01）研究扩散模型及其在自动驾驶中的应用，随后（2025.01–2025.08）转向 VLM 自动驾驶与 ReasonPlan。科研经历保留简短项目概述，并单独列出两位导师及主页链接；费曼学习法与博客说明独立放在简介中。教育经历同样单列对应导师及链接。
