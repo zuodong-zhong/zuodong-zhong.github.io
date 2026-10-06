@@ -49,6 +49,8 @@ News 位于简介与论文列表之间，使用“日期 + 分类表情 + 简短
 - PlanCoT 在原材料中处于投稿状态，未将其列为已发表论文；更新状态后可继续补充。
 - 用户确认于 2025.11–2026.04 在[小红书超级智能团队](https://fireredteam.github.io/)担任科研实习生，是 FireRed-OCR 的核心贡献者，并提供[项目介绍](https://mp.weixin.qq.com/s/UTJ1qNW9GLM8N4y09Q-Vhw)正文。技术概述、2026 年和 OmniDocBench v1.5 的 92.94 分由[官方仓库](https://github.com/FireRedTeam/FireRed-OCR)核实；技术报告使用官方仓库链接的 [arXiv 版本](https://arxiv.org/abs/2603.01840)，模型使用用户指定的 [Hugging Face 链接](https://huggingface.co/FireRedTeam/FireRed-OCR)，演示保留 ModelScope 链接。条目注明项目贡献角色，不推测个人具体职责；项目简介与 News 均注明发布时达到端到端方案 SOTA，不将发布时的榜单排名表述为持续有效的当前排名。
 - 用户补充在北京科技大学期间受到[李擎教授](https://saee.ustb.edu.cn/szdw/xsjs2/kzkxygcx/346c13ee30504a0cb64c4bc213693ee2.htm)指导；按要求移除独立的深度伪造检测科研经历。
+- 北京科技大学教育经历在导师信息上方注明“期间曾担任索奥科技中心社团主席”，中英文同步。
+- 页脚保留版权说明，并感谢[路橙学长](https://luchengthu.github.io/)的模板支持。
 - 用户澄清自动化所经历：2024.07–2025.08 在[中国科学院自动化研究所](http://www.ia.cas.cn/)担任科研实习生，受到[张启超副教授（Assoc. Prof.）](https://people.ucas.ac.cn/~0044631)和[赵冬斌教授（Prof.）](https://people.ucas.ac.cn/~zhaodongbin)指导，按最新要求不再额外注明“直接指导”。前半年（2024.07–2025.01）研究扩散模型及其在自动驾驶中的应用，随后（2025.01–2025.08）转向 VLM 自动驾驶与 ReasonPlan。简介保留研究方向、两位导师及主页链接，以及费曼学习法与博客说明；科研经历保留简短项目概述，并单独列出导师及主页链接。教育经历同样单列对应导师及链接。
 - 用户补充喜欢费曼学习法，曾将自己对扩散模型的理解整理成博客，分享到[知乎专栏](https://www.zhihu.com/column/c_2090888965956151131)；说明和链接放在个人简介的既往实习段落中。
 - 用户补充 2026 年 6 月获北京市普通高等学校优秀毕业生，移除 ICM H 奖。

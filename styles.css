@@ -567,16 +567,19 @@ li p {
 }
 
 #footer {
-  font-size: small;
   border-top: 1px solid #c0c0c0;
-  padding-top: 0.1em;
-  margin-top: 4em;
-  color: #c0c0c0;
+  padding-top: 4px;
+  margin-top: 3.25em;
 }
 
-#footer-text {
-  float: left;
-  padding-bottom: 8px;
+.footer-copyright {
+  margin-bottom: 0;
+}
+
+.footer-credit {
+  margin: 6px 0 0;
+  color: #666666;
+  font-size: small;
 }
 
 .skip-link {
