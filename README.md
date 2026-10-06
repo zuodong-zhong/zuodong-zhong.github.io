@@ -40,6 +40,8 @@ News 位于简介与论文列表之间，使用“日期 + 分类表情 + 简短
 
 本项目使用 GitHub Pages：仓库 Settings → Pages 中选择 Deploy from a branch，分支 `main`，目录 `/ (root)`。更新提交并推送到 `main` 后自动发布，线上地址为 https://zuodong-zhong.github.io/ 。
 
+`index.html` 中的 CSS 和 JavaScript 引用带有内容哈希版本参数，避免新页面加载浏览器缓存的旧样式或脚本。每次修改 `styles.css` 或 `site.js`，将对应引用的 `?v=` 更新为该文件 SHA-256 的前 12 位（用 `shasum -a 256 styles.css site.js` 查看），并与页面一起提交。发布后核对页面实际引用的版本化资源，而不仅是无参数的文件地址。
+
 ## 内容依据
 
 - 用户提供的《北京科技大学_钟祚栋_简历+科研材料.pdf》。原文件包含完整申请材料，未将原始 PDF 复制到主页；公开介绍和原始论文配图从中整理，当前头像采用用户后来指定的照片。
