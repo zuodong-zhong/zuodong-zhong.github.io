@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#527bbd">
+  <title>访问统计设置 | 钟祚栋</title>
+  <link rel="icon" type="image/jpeg" href="assets/images/头像.jpg?v=9dfdd1931b47">
+  <script src="analytics.js?v=1" defer></script>
+  <style>
+    * { box-sizing: border-box; }
+    html { background: #eeeeee; }
+    body { max-width: 680px; margin: 40px auto; padding: 36px; background: #fff; color: #263345; font: 16px/1.75 system-ui, sans-serif; }
+    h1 { margin: 0 0 12px; color: #527bbd; font-size: 27px; line-height: 1.4; }
+    p { margin: 0 0 20px; }
+    a { color: #355f9d; text-underline-offset: 3px; }
+    #analytics-status { padding: 16px; border-left: 3px solid #527bbd; background: #f1f5fb; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    button { padding: 10px 16px; border: 1px solid #527bbd; border-radius: 6px; background: #527bbd; color: #fff; font: inherit; cursor: pointer; }
+    button.secondary { background: #fff; color: #355f9d; }
+    button:disabled { opacity: .5; cursor: default; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #233f69; outline-offset: 4px; }
+    .notes { margin-top: 28px; padding-top: 20px; border-top: 1px solid #dbe2ec; color: #526073; font-size: 14px; }
+    code { overflow-wrap: anywhere; }
+    @media (max-width: 720px) { body { margin: 16px; padding: 24px; } h1 { font-size: 24px; } }
+  </style>
+</head>
+<body data-analytics-settings>
+  <main>
+    <h1>访问统计设置</h1>
+    <p>在你自己使用的浏览器中开启排除，让网站访问统计更接近其他访客的访问情况。这个设置页本身不记录访问统计。</p>
+    <p id="analytics-status" role="status" aria-live="polite" aria-atomic="true">正在读取此浏览器的设置…</p>
+    <div class="actions">
+      <button id="analytics-exclude" type="button" disabled>排除此浏览器的访问</button>
+      <button id="analytics-restore" class="secondary" type="button" disabled>恢复统计</button>
+    </div>
+    <p><a id="analytics-home" href="./?analytics=off">返回首页</a></p>
+    <noscript><p>设置按钮需要 JavaScript。你仍可通过<a href="./?analytics=off">排除统计的首页链接</a>访问。</p></noscript>
+    <div class="notes">
+      <p>Mac 和 iPhone 要分别设置。不同浏览器、浏览器个人资料（Profile）以及微信等应用内的浏览器，也需要各自设置一次。</p>
+      <p>清除网站数据、退出无痕浏览或换新浏览器后，需要重新设置。Safari 也可能清理网站存储，无法保证排除状态永久保留。建议收藏<a href="./?analytics=off">这个带排除参数的首页链接</a>，以后始终从该书签进入；即使设置丢失，该链接的访问也会跳过统计。</p>
+      <p>开启排除后，请关闭之前已打开的首页标签再重新打开。此设置不能删除已记录的访问。恢复统计后，请改用不带 <code>?analytics=off</code> 的首页地址，否则旧书签会再次开启排除。</p>
+    </div>
+  </main>
+</body>
+</html>
