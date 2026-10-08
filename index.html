@@ -10,7 +10,7 @@
   <meta property="og:title" content="Zuodong Zhong | Peking University">
   <meta property="og:description" content="Ph.D. student at Peking University, researching efficient architectures and sparse attention for long-video understanding with multimodal large language models.">
   <link rel="icon" type="image/jpeg" href="assets/images/头像.jpg?v=9dfdd1931b47">
-  <link rel="stylesheet" href="styles.css?v=e6399bec4339">
+  <link rel="stylesheet" href="styles.css?v=a7ee4b5ef059">
   <script src="site.js?v=621ee894e601" defer></script>
   <script src="analytics.js?v=1" defer></script>
 </head>
@@ -65,12 +65,19 @@
 
     <!-- Keep News focused on research releases, papers, and major updates; list awards under Honors. -->
     <h2 id="news" data-zh="最新消息">News</h2>
-    <ul class="news-list">
-      <li><time datetime="2026-03">[2026.03]</time><span><span class="news-emoji" aria-hidden="true">🚀</span><a href="https://github.com/FireRedTeam/FireRed-OCR">FireRed-OCR</a><span data-zh=" 已开源！发布时在 OmniDocBench v1.5 上达到"> is now open source! At release, it achieved </span><a href="https://github.com/FireRedTeam/FireRed-OCR#-benchmark" data-zh="端到端方案 SOTA">SOTA among end-to-end methods</a><span data-zh="。"> on OmniDocBench v1.5.</span></span></li>
-      <li><time datetime="2025-08">[2025.08]</time><span><span class="news-emoji" aria-hidden="true">🎉</span><a href="https://proceedings.mlr.press/v305/liu25e.html">ReasonPlan</a><span data-zh=" 被 Conference on Robot Learning（CoRL 2025）接收！"> was accepted to the Conference on Robot Learning (CoRL 2025)!</span></span></li>
+    <ul class="news-list" role="list" aria-labelledby="news">
+      <li>
+        <time datetime="2026-03">2026.03</time>
+        <p class="news-description"><span class="news-emoji" aria-hidden="true">🚀</span><a href="https://github.com/FireRedTeam/FireRed-OCR">FireRed-OCR</a><span data-zh=" 已开源！发布时在 OmniDocBench v1.5 上达到"> is now open source! At release, it achieved </span><a href="https://github.com/FireRedTeam/FireRed-OCR#-benchmark" data-zh="端到端方案 SOTA">SOTA among end-to-end methods</a><span data-zh="。"> on OmniDocBench v1.5.</span></p>
+      </li>
+      <li>
+        <time datetime="2025-08">2025.08</time>
+        <p class="news-description"><span class="news-emoji" aria-hidden="true">🎉</span><a href="https://proceedings.mlr.press/v305/liu25e.html">ReasonPlan</a><span data-zh=" 被 Conference on Robot Learning（CoRL 2025）接收！"> has been accepted to the Conference on Robot Learning (CoRL 2025)!</span></p>
+      </li>
     </ul>
 
-    <!-- Add papers and projects to this single list; distinguish project contributions from published papers. -->
+    <!-- Add papers and projects to this single list; distinguish project contributions from published papers.
+         Label all paper links [paper] ([论文] in Chinese); put publication type/venue and year after the links. -->
     <h2 id="publications" data-zh="论文与项目">Publications &amp; Projects</h2>
     <ul class="publication-list">
       <li class="publication-entry">
@@ -80,13 +87,14 @@
         </a>
         <div class="publication-details">
           <a class="publication-title" href="https://github.com/FireRedTeam/FireRed-OCR">FireRed-OCR</a>
-          <p class="publication-authors"><a href="https://fireredteam.github.io/" data-zh="小红书超级智能团队">Super Intelligence Team, Xiaohongshu</a> · <strong data-zh="核心贡献者">Core Contributor</strong>, 2026</p>
+          <p class="publication-authors"><a href="https://fireredteam.github.io/" data-zh="小红书超级智能团队">Super Intelligence Team, Xiaohongshu</a> · <strong data-zh="核心贡献者">Core Contributor</strong></p>
           <div class="publication-links">
-            <a href="https://arxiv.org/abs/2603.01840" data-zh="[技术报告]">[technical report]</a>
+            <a href="https://arxiv.org/abs/2603.01840" data-zh="[论文]">[paper]</a>
             <a href="https://github.com/FireRedTeam/FireRed-OCR" data-zh="[代码]">[code]</a>
             <a href="https://huggingface.co/FireRedTeam/FireRed-OCR" data-zh="[模型]">[model]</a>
             <a href="https://www.modelscope.cn/studios/FireRedTeam/FireRed-OCR" data-zh="[演示]">[demo]</a>
             <a href="https://mp.weixin.qq.com/s/UTJ1qNW9GLM8N4y09Q-Vhw" data-zh="[项目介绍]">[announcement]</a>
+            <span class="publication-venue">· <strong data-zh="技术报告 2026">Technical Report 2026</strong></span>
           </div>
           <ul class="publication-summary">
             <li data-zh="面向端到端结构化文档解析的 2B 参数视觉语言模型，结合渐进式训练与格式约束强化学习。发布时在 OmniDocBench v1.5 上取得 92.94 分，达到端到端方案 SOTA。">A 2B-parameter vision-language model for end-to-end structured document parsing, combining progressive training with format-constrained reinforcement learning. Achieved 92.94 on OmniDocBench v1.5, reaching SOTA among end-to-end methods at release.</li>
@@ -102,7 +110,7 @@
           <a class="publication-title" href="https://proceedings.mlr.press/v305/liu25e.html">ReasonPlan: Unified Scene Prediction and Decision Reasoning for Closed-loop Autonomous Driving</a>
           <p class="publication-authors">Xueyi Liu, <strong>Zuodong Zhong</strong>, Qichao Zhang, Yuxin Guo, Yupeng Zheng, Junli Wang, Dongbin Zhao, Yun-Fu Liu, Zhiguo Su, Yinfeng Gao, Qiao Lin, Chen Huiyong</p>
           <div class="publication-links">
-            <a href="https://arxiv.org/abs/2505.20024">[arXiv]</a>
+            <a href="https://arxiv.org/abs/2505.20024" data-zh="[论文]">[paper]</a>
             <a href="https://github.com/Liuxueyi/ReasonPlan" data-zh="[代码]">[code]</a>
             <a href="https://huggingface.co/datasets/LiuxyIA/ReasonPlan_PDR" data-zh="[数据集]">[dataset]</a>
             <span class="publication-venue">· <strong>CoRL 2025</strong></span>

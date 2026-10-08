@@ -256,21 +256,66 @@ li p {
   margin-bottom: 0.3em;
 }
 
+/* News timeline structure adapted from Ziyang Gong's homepage.
+   See THIRD_PARTY_NOTICES.txt; node and line colors follow the reference. */
 .news-list {
-  padding-left: 0;
+  margin: 1em 0 0.8em;
+  padding: 0 0 0 6px;
   list-style: none;
 }
 
-.news-list li {
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  column-gap: 12px;
-  margin-top: 0.55em;
-  line-height: 1.4;
+.news-list > li {
+  position: relative;
+  margin: 0;
+  padding: 0 0 1.25em 24px;
+  line-height: 1.5;
+}
+
+.news-list > li::before {
+  content: "";
+  position: absolute;
+  top: 0.65em;
+  bottom: -0.65em;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: #f0f0f0;
+}
+
+.news-list > li::after {
+  content: "";
+  position: absolute;
+  top: calc(0.65em - 6px);
+  left: -5px;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #1777ff;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.news-list > li:last-child {
+  padding-bottom: 0;
+}
+
+.news-list > li:last-child::before {
+  bottom: 0.5em;
 }
 
 .news-list time {
+  display: block;
+  margin-bottom: 0.25em;
+  color: #666666;
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.news-list .news-description {
+  margin: 0;
+  line-height: inherit;
+  overflow-wrap: anywhere;
 }
 
 .news-emoji {
