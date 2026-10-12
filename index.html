@@ -11,43 +11,63 @@
   <meta property="og:title" content="Zuodong Zhong | Peking University">
   <meta property="og:description" content="Ph.D. student at Peking University, researching efficient architectures and sparse attention for long-video understanding with multimodal large language models.">
   <link rel="icon" type="image/jpeg" href="assets/images/头像.jpg?v=9dfdd1931b47">
-  <link rel="stylesheet" href="styles.css?v=29dacd2dbb0e">
-  <script src="site.js?v=616bd73066e3" defer></script>
+  <link rel="stylesheet" href="site-theme.css?v=0325a12068d1">
+  <link rel="stylesheet" href="styles.css?v=022258f7a41a">
+  <link rel="stylesheet" href="site-header.css?v=41802d76fa51">
+  <script src="site.js?v=1d16e7250071" defer></script>
   <script src="analytics.js?v=1" defer></script>
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#biography" data-zh="跳转到正文">Skip to content</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="./" data-zh="钟祚栋">Zuodong Zhong</a>
+      <nav class="site-nav" data-site-nav aria-label="Main navigation">
+        <a href="#about" class="is-active" aria-current="true" data-zh="简介">About</a>
+        <a href="#news" data-zh="动态">News</a>
+        <a href="#publications" data-zh="论文">Publications</a>
+        <a href="#experience" data-zh="经历">Experience</a>
+        <a href="blog/" data-zh="博客">Blog</a>
+      </nav>
+      <div class="site-tools">
+        <button class="site-language" type="button" data-language-toggle aria-label="切换到中文" hidden><span data-language="en">EN</span><span data-language="zh" lang="zh-CN">中</span></button>
+      </div>
+    </div>
+  </header>
+  <div class="home-shell">
   <main id="layout-content">
-    <header class="profile-header">
-      <div class="profile-details">
-        <div id="toptitle"><h1>Zuodong Zhong <span lang="zh-CN">(钟祚栋)</span></h1></div>
-        <div class="profile-affiliation">
-          <p class="profile-role" data-zh="博士研究生">Ph.D. Student</p>
-          <p class="profile-university" data-zh="北京大学">Peking University</p>
+    <header class="profile-header" id="about">
+      <div class="profile-main">
+        <div class="profile-intro">
+          <div id="toptitle"><h1>Zuodong Zhong <span lang="zh-CN">(钟祚栋)</span></h1></div>
+          <p class="profile-affiliation"><span class="profile-role" data-zh="博士研究生">Ph.D. Student</span><span class="profile-university" data-zh="北京大学">Peking University</span></p>
+        </div>
+        <div class="profile-bio" id="biography">
+          <p><span data-zh="我是钟祚栋，目前是">I am a Ph.D. student at </span><a href="https://www.pku.edu.cn/" data-zh="北京大学">Peking University</a><span data-zh="的博士研究生，受到">, advised by </span><a href="https://imt.bjmu.edu.cn/szll/yjsds/yxyxjs_2/65ee71d8a924471d8e44ddec9a3ecbc6.htm" data-zh="黄益星助理教授">Asst. Prof. Yixing Huang</a><span data-zh="的指导。我于 2026 年在">. I earned my B.Eng. (2026) in Automation from the </span><a href="https://www.ustb.edu.cn/" data-zh="北京科技大学">University of Science and Technology Beijing</a><span data-zh="获得自动化专业工学学士学位，导师是">, where I was advised by </span><a href="https://saee.ustb.edu.cn/szdw/xsjs2/kzkxygcx/346c13ee30504a0cb64c4bc213693ee2.htm" data-zh="李擎教授">Prof. Qing Li</a><span data-zh="。">.</span></p>
+          <p><span data-zh="我目前的研究兴趣是面向长视频理解的高效架构，当前聚焦于稀疏注意力机制，希望让多模态大模型更高效、更好地处理长视频数据。我很荣幸受到">My research focuses on efficient architectures for long-video understanding, particularly sparse attention mechanisms. I aim to help multimodal large language models process long videos more efficiently and effectively. I am fortunate to receive research guidance from </span><a href="https://people.ucas.ac.cn/~ltguo" data-zh="郭龙腾副教授">Assoc. Prof. Longteng Guo</a><span data-zh="和"> and </span><a href="https://ia.cas.cn/rcdw/yxqnjj/202404/t20240422_7129861.html" data-zh="刘静教授">Prof. Jing Liu</a><span data-zh="的指导。">.</span></p>
+          <p><span data-zh="我曾在">I previously interned with the </span><a href="https://fireredteam.github.io/" data-zh="小红书超级智能团队">Super Intelligence Team at Xiaohongshu</a><span data-zh="担任科研实习生，作为核心贡献者参与 ">, where I was a core contributor to </span><a href="https://github.com/FireRedTeam/FireRed-OCR">FireRed-OCR</a><span data-zh="。">.</span></p>
+          <p><span data-zh="此前在">During an earlier internship at the </span><a href="http://www.ia.cas.cn/" data-zh="中科院自动化所">Institute of Automation, Chinese Academy of Sciences (CASIA)</a><span data-zh="实习期间，我先后研究扩散模型和 VLM 在自动驾驶中的应用，并参与 ">, I studied diffusion models and later vision-language models (VLMs) for autonomous driving, and contributed to </span><a href="https://github.com/Liuxueyi/ReasonPlan">ReasonPlan</a><span data-zh="。期间受到">. I was advised by </span><a href="https://people.ucas.ac.cn/~0044631" data-zh="张启超副教授">Assoc. Prof. Qichao Zhang</a><span data-zh="和"> and </span><a href="https://people.ucas.ac.cn/~zhaodongbin" data-zh="赵冬斌教授">Prof. Dongbin Zhao</a><span data-zh="的指导。">.</span></p>
+          <p><span data-zh="我喜欢费曼学习法，并在">I enjoy using the Feynman technique and share my notes on diffusion models and research on my </span><a href="blog/" data-zh="个人博客">blog</a><span data-zh="和"> and </span><a href="https://www.zhihu.com/column/c_2090888965956151131" data-zh="知乎专栏">Zhihu column</a><span data-zh="分享扩散模型学习心得与科研笔记。">.</span></p>
+        </div>
+      </div>
+      <div class="profile-aside">
+        <div class="profile-photo">
+          <div class="portrait-frame">
+            <img class="portrait" src="assets/images/国家奖学金答辩.jpg" alt="Zuodong Zhong / 钟祚栋" width="5472" height="3648" decoding="async">
+          </div>
+          <p class="portrait-caption"><strong>Simple and Effective</strong><span data-zh="简洁且有效，是我的科研追求。">My research philosophy.</span></p>
         </div>
         <div class="profile-contact">
-          <p class="profile-email"><span data-zh="邮箱：">Email: </span><a href="mailto:zhongzuodong26@stu.pku.edu.cn">zhongzuodong26@stu.pku.edu.cn</a></p>
-          <div class="profile-links">
+          <a class="profile-email" href="mailto:zhongzuodong26@stu.pku.edu.cn">zhongzuodong26<wbr>@stu.pku.edu.cn</a>
+          <p class="profile-links">
             <a href="https://github.com/zuodong-zhong">[GitHub]</a>
             <a href="https://scholar.google.com/citations?user=mVHcUnMAAAAJ&amp;hl=zh-CN">[Google Scholar]</a>
             <a href="https://www.zhihu.com/people/11-30-9-68/posts" data-zh="[知乎]">[Zhihu]</a>
             <a href="https://www.xiaohongshu.com/user/profile/62b06ff9000000001b02a597" data-zh="[小红书]">[Xiaohongshu]</a>
             <a href="https://x.com/Zhzdpaaa">[X]</a>
             <button class="contact-button" type="button" popovertarget="wechat-contact" data-zh="[微信]">[WeChat]</button>
-            <button class="language-button" type="button" data-language-toggle aria-label="切换到中文" hidden>[中文]</button>
-          </div>
-          <a class="profile-blog-link" href="blog/">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v15M12 5C9 3 5 3 2 4v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Z"/></svg>
-            <span data-zh="阅读博客">Read the blog</span>
-            <span class="profile-blog-arrow" aria-hidden="true">→</span>
-          </a>
+          </p>
         </div>
-      </div>
-      <div class="profile-photo">
-        <div class="portrait-frame">
-          <img class="portrait" src="assets/images/国家奖学金答辩.jpg" alt="Zuodong Zhong / 钟祚栋" width="5472" height="3648" decoding="async">
-        </div>
-        <p class="portrait-caption"><strong>Simple and Effective</strong><span data-zh="简洁且有效，是我的科研追求。">My research philosophy.</span></p>
       </div>
     </header>
 
@@ -61,13 +81,6 @@
       </a>
       <p data-zh="使用微信扫一扫，或点击图片查看原图。">Scan with WeChat, or click the image to view it full size.</p>
     </div>
-
-    <h2 id="biography" data-zh="个人简介">Biography</h2>
-    <p><span data-zh="我是钟祚栋，目前是">I am a Ph.D. student at </span><a href="https://www.pku.edu.cn/" data-zh="北京大学">Peking University</a><span data-zh="的博士研究生，受到">, advised by </span><a href="https://imt.bjmu.edu.cn/szll/yjsds/yxyxjs_2/65ee71d8a924471d8e44ddec9a3ecbc6.htm" data-zh="黄益星助理教授">Asst. Prof. Yixing Huang</a><span data-zh="的指导。我于 2026 年在">. I earned my B.Eng. (2026) in Automation from the </span><a href="https://www.ustb.edu.cn/" data-zh="北京科技大学">University of Science and Technology Beijing</a><span data-zh="获得自动化专业工学学士学位，导师是">, where I was advised by </span><a href="https://saee.ustb.edu.cn/szdw/xsjs2/kzkxygcx/346c13ee30504a0cb64c4bc213693ee2.htm" data-zh="李擎教授">Prof. Qing Li</a><span data-zh="。">.</span></p>
-    <p><span data-zh="我目前的研究兴趣是面向长视频理解的高效架构，当前聚焦于稀疏注意力机制，希望让多模态大模型更高效、更好地处理长视频数据。我很荣幸受到">My research focuses on efficient architectures for long-video understanding, particularly sparse attention mechanisms. I aim to help multimodal large language models process long videos more efficiently and effectively. I am fortunate to receive research guidance from </span><a href="https://people.ucas.ac.cn/~ltguo" data-zh="郭龙腾副教授">Assoc. Prof. Longteng Guo</a><span data-zh="和"> and </span><a href="https://ia.cas.cn/rcdw/yxqnjj/202404/t20240422_7129861.html" data-zh="刘静教授">Prof. Jing Liu</a><span data-zh="的指导。">.</span></p>
-    <p><span data-zh="我曾在">I previously interned with the </span><a href="https://fireredteam.github.io/" data-zh="小红书超级智能团队">Super Intelligence Team at Xiaohongshu</a><span data-zh="担任科研实习生，作为核心贡献者参与 ">, where I was a core contributor to </span><a href="https://github.com/FireRedTeam/FireRed-OCR">FireRed-OCR</a><span data-zh="。">.</span></p>
-    <p><span data-zh="此前在">During an earlier internship at the </span><a href="http://www.ia.cas.cn/" data-zh="中科院自动化所">Institute of Automation, Chinese Academy of Sciences (CASIA)</a><span data-zh="实习期间，我先后研究扩散模型和 VLM 在自动驾驶中的应用，并参与 ">, I studied diffusion models and later vision-language models (VLMs) for autonomous driving, and contributed to </span><a href="https://github.com/Liuxueyi/ReasonPlan">ReasonPlan</a><span data-zh="。期间受到">. I was advised by </span><a href="https://people.ucas.ac.cn/~0044631" data-zh="张启超副教授">Assoc. Prof. Qichao Zhang</a><span data-zh="和"> and </span><a href="https://people.ucas.ac.cn/~zhaodongbin" data-zh="赵冬斌教授">Prof. Dongbin Zhao</a><span data-zh="的指导。">.</span></p>
-    <p><span data-zh="我喜欢费曼学习法，并在">I enjoy using the Feynman technique and share my notes on diffusion models and research on my </span><a href="blog/" data-zh="个人博客">blog</a><span data-zh="和"> and </span><a href="https://www.zhihu.com/column/c_2090888965956151131" data-zh="知乎专栏">Zhihu column</a><span data-zh="分享扩散模型学习心得与科研笔记。">.</span></p>
 
     <!-- Keep News focused on research releases, papers, and major updates; list awards under Honors. -->
     <h2 id="news" data-zh="最新消息">News</h2>
@@ -125,6 +138,45 @@
             <li data-zh="将下一场景预测与决策思维链结合，增强多模态大模型在闭环自动驾驶中的规划与推理能力。">Combining next-scene prediction and decision chain-of-thought to improve multimodal reasoning for closed-loop autonomous driving.</li>
           </ul>
         </div>
+      </li>
+    </ul>
+
+    <!-- Mirror blog/index.html: list posts in the same order, with the same titles, dates, and reading times.
+         Thumbnails are 360px copies of each cover (blog/<slug>/thumb.jpg). -->
+    <div class="section-heading">
+      <h2 id="writing" data-zh="写作">Writing</h2>
+      <a href="blog/" data-zh="全部文章 →">All posts →</a>
+    </div>
+    <ul class="writing-list" role="list">
+      <li>
+        <a class="writing-card" href="blog/ddpm/">
+          <img class="writing-cover" src="blog/ddpm/thumb.jpg" alt="" width="360" height="189" loading="lazy" decoding="async">
+          <span class="writing-text">
+            <span class="writing-title">DDPM</span>
+            <span class="writing-subtitle" data-zh="一步加噪，逐步去噪">Adding noise in one step, denoising step by step</span>
+            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 1">Study 01</span> · <time datetime="2025-09-09">2025.09.09</time> <span data-zh="更新">Updated</span> · <span data-zh="18 分钟阅读">18 min read</span></span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="writing-card" href="blog/ddim/">
+          <img class="writing-cover" src="blog/ddim/thumb.jpg" alt="" width="360" height="190" loading="lazy" decoding="async">
+          <span class="writing-text">
+            <span class="writing-title">DDIM</span>
+            <span class="writing-subtitle" data-zh="相同边缘分布，跳步生成">The same marginals, fewer sampling steps</span>
+            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 2">Study 02</span> · <time datetime="2025-02-21">2025.02.21</time> <span data-zh="更新">Updated</span> · <span data-zh="8 分钟阅读">8 min read</span></span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="writing-card" href="blog/score-based-generative-models/">
+          <img class="writing-cover" src="blog/score-based-generative-models/thumb.jpg" alt="" width="360" height="190" loading="lazy" decoding="async">
+          <span class="writing-text">
+            <span class="writing-title">Score-based Generative Models</span>
+            <span class="writing-subtitle" data-zh="真正意义的“扩散”模型，从梯度角度理解加噪去噪">Understanding diffusion and denoising through gradients</span>
+            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 3">Study 03</span> · <time datetime="2025-09-09">2025.09.09</time> <span data-zh="更新">Updated</span> · <span data-zh="15 分钟阅读">15 min read</span></span>
+          </span>
+        </a>
       </li>
     </ul>
 
@@ -210,5 +262,6 @@
     <p class="footer-copyright">© 2026 <span data-zh="钟祚栋">Zuodong Zhong</span></p>
     <p class="footer-credit"><span data-zh="感谢">Thanks to </span><a href="https://luchengthu.github.io/" data-zh="路橙学长">Cheng Lu</a><span data-zh="的模板支持。"> for the website template.</span></p>
   </footer>
+  </div>
 </body>
 </html>

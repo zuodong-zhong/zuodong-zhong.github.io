@@ -17,7 +17,8 @@
     framePending = false;
     const viewportHeight = window.innerHeight;
     const articleBounds = article.getBoundingClientRect();
-    const threshold = Math.min(180, viewportHeight * .22);
+    const anchorOffset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const threshold = Math.max(Math.min(180, viewportHeight * .22), anchorOffset + 2);
     let activeLink = entries[0]?.link;
     entries.forEach(({ link, section }) => {
       if (section.getBoundingClientRect().top <= threshold) activeLink = link;

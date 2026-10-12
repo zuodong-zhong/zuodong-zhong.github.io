@@ -1,0 +1,19 @@
+/* Shared type, color, and width tokens for every page. Load before page styles.
+   Articles keep their own reading palettes (blog/article.css) but use the same type. */
+:root {
+  color-scheme: light;
+  --site-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  /* The homepage keeps the academic serif voice; the header and blog use --site-font. */
+  --site-font-serif: Georgia, "Times New Roman", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", SimSun, serif;
+  --site-bg: #fafafa;
+  --site-surface: #ffffff;
+  --site-ink: #25262b;
+  --site-text: #484a52;
+  --site-muted: #62646d;
+  --site-line: #dedee3;
+  --site-line-strong: #c9cad1;
+  /* The one accent: links and current-state marks only. */
+  --site-accent: #2c5191;
+  --site-accent-soft: #527bbd1a;
+  --site-width: 1040px;
+}

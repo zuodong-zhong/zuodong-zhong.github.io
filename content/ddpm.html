@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" class="article-document">
+<html lang="en" class="article-document">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DDPM：从逐步去噪到一步加噪 | 钟祚栋</title>
+  <title lang="zh-CN">DDPM：从逐步去噪到一步加噪 | 钟祚栋</title>
   <meta name="description" content="GO UP! Diffusion + RL 学习 1：从一步加噪的高斯性质出发，推导 DDPM 的反向后验、噪声预测与逐步采样，理解前向和反向过程如何对应。">
   <meta name="theme-color" content="#d5dfe6">
   <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
@@ -14,7 +14,9 @@
   <link rel="canonical" href="https://zuodong-zhong.github.io/blog/ddpm/">
   <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
   <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
-  <link rel="stylesheet" href="../article.css?v=4">
+  <link rel="stylesheet" href="../../site-theme.css?v=0325a12068d1">
+  <link rel="stylesheet" href="../article.css?v=8c73710039e0">
+  <link rel="stylesheet" href="../../site-header.css?v=41802d76fa51">
   <style>
     :root {
       --article-wash-start: #d5dfe6;
@@ -25,20 +27,29 @@
       --article-cover-image: url("/blog/ddpm/cover.jpg");
     }
   </style>
-  <script src="../article.js?v=2" defer></script>
+  <script src="../../site.js?v=1d16e7250071" defer></script>
+  <script src="../article.js?v=3" defer></script>
   <script src="../../analytics.js?v=1" defer></script>
 </head>
 <body class="blog-page article-page" id="top">
-  <a class="skip-link" href="#intro">跳转到正文</a>
-  <header class="blog-header">
-    <a class="blog-brand" href="../">祚栋的博客<span class="brand-dot" aria-hidden="true">.</span></a>
-    <nav class="blog-nav" aria-label="主导航">
-      <a href="../../">主页</a><a href="../" aria-current="page">博客</a>
-      <a class="nav-search" href="../#blog-search" aria-label="搜索博客"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
-    </nav>
+  <a class="skip-link" href="#intro" lang="zh-CN">跳转到正文</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="../../" data-zh="钟祚栋">Zuodong Zhong</a>
+      <nav class="site-nav" data-site-nav aria-label="Main navigation">
+        <a href="../../#about" data-zh="简介">About</a>
+        <a href="../../#news" data-zh="动态">News</a>
+        <a href="../../#publications" data-zh="论文">Publications</a>
+        <a href="../../#experience" data-zh="经历">Experience</a>
+        <a href="../" class="is-active" data-zh="博客">Blog</a>
+      </nav>
+      <div class="site-tools">
+        <button class="site-language" type="button" data-language-toggle aria-label="切换到中文" hidden><span data-language="en">EN</span><span data-language="zh" lang="zh-CN">中</span></button>
+      </div>
+    </div>
   </header>
 
-  <main class="article-layout">
+  <main class="article-layout" lang="zh-CN">
     <aside class="article-sidebar">
       <details class="article-toc" open>
         <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
@@ -259,7 +270,7 @@
       </footer>
     </article>
   </main>
-  <a class="reading-return" href="#top" aria-label="回到顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg><span data-reading-percent aria-hidden="true"></span></a>
-  <footer class="blog-footer"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+  <a class="reading-return" href="#top" aria-label="回到顶部" lang="zh-CN"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg><span data-reading-percent aria-hidden="true"></span></a>
+  <footer class="blog-footer" lang="zh-CN"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
 </body>
 </html>

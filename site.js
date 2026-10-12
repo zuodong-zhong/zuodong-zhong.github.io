@@ -10,16 +10,69 @@
     translatedElements.forEach((element) => {
       element.textContent = chinese ? element.dataset.zh : element.dataset.en;
     });
-    button.textContent = chinese ? '[English]' : '[中文]';
     button.setAttribute('aria-label', chinese ? 'Switch to English' : '切换到中文');
+    document.querySelectorAll('[data-site-nav]').forEach((navigation) => {
+      navigation.setAttribute('aria-label', chinese ? '主导航' : 'Main navigation');
+    });
     try { localStorage.setItem('homepage-language', language); } catch { /* The site also works without browser storage. */ }
   }
 
-  button.hidden = false;
   button.addEventListener('click', () => setLanguage(document.documentElement.lang === 'en' ? 'zh' : 'en'));
+  let initialLanguage = 'en';
   try {
-    if (localStorage.getItem('homepage-language') === 'zh') setLanguage('zh');
+    if (localStorage.getItem('homepage-language') === 'zh') initialLanguage = 'zh';
   } catch { /* Keep the default English page when storage is unavailable. */ }
+  setLanguage(initialLanguage);
+  button.hidden = false;
+})();
+
+(() => {
+  // On narrow screens the header links scroll sideways; keep the current one in view.
+  function revealActiveLinks() {
+    document.querySelectorAll('[data-site-nav]').forEach((navigation) => {
+      const active = navigation.querySelector('.is-active');
+      if (!active || navigation.scrollWidth <= navigation.clientWidth) return;
+      const overflow = active.getBoundingClientRect().right - navigation.getBoundingClientRect().right + 16;
+      if (overflow > 0) navigation.scrollLeft += overflow;
+    });
+  }
+
+  document.querySelector('[data-language-toggle]')?.addEventListener('click', revealActiveLinks);
+  revealActiveLinks();
+})();
+
+(() => {
+  // On the homepage, highlight the header link for the section being read.
+  const sections = [...document.querySelectorAll('[data-site-nav] a[href^="#"]')]
+    .map((link) => ({ link, target: document.getElementById(link.hash.slice(1)) }))
+    .filter(({ target }) => target);
+  if (!sections.length) return;
+
+  let framePending = false;
+  function update() {
+    framePending = false;
+    const offset = (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) + 8;
+    let active = sections[0];
+    sections.forEach((section) => {
+      if (section.target.getBoundingClientRect().top <= offset) active = section;
+    });
+    sections.forEach(({ link }) => {
+      const current = link === active.link;
+      link.classList.toggle('is-active', current);
+      if (current) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function requestUpdate() {
+    if (framePending) return;
+    framePending = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+  update();
 })();
 
 (() => {

@@ -45,7 +45,6 @@
   function updateLanguage() {
     const chinese = document.documentElement.lang.startsWith('zh');
     search.placeholder = chinese ? '搜索文章…' : 'Search posts…';
-    document.querySelector('.blog-nav').setAttribute('aria-label', chinese ? '主导航' : 'Main navigation');
     document.querySelector('.blog-filters').setAttribute('aria-label', chinese ? '专栏筛选' : 'Collections');
     document.querySelector('.tag-filters').setAttribute('aria-label', chinese ? '标签筛选' : 'Tags');
     document.querySelectorAll('.post-tags').forEach((element) => element.setAttribute('aria-label', chinese ? '标签' : 'Tags'));
