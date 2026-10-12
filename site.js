@@ -12,7 +12,6 @@
     });
     button.textContent = chinese ? '[English]' : '[中文]';
     button.setAttribute('aria-label', chinese ? 'Switch to English' : '切换到中文');
-    document.title = chinese ? '钟祚栋 | 北京大学' : 'Zuodong Zhong | Peking University';
     try { localStorage.setItem('homepage-language', language); } catch { /* The site also works without browser storage. */ }
   }
 

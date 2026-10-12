@@ -25,3 +25,46 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+KaTeX 0.16.22
+Source: https://github.com/KaTeX/KaTeX
+Used to pre-render the blog's mathematical notation. The distributed CSS,
+fonts, and complete MIT license are in assets/vendor/katex/.
+
+Diffusion-model articles and retained figures
+The local articles are edited, typeset versions of the site author's public
+Zhihu learning notes:
+- Score-based Generative Models
+  Source: https://zhuanlan.zhihu.com/p/25390096275
+  Local source: content/score-based-generative-models.html
+- DDPM
+  Source: https://zhuanlan.zhihu.com/p/22870758906
+  Local source: content/ddpm.html
+- DDIM
+  Source: https://zhuanlan.zhihu.com/p/25355354086
+  Local source: content/ddim.html
+
+Formula, algorithm, and derivation screenshots were transcribed into text
+and mathematical notation, with notation corrections described in the
+articles. The DDPM and DDIM notes retain attribution to Su Jianlin's
+derivations at https://spaces.ac.cn/archives/9164 and
+https://spaces.ac.cn/archives/9181, respectively. Each local article also
+links its original research papers in the references.
+
+Among the newly added DDPM and DDIM articles, only the DDPM forward-process
+illustration is retained as an image from the Zhihu original:
+blog/ddpm/forward-process.jpg, from https://zhuanlan.zhihu.com/p/22870758906.
+The existing Score article also retains blog/score-based-generative-models/
+score-field.jpg from https://zhuanlan.zhihu.com/p/25390096275.
+These source attributions do not place the articles or retained figures
+under the software licenses above.
+
+AI-generated editorial covers
+The covers are original image_gen.imagegen artwork, used as editorial
+illustrations rather than scientific figures or experimental results.
+The new DDPM and DDIM covers have their full prompts and generation-source
+records in blog/ddpm/cover-prompt.txt and blog/ddim/cover-prompt.txt.
+Each directory contains cover.png (generated original) and cover.jpg
+(web-ready image). The existing Score cover has corresponding records in
+blog/score-based-generative-models/cover-prompt.txt, with diffusion-cover.png
+and diffusion-cover.jpg in the same directory.

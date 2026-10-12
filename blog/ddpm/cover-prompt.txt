@@ -1,0 +1,13 @@
+Tool: built-in image_gen.imagegen
+Intent: original editorial art cover, not a scientific illustration or experimental result.
+Source: /Users/zhongzuodong/.codex/generated_images/01a12fa0-478a-7bf0-bdae-06f4e7ed8e68/exec-8803ec3a-1431-4531-8c6c-004511898adf.png
+Outputs: cover.png (original), cover.jpg (sips JPEG 88 quality)
+
+Final prompt:
+Use case: stylized-concept.
+Asset type: original full-bleed horizontal art cover for a thoughtful Chinese essay about DDPM, part of a restrained abstract scientific-essay cover series. Wide landscape approximately 1.9:1.
+Primary request: express noisy particles becoming a clear structure through many discrete denoising stages, as refined tactile silkscreen editorial art. The left third is quiet mist-gray paper with sparse crisp blue-gray pigment specks, supporting future overlaid web text without having any text in the image. From middle toward far right, a sequence of five to seven slightly offset, flat translucent rectangular and faceted planes forms a rhythmic ascending diagonal stack. Each successive plane is visibly more coherent and less speckled, culminating on the right in a precise dark-navy faceted architectural form with an open pale center. Small fragments transition into orderly edges. A few hairline contour traces pass between the stages, but no literal arrows or explanatory diagram.
+Composition: asymmetric and intentionally designed, ample quieter left region, main geometric subject occupies the right 55%, varied planes overlap with subtle print registration, distinct silhouettes, fully resolved crisp fine details. Full bleed with no frame.
+Style and material: flat modernist abstraction, beautiful fine cotton-paper grain, dry pigment edge and translucent overprinting, restrained pastel rubbing, sophisticated magazine art, tactile yet sharply legible, no photographic blur and no glossy rendering.
+Palette: cold slate blue, fog gray, deep ocean navy, subtle cool off-white, tiny muted steel-blue accents. Low-saturation but rich dark contrast at the right.
+Avoid: text, letters, words, numbers, formulas, logos, watermark, labels, border, robot, neon, glowing effects, generic AI particle spheres, glossy 3D balls, ordinary tech wallpaper, excessive blur, a central concentric circle composition.

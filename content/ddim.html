@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN" class="article-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DDIM：相同前向分布与跳步采样 | 钟祚栋</title>
+  <meta name="description" content="GO UP! Diffusion + RL 学习 2：保留 DDPM 的前向边缘分布，用待定系数法推导 DDIM，理解跳步采样、确定性生成与 ODE 的联系。">
+  <meta name="theme-color" content="#d5dfd7">
+  <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="DDIM——相同前向的 ODE 算法，加速采样">
+  <meta property="og:description" content="GO UP! Diffusion + RL 学习 2 · 钟祚栋的学习笔记">
+  <meta property="og:image" content="https://zuodong-zhong.github.io/blog/ddim/cover.jpg">
+  <link rel="canonical" href="https://zuodong-zhong.github.io/blog/ddim/">
+  <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
+  <link rel="stylesheet" href="../article.css?v=4">
+  <!-- Each article chooses its own cover and reading palette. -->
+  <style>
+    :root {
+      --article-wash-start: #d5dfd7;
+      --article-wash-middle: #e5ece5;
+      --article-wash-end: #f2f5ef;
+      --article-surface: #fafbf8;
+      --article-accent: #476b58;
+      --article-cover-image: url("/blog/ddim/cover.jpg");
+    }
+  </style>
+  <script src="../article.js?v=2" defer></script>
+  <script src="../../analytics.js?v=1" defer></script>
+</head>
+<body class="blog-page article-page" id="top">
+  <a class="skip-link" href="#intro">跳转到正文</a>
+  <header class="blog-header">
+    <a class="blog-brand" href="../">祚栋的博客<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav class="blog-nav" aria-label="主导航">
+      <a href="../../">主页</a><a href="../" aria-current="page">博客</a>
+      <a class="nav-search" href="../#blog-search" aria-label="搜索博客"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
+    </nav>
+  </header>
+
+  <main class="article-layout">
+    <aside class="article-sidebar">
+      <details class="article-toc" open>
+        <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <nav aria-label="文章目录">
+          <a href="#intro">写在前面</a>
+          <a href="#marginals">保持前向边缘分布</a>
+          <a href="#coefficients">待定系数法</a>
+          <a href="#sampling">从公式到跳步采样</a>
+          <a href="#ode">确定性与 ODE</a>
+          <a href="#references">参考与延伸阅读</a>
+        </nav>
+      </details>
+      <a class="article-back" href="../"><span aria-hidden="true">←</span> 全部文章</a>
+    </aside>
+
+    <article class="article-content">
+      <figure class="article-cover"><img src="cover.jpg" width="1727" height="911" fetchpriority="high" alt="墨绿色的连续曲线穿过疏密不同的开放环带，表现沿生成轨迹跳步前进的过程"></figure>
+      <header class="article-header">
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18M7 15h1m3 0h1m3 0h1m-9 3h1m3 0h1"/></svg><time datetime="2025-02-21">2025 年 2 月 21 日</time><span class="meta-update">更新</span></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>8 分钟阅读</span>
+          <span class="article-tags"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3-2 18M17 3l-2 18M4 8h17M3 16h17"/></svg><a href="../?tag=diffusion">diffusion</a><span aria-hidden="true">/</span><a href="../?tag=ddim">DDIM</a></span>
+        </div>
+        <h1>DDIM</h1>
+        <p class="article-subtitle">相同前向的 ODE 算法，加速采样</p>
+        <p class="article-byline">钟祚栋 <span aria-hidden="true">/</span> 学习笔记</p>
+        <a class="article-series" href="../?collection=diffusion-rl"><span>GO UP! Diffusion + RL</span><span class="series-lesson">学习 02 <span aria-hidden="true">↗</span></span></a>
+      </header>
+
+
+      <section class="article-section" id="intro" aria-label="写在前面">
+        <p>上一篇梳理了 <a href="../ddpm/">DDPM 的完整推导</a>。这一次继续问一个很自然的问题：<strong>能不能沿用已经训练好的噪声预测模型，让采样快一点？</strong></p>
+        <p>我原来的直观理解是：前向过程从干净图像出发，为不同噪声程度的样本建立去噪的学习目标；反向过程再利用学到的方向，逐步生成图像。DDIM 就是在这两件事之间找到了更大的自由度。</p>
+        <a class="reference-card" href="https://arxiv.org/abs/2010.02502"><span class="reference-kind">PAPER · JIAMING SONG, CHENLIN MENG &amp; STEFANO ERMON</span><strong>Denoising Diffusion Implicit Models</strong><span>ICLR 2021 · arXiv:2010.02502 ↗</span></a>
+        <p>DDPM 通常按相邻时间步逐次去噪。如果想加速，可以改变采样过程，同时让训练时用到的加噪分布保持一致。关键就在于：<strong>相同的前向边缘分布，并不唯一决定整条随机轨迹。</strong></p>
+        <aside class="editor-note"><strong>阅读说明</strong><p>标题沿用原笔记的 ODE 视角。严格说，DDIM 的确定性情形与 ODE 的离散化相关；带随机项的广义采样不能一概称为 ODE。这里也把“指向某张原图”改成更准确的“学习数据分布的去噪方向”，网络在生成时并不知道真实的 <span data-math>x_0</span>。</p></aside>
+      </section>
+
+      <section class="article-section" id="marginals">
+        <h2><a class="heading-anchor" href="#marginals" aria-label="链接到此章节">#</a><span>保持前向边缘分布</span></h2>
+        <p>全文延续 DDPM 的标准记号，<span data-math>\alpha_t=1-\beta_t</span>，<span data-math>\bar\alpha_t=\prod_{i=1}^t\alpha_i</span>，并令 <span data-math>\bar\alpha_0=1</span>。我们希望保留：</p>
+        <div data-math="block">\begin{aligned}q(x_t\mid x_0)&amp;=\mathcal N\!\left(\sqrt{\bar\alpha_t}\,x_0,(1-\bar\alpha_t)I\right),\\x_t&amp;=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\epsilon,\qquad\epsilon\sim\mathcal N(0,I).\end{aligned}</div>
+        <p>训练时，随机选一个时间步，再从这个条件分布直接得到加噪样本。常用的简化噪声预测损失是：</p>
+        <div data-math="block">\mathcal L_{\mathrm{simple}}=\mathbb E_{x_0,t,\epsilon}\!\left[\left\|\epsilon-\epsilon_\theta\!\left(\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,t\right)\right\|_2^2\right].</div>
+        <p>它用到的是各个时间步的加噪样本，而不是一条完整的加噪轨迹。因此，只要沿用相同的噪声日程和这个训练目标，就可以复用同一个噪声预测网络。</p>
+        <p>DDIM 不再要求沿用 DDPM 原来的相邻前向转移。它直接构造一个带 <span data-math>x_0</span> 条件的反向分布，让它满足边缘一致性：</p>
+        <div data-math="block">\int q_\sigma(x_s\mid x_t,x_0)\,q(x_t\mid x_0)\,\mathrm dx_t=q(x_s\mid x_0),\qquad 0\le s&lt;t.</div>
+        <p>先把 <span data-math>s</span> 理解为 <span data-math>t-1</span>；后面会看到，它也可以是更早的时间步。这就是原文手写推导最上方的那条等式。</p>
+        <aside class="editor-note"><strong>概念校注</strong><p>“相同前向”指相同的 <span data-math>q(x_t\mid x_0)</span>，不代表相同的联合前向过程。原始 DDPM 的逐步采样来自它采用的转移规则；不能把“马尔可夫过程”本身理解成绝对不允许跳步。相同的简化损失也不表示不同过程的精确变分目标及其权重处处相同。</p></aside>
+      </section>
+
+      <section class="article-section" id="coefficients">
+        <h2><a class="heading-anchor" href="#coefficients" aria-label="链接到此章节">#</a><span>待定系数法：构造可行的反向过程</span></h2>
+        <p>这里同样沿着苏神的推导来理解 (っ´ω`)ﾉ。原文截图中的系数记号与 DDPM 不同，下面统一写成 <span data-math>a_t=\sqrt{\bar\alpha_t}</span>、<span data-math>b_t=\sqrt{1-\bar\alpha_t}</span>，减少混淆。</p>
+        <a class="reference-card" href="https://spaces.ac.cn/archives/9181"><span class="reference-kind">原文参考 · 苏剑林</span><strong>生成扩散模型漫谈（四）：DDIM = 高观点 DDPM</strong><span>科学空间 · 待定系数法推导 ↗</span></a>
+        <h3>先设一个高斯条件分布</h3>
+        <div data-math="block">q_\sigma(x_s\mid x_t,x_0)=\mathcal N\!\left(\kappa x_t+\lambda x_0,\sigma^2 I\right).</div>
+        <p>其中 <span data-math>\kappa,\lambda,\sigma</span> 是这一对时间步对应的系数。取两个相互独立的标准高斯噪声，代入采样式：</p>
+        <div data-math="block">\begin{aligned}\epsilon_1,\epsilon_2&amp;\overset{\mathrm{iid}}\sim\mathcal N(0,I),\\x_t&amp;=a_t x_0+b_t\epsilon_1,\\x_s&amp;=\kappa x_t+\lambda x_0+\sigma\epsilon_2\\&amp;=(\kappa a_t+\lambda)x_0+\kappa b_t\epsilon_1+\sigma\epsilon_2.\end{aligned}</div>
+        <p>为了让它与 <span data-math>x_s=a_s x_0+b_s\epsilon</span> 同分布，只需要匹配条件均值和方差：</p>
+        <div data-math="block">\begin{cases}\kappa a_t+\lambda=a_s,\\\kappa^2 b_t^2+\sigma^2=b_s^2.\end{cases}</div>
+        <p>三个未知数、两个方程，多出来的自由度就交给 <span data-math>\sigma</span>。取通常使用的非负根：</p>
+        <div data-math="block">\begin{aligned}\kappa&amp;=\frac{\sqrt{b_s^2-\sigma^2}}{b_t},\\\lambda&amp;=a_s-a_t\frac{\sqrt{b_s^2-\sigma^2}}{b_t},\qquad 0\le\sigma^2\le b_s^2.\end{aligned}</div>
+        <p>于是，原截图中的完整条件分布就可以排成：</p>
+        <div data-math="block">\begin{gathered}q_\sigma(x_s\mid x_t,x_0)=\mathcal N\!\left(\mu_\sigma(x_t,x_0),\sigma^2 I\right),\\\mu_\sigma(x_t,x_0)=a_s x_0+\frac{\sqrt{b_s^2-\sigma^2}}{b_t}(x_t-a_t x_0).\end{gathered}</div>
+        <p>代回 DDPM 的标准记号，采样式会更直观：</p>
+        <div data-math="block">\begin{aligned}x_s&amp;=\sqrt{\bar\alpha_s}\,x_0\\&amp;\quad+\sqrt{1-\bar\alpha_s-\sigma^2}\,\frac{x_t-\sqrt{\bar\alpha_t}x_0}{\sqrt{1-\bar\alpha_t}}+\sigma z,\\z&amp;\sim\mathcal N(0,I).\end{aligned}</div>
+        <p>这里没有用到“<span data-math>s=t-1</span>”这一条件，所以可以直接为两个相隔更远的噪声级构造转移。<span data-math>\sigma=0</span> 时，高斯条件分布退化为一个确定性映射。</p>
+      </section>
+
+      <section class="article-section" id="sampling">
+        <h2><a class="heading-anchor" href="#sampling" aria-label="链接到此章节">#</a><span>从公式到跳步采样</span></h2>
+        <h3>用网络估计未知的原图</h3>
+        <p>现在求出的是 <span data-math>q_\sigma(x_s\mid x_t,x_0)</span>，但推理时并不知道 <span data-math>x_0</span>。参考 DDPM，把前向公式里的真实噪声替换成网络的预测：</p>
+        <div data-math="block">\hat x_0(x_t,t)=\frac{x_t-\sqrt{1-\bar\alpha_t}\,\epsilon_\theta(x_t,t)}{\sqrt{\bar\alpha_t}}.</div>
+        <p>原笔记里的 <span data-math>\xi</span> 在这里统一记为 <span data-math>\epsilon</span>，网络输出则记为 <span data-math>\epsilon_\theta</span>。代回后，得到实际使用的更新：</p>
+        <div data-math="block">\begin{aligned}x_s&amp;=\underbrace{\sqrt{\bar\alpha_s}\,\hat x_0(x_t,t)}_{\text{预测的干净图像}}\\&amp;\quad+\underbrace{\sqrt{1-\bar\alpha_s-\sigma_{t\to s}^2}\,\epsilon_\theta(x_t,t)}_{\text{指向下一噪声级的方向}}\\&amp;\quad+\underbrace{\sigma_{t\to s}z}_{\text{额外随机噪声}},\qquad z\sim\mathcal N(0,I).\end{aligned}</div>
+        <p>这三项也对应了原手写总结中的“均值”和“方差”：前两项组成条件均值，最后一项控制条件方差。</p>
+        <h3>用一个参数控制随机性</h3>
+        <p>常用的标准差选取如下，这里考虑 <span data-math>0\le\eta\le1</span>：</p>
+        <div data-math="block">\sigma_{t\to s}(\eta)=\eta\sqrt{\frac{1-\bar\alpha_s}{1-\bar\alpha_t}}\sqrt{1-\frac{\bar\alpha_t}{\bar\alpha_s}}.</div>
+        <p>当 <span data-math>\eta=0</span> 时不再注入新噪声，这就是确定性的 DDIM 采样。当 <span data-math>s=t-1</span> 且 <span data-math>\eta=1</span> 时：</p>
+        <div data-math="block">\sigma_{t\to t-1}^2=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t=\tilde\beta_t.</div>
+        <p>此时均值与 DDPM 的噪声预测形式一致，并使用后验方差 <span data-math>\tilde\beta_t</span>。如果 DDPM 实现使用的是另一种方差约定，随机项需要相应区分。</p>
+        <aside class="editor-note"><strong>公式校注</strong><p>原手写图中“与 DDPM 相同时”的右侧是<strong>方差</strong>，左侧应写 <span data-math>\sigma^2</span>，而不是标准差 <span data-math>\sigma</span>。这里已统一修正；确定性 DDIM 对应的仍是 <span data-math>\sigma=0</span>。</p></aside>
+        <section class="algorithm" aria-labelledby="algorithm-title">
+          <h4 id="algorithm-title">Algorithm · DDIM 跳步采样</h4>
+          <p><strong>输入：</strong>已训练的噪声预测网络、原训练噪声日程、随机性参数 <span data-math>\eta</span>，以及时间步子序列：</p>
+          <div data-math="block">0=\tau_0&lt;\tau_1&lt;\cdots&lt;\tau_S=T,\qquad S\le T.</div>
+          <ol>
+            <li>从 <span data-math>x_T\sim\mathcal N(0,I)</span> 开始。</li>
+            <li>对 <span data-math>i=S,\ldots,1</span>，令 <span data-math>t=\tau_i</span>、<span data-math>s=\tau_{i-1}</span>，计算 <span data-math>\epsilon_\theta(x_t,t)</span> 和 <span data-math>\hat x_0(x_t,t)</span>。</li>
+            <li>按上式计算 <span data-math>\sigma_{t\to s}(\eta)</span>，再更新到 <span data-math>x_s</span>；最后一步 <span data-math>s=0</span> 时返回预测的干净样本。</li>
+          </ol>
+        </section>
+        <p>注意，跳步以后仍使用<strong>原来时间步对应的</strong> <span data-math>\bar\alpha_{\tau_i}</span> 和时间条件，不是把较短序列直接重新编号后套入原公式。</p>
+        <p>减少网络调用就能加快生成，但步子不能无限放大。噪声预测有误差，有限步更新也有离散化误差；跨度过大时，一次预测无法充分描述整段生成路径。原文推荐 Double 童发发的讲解，把这点说得很清楚：</p>
+        <a class="reference-card" href="https://www.bilibili.com/video/BV1KpgLe6E8A/"><span class="reference-kind">原文推荐 · DOUBLE 童发发</span><strong>为什么 DDPM、DDIM 不能一步求得 X₀？为什么 DDIM 不能跳步过大？</strong><span>AI 知识分享 · Bilibili ↗</span></a>
+      </section>
+
+      <section class="article-section" id="ode">
+        <h2><a class="heading-anchor" href="#ode" aria-label="链接到此章节">#</a><span>确定性与 ODE</span></h2>
+        <p>当 <span data-math>\eta=0</span> 时，给定初始噪声、网络、时间步序列和实现，后续采样路径就是确定的。不过，初始的 <span data-math>x_T</span> 仍是随机变量，因此仍然可以生成一个分布。</p>
+        <p>为了理解标题中的 ODE，可以把确定性更新改写一下。令：</p>
+        <div data-math="block">y_t=\frac{x_t}{\sqrt{\bar\alpha_t}},\qquad u_t=\sqrt{\frac{1-\bar\alpha_t}{\bar\alpha_t}}.</div>
+        <p>把 <span data-math>\hat x_0</span> 展开并整理，得到：</p>
+        <div data-math="block">y_s-y_t=(u_s-u_t)\,\epsilon_\theta(x_t,t).</div>
+        <p>它具有 Euler 离散步的形式。在连续噪声日程及合适的时间插值下，可以对应到：</p>
+        <div data-math="block">\frac{\mathrm dy}{\mathrm du}=\epsilon_\theta\!\left(\frac{y}{\sqrt{1+u^2}},t(u)\right).</div>
+        <p>采样时沿着从大到小的 <span data-math>u</span> 积分。这个视角解释了为什么确定性 DDIM 可以用更少的时间步沿路径前进，也提醒我们：有限步 DDIM 只是离散近似，改变步数不保证得到完全相同的像素结果。</p>
+        <p>这样再回看 DDPM → DDIM，核心就很清楚了：保留噪声预测的训练方式，重新构造生成路径；确定性路径让加速采样和连续时间的理解联系起来。下一篇继续从 <a href="../score-based-generative-models/">Score-based Generative Models</a> 的梯度视角理解这件事。</p>
+      </section>
+
+      <section class="article-section" id="references">
+        <h2><a class="heading-anchor" href="#references" aria-label="链接到此章节">#</a>参考与延伸阅读</h2>
+        <ol class="article-references">
+          <li>Jiaming Song, Chenlin Meng &amp; Stefano Ermon. <a href="https://arxiv.org/abs/2010.02502">Denoising Diffusion Implicit Models</a>, ICLR 2021. 第 3–4 节：非马尔可夫前向过程、采样与 ODE 联系。</li>
+          <li>苏剑林，<a href="https://spaces.ac.cn/archives/9181">生成扩散模型漫谈（四）：DDIM = 高观点 DDPM</a>。原文截图中的待定系数法来源；本文统一记号后重排。</li>
+          <li>Double 童发发，<a href="https://www.bilibili.com/video/BV1KpgLe6E8A/">理解扩散模型两大问题：为什么不能一步求得 X₀，为什么 DDIM 不能跳步过大</a>。原文推荐视频。</li>
+        </ol>
+      </section>
+
+      <footer class="article-end">
+        <a class="author-profile" href="../../"><img src="../../assets/images/头像.jpg?v=9dfdd1931b47" width="48" height="48" loading="lazy" alt=""><span><strong>钟祚栋</strong><span>记录学习过程，分享一点理解。</span></span><span class="author-arrow" aria-hidden="true">↗</span></a>
+        <p>本文由作者的<a href="https://zhuanlan.zhihu.com/p/25355354086">知乎原文</a>整理。两张推导图已转为公式排版；统一了系数记号，校正标准差与方差的区别，并补充跳步算法与 ODE 联系。封面为 AI 生成的原创插画。</p>
+        <a href="../ddpm/">← 学习 01 · DDPM</a><a href="../score-based-generative-models/">学习 03 · Score-based →</a>
+        <a href="../">返回博客</a><a href="#top">回到顶部 ↑</a>
+      </footer>
+    </article>
+  </main>
+  <a class="reading-return" href="#top" aria-label="回到顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg><span data-reading-percent aria-hidden="true"></span></a>
+  <footer class="blog-footer"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+</body>
+</html>

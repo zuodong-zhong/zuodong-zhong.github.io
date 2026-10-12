@@ -1,22 +1,30 @@
-/* Layout measurements matched to https://luchengthu.github.io/files/jemdoc.css.
-   Only the rules used by this personal homepage are implemented here. */
+/* Academic typography adapted from https://luchengthu.github.io/files/jemdoc.css.
+   Shared spacing keeps the header, content, and footer on the same grid. */
+:root {
+  --page-gutter: 64px;
+  --section-gap: 32px;
+  --entry-gap: 24px;
+  --portrait-width: 200px;
+}
+
 html {
   background-color: #eeeeee;
 }
 
 body {
+  box-sizing: border-box;
   font-family: Georgia, serif;
   color: #000000;
   background-color: #ffffff;
   text-align: left;
-  margin: 30px auto;
-  padding: 10px 50px 30px;
-  max-width: 960px;
+  margin: 32px auto;
+  padding: 56px var(--page-gutter) 32px;
+  max-width: 1060px;
 }
 
 #layout-content {
-  margin-top: 25px;
-  padding: 0 1em;
+  margin: 0;
+  padding: 0;
   border: none;
   background: white;
   text-align: left;
@@ -25,10 +33,9 @@ body {
 
 .profile-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 200px;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) var(--portrait-width);
+  gap: var(--entry-gap);
   align-items: start;
-  padding-top: 24px;
 }
 
 .profile-details {
@@ -37,17 +44,16 @@ body {
   justify-content: space-between;
   box-sizing: border-box;
   min-width: 0;
-  min-height: calc(200px * 4 / 3);
-  padding: 6px 0 10px;
+  min-height: calc(var(--portrait-width) * 4 / 3);
 }
 
 .profile-photo {
-  width: 200px;
+  width: var(--portrait-width);
 }
 
 .portrait-frame {
   position: relative;
-  width: 200px;
+  width: 100%;
   aspect-ratio: 3 / 4;
   margin-left: auto;
   overflow: hidden;
@@ -69,7 +75,7 @@ body {
 }
 
 .portrait-caption {
-  width: 200px;
+  width: 100%;
   margin: 10px 0 0 auto;
   text-align: center;
   font-size: 12px;
@@ -114,6 +120,10 @@ body {
   line-height: 1.4;
 }
 
+.profile-email a {
+  overflow-wrap: anywhere;
+}
+
 .profile-links {
   display: flex;
   flex-wrap: wrap;
@@ -126,6 +136,28 @@ body {
 .profile-links button {
   white-space: nowrap;
 }
+
+.profile-blog-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 9px 16px;
+  border: 1px solid #bdcce2;
+  border-radius: 7px;
+  color: #345e99;
+  background: #f3f6fb;
+  font-size: 15px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.profile-blog-link svg { flex: none; }
+.profile-blog-arrow { margin-left: 9px; font-size: 18px; line-height: 1; }
+.profile-blog-link:hover { color: #244c85; background: #e9eff8; border-color: #839fc7; text-decoration: none; }
+.profile-blog-link:focus-visible { outline: 2px solid #345e99; outline-offset: 4px; }
 
 h1, h2, h3 {
   color: #527bbd;
@@ -158,6 +190,12 @@ h2 {
   font-size: 125%;
 }
 
+#layout-content > h2 {
+  margin: var(--section-gap) 0 16px;
+  padding: 0 0 6px;
+  line-height: 1.3;
+}
+
 h3 {
   font-size: 110%;
   border-bottom: none;
@@ -171,7 +209,7 @@ p {
   margin-top: 0;
   margin-bottom: 0.8em;
   padding: 0;
-  line-height: 1.3;
+  line-height: 1.5;
 }
 
 a, .language-button, .contact-button {
@@ -180,7 +218,8 @@ a, .language-button, .contact-button {
 }
 
 a:hover, .language-button:hover, .contact-button:hover {
-  border-bottom: 1px gray dotted;
+  text-decoration: underline dotted gray;
+  text-underline-offset: 3px;
 }
 
 a:focus-visible, button:focus-visible {
@@ -259,8 +298,8 @@ li p {
 /* News timeline structure adapted from Ziyang Gong's homepage.
    See THIRD_PARTY_NOTICES.txt; node and line colors follow the reference. */
 .news-list {
-  margin: 1em 0 0.8em;
-  padding: 0 0 0 6px;
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
@@ -276,7 +315,7 @@ li p {
   position: absolute;
   top: 0.65em;
   bottom: -0.65em;
-  left: 0;
+  left: 5px;
   width: 2px;
   border-radius: 1px;
   background: #f0f0f0;
@@ -286,7 +325,7 @@ li p {
   content: "";
   position: absolute;
   top: calc(0.65em - 6px);
-  left: -5px;
+  left: 0;
   box-sizing: border-box;
   width: 12px;
   height: 12px;
@@ -300,7 +339,7 @@ li p {
 }
 
 .news-list > li:last-child::before {
-  bottom: 0.5em;
+  display: none;
 }
 
 .news-list time {
@@ -324,29 +363,36 @@ li p {
 }
 
 .honors-list {
-  padding-left: 20px;
+  display: grid;
+  row-gap: 12px;
+  margin: 0;
+  padding-left: 24px;
   list-style: none;
 }
 
 .honors-list > li {
   position: relative;
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
-  column-gap: 12px;
-  line-height: 1.4;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 16px;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .honors-list > li::before {
   content: "";
   position: absolute;
-  top: 0.55em;
-  left: -14px;
+  top: calc(0.75em - 2px);
+  left: -20px;
   width: 4px;
   height: 4px;
   background: currentColor;
 }
 
 .honors-list time {
+  color: #666666;
+  font-size: 0.85em;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -354,6 +400,9 @@ li p {
 .publication-list,
 .experience-list,
 .education-list {
+  display: grid;
+  gap: var(--entry-gap);
+  margin: 0;
   padding-left: 0;
   list-style: none;
 }
@@ -361,13 +410,9 @@ li p {
 .publication-entry {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 24px;
-  margin-top: 1.8em;
-}
-
-.publication-list {
-  margin-bottom: 1.5em;
+  align-items: start;
+  column-gap: var(--entry-gap);
+  margin: 0;
 }
 
 .publication-figure {
@@ -386,6 +431,7 @@ li p {
 .publication-figure:focus-visible {
   border: 1px solid #8aa4cc;
   box-shadow: 0 4px 14px rgba(34, 75, 141, 0.12);
+  text-decoration: none;
 }
 
 .publication-figure img {
@@ -536,6 +582,7 @@ li p {
 }
 
 .publication-details {
+  min-width: 0;
   line-height: 1.5;
 }
 
@@ -560,6 +607,7 @@ li p {
 .publication-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   gap: 4px 8px;
 }
 
@@ -576,9 +624,9 @@ li p {
 .institution-entry {
   display: grid;
   grid-template-columns: 80px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 22px;
-  margin-top: 1.5em;
+  align-items: start;
+  column-gap: var(--entry-gap);
+  margin: 0;
 }
 
 .institution-logo {
@@ -590,6 +638,10 @@ li p {
   width: 80px;
   height: 80px;
   object-fit: contain;
+}
+
+.institution-details {
+  min-width: 0;
 }
 
 .institution-details h3 {
@@ -610,6 +662,7 @@ li p {
 .wechat-contact a:hover,
 .institution-logo:hover {
   border-bottom: none;
+  text-decoration: none;
 }
 
 #footer {
@@ -617,10 +670,10 @@ li p {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px 24px;
+  gap: 8px var(--entry-gap);
   border-top: 1px solid #c0c0c0;
-  padding-top: 4px;
-  margin-top: 3.25em;
+  padding-top: 12px;
+  margin-top: 48px;
 }
 
 .footer-copyright {
@@ -642,4 +695,88 @@ li p {
 .skip-link:focus {
   top: 0;
   background: white;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --page-gutter: 24px;
+    --portrait-width: 160px;
+  }
+
+  body {
+    margin: 0;
+    padding-top: 32px;
+  }
+}
+
+@media (max-width: 620px) {
+  :root {
+    --page-gutter: 20px;
+    --portrait-width: 120px;
+  }
+
+  .profile-header {
+    gap: 16px 20px;
+  }
+
+  .profile-details {
+    display: contents;
+  }
+
+  #toptitle {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #toptitle h1 {
+    font-size: 24px;
+  }
+
+  .profile-affiliation {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .profile-photo {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .profile-contact {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  .portrait-caption {
+    font-size: 11px;
+  }
+
+  .portrait-caption strong {
+    font-size: 12px;
+  }
+
+  .publication-entry {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 16px;
+  }
+
+  .publication-figure {
+    width: min(100%, 320px);
+  }
+
+  .institution-entry {
+    grid-template-columns: 64px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+
+  .institution-logo img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .footer-credit {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: left;
+  }
 }

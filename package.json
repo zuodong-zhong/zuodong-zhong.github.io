@@ -1,0 +1,11 @@
+{
+  "name": "zuodong-zhong-homepage",
+  "private": true,
+  "scripts": {
+    "build:blog": "node scripts/build-blog.cjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "katex": "0.16.22"
+  }
+}

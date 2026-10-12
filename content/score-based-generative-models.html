@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN" class="article-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Score-based Generative Models：从梯度角度理解加噪去噪 | 钟祚栋</title>
+  <meta name="description" content="GO UP! Diffusion + RL 学习 3：从 Score、去噪 Score Matching 到退火 Langevin dynamics，梳理扩散模型的梯度视角与公式推导。">
+  <meta name="theme-color" content="#d9d6cf">
+  <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Score-based Generative Models——从梯度角度理解加噪去噪">
+  <meta property="og:description" content="GO UP! Diffusion + RL 学习 3 · 钟祚栋的学习笔记">
+  <meta property="og:image" content="https://zuodong-zhong.github.io/blog/score-based-generative-models/diffusion-cover.jpg">
+  <link rel="canonical" href="https://zuodong-zhong.github.io/blog/score-based-generative-models/">
+  <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
+  <link rel="stylesheet" href="../article.css?v=4">
+  <!-- Each article chooses its own cover and reading palette. -->
+  <style>
+    :root {
+      --article-wash-start: #d9d6cf;
+      --article-wash-middle: #e7e4de;
+      --article-wash-end: #f3f2ef;
+      --article-surface: #fafaf9;
+      --article-accent: #78613d;
+      --article-cover-image: url("/blog/score-based-generative-models/diffusion-cover.jpg");
+    }
+  </style>
+  <script src="../article.js?v=2" defer></script>
+  <script src="../../analytics.js?v=1" defer></script>
+</head>
+<body class="blog-page article-page" id="top">
+  <a class="skip-link" href="#intro">跳转到正文</a>
+  <header class="blog-header">
+    <a class="blog-brand" href="../">祚栋的博客<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav class="blog-nav" aria-label="主导航">
+      <a href="../../">主页</a><a href="../" aria-current="page">博客</a>
+      <a class="nav-search" href="../#blog-search" aria-label="搜索博客"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
+    </nav>
+  </header>
+
+  <main class="article-layout">
+    <aside class="article-sidebar">
+      <details class="article-toc" open>
+        <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <nav aria-label="文章目录">
+          <a href="#intro">写在前面</a>
+          <a href="#score">Score 概念</a>
+          <a href="#score-matching">Score Matching</a>
+          <a href="#langevin">Langevin dynamics</a>
+          <a href="#discussion">问题讨论</a>
+          <a href="#references">参考与延伸阅读</a>
+        </nav>
+      </details>
+      <a class="article-back" href="../"><span aria-hidden="true">←</span> 全部文章</a>
+    </aside>
+
+    <article class="article-content">
+      <figure class="article-cover"><img src="diffusion-cover.jpg" width="1726" height="911" fetchpriority="high" alt="暖金与炭灰色的颗粒沿弧线逐渐汇聚成清晰的几何结构，表现从噪声到秩序的过程"></figure>
+      <header class="article-header">
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18M7 15h1m3 0h1m3 0h1m-9 3h1m3 0h1"/></svg><time datetime="2025-09-09">2025 年 9 月 9 日</time><span class="meta-update">更新</span></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>15 分钟阅读</span>
+          <span class="article-tags"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3-2 18M17 3l-2 18M4 8h17M3 16h17"/></svg><a href="../?tag=diffusion">diffusion</a><span aria-hidden="true">/</span><a href="../?tag=score-matching">score matching</a></span>
+        </div>
+        <h1>Score-based Generative Models</h1>
+        <p class="article-subtitle">真正意义的“扩散”模型，从梯度角度理解加噪去噪</p>
+        <p class="article-byline">钟祚栋 <span aria-hidden="true">/</span> 学习笔记</p>
+        <a class="article-series" href="../?collection=diffusion-rl"><span>GO UP! Diffusion + RL</span><span class="series-lesson">学习 03 <span aria-hidden="true">↗</span></span></a>
+      </header>
+
+      <section class="article-section" id="intro" aria-label="写在前面">
+        <p>宋飏大佬真的太强了，后续的 score-based SDE 更是无敌。</p>
+        <a class="reference-card" href="https://arxiv.org/abs/1907.05600"><span class="reference-kind">PAPER · YANG SONG &amp; STEFANO ERMON</span><strong>Generative Modeling by Estimating Gradients of the Data Distribution</strong><span>NeurIPS 2019 · arXiv:1907.05600 ↗</span></a>
+        <p>这篇文章也让我感到学数学物理的是真的强。Score-based Generative Models 从粒子扩散和梯度场的角度，让我重新理解了图像生成：一张图片可以看成高维空间中的一个点，而大量图片共同对应一个数据分布。</p>
+        <p>前向过程通过加噪，构造出一系列更平滑的分布；训练时，我们学习这些分布的梯度方向。生成时，再利用学到的梯度，从一个容易采样的初始分布逐步走向数据分布，也就是从 Prior 到 <span data-math>p_{\mathrm{data}}</span> 的过程。</p>
+        <p>对一个固定的干净样本来说，加噪后的条件分布的梯度，确实指向它的均值，而且可以证明这个方向与噪声相反。下面就沿着这条线，理解加噪、去噪和采样。</p>
+      </section>
+
+      <section class="article-section" id="score">
+        <h2><a class="heading-anchor" href="#score" aria-label="链接到此章节">#</a><span>Score 概念</span></h2>
+        <p>先把概率密度写成能量模型（玻尔兹曼分布）的形式：</p>
+        <div data-math="block">p_\theta(x)=\frac{e^{-f_\theta(x)}}{Z_\theta},\qquad Z_\theta=\int e^{-f_\theta(x)}\,\mathrm{d}x.</div>
+        <p>这里 <span data-math>f_\theta(x)</span> 是能量函数，<span data-math>Z_\theta</span> 是归一化因子。我们关心的 score 是<strong>对数概率密度关于输入的梯度</strong>：</p>
+        <div data-math="block">\begin{aligned}s_\theta(x)&amp;=\nabla_x\log p_\theta(x)\\&amp;=-\nabla_x f_\theta(x)-\underbrace{\nabla_x\log Z_\theta}_{=\,0}\\&amp;=-\nabla_x f_\theta(x).\end{aligned}</div>
+        <p>这样一来，不好求的归一化因子就消失了，因为它不依赖于 <span data-math>x</span>。直观上，score 告诉我们：从当前位置出发，往哪个方向走，概率密度增长得最快。后面的 NCSN 会直接用网络拟合这个向量场。</p>
+
+        <h3>与 DDPM 中噪声的关系</h3>
+        <p>DDPM 的前向加噪可以写成：</p>
+        <div data-math="block">\begin{gathered}q(x_t\mid x_0)=\mathcal N\!\left(x_t;\sqrt{\bar\alpha_t}\,x_0,(1-\bar\alpha_t)I\right),\\x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\epsilon,\quad\epsilon\sim\mathcal N(0,I),\\\bar\alpha_t=\prod_{s=1}^{t}\alpha_s,\qquad\alpha_s=1-\beta_s.\end{gathered}</div>
+        <p>对这个条件高斯分布取对数，再对 <span data-math>x_t</span> 求梯度：</p>
+        <div data-math="block">\begin{aligned}\nabla_{x_t}\log q(x_t\mid x_0)&amp;=-\frac{x_t-\sqrt{\bar\alpha_t}\,x_0}{1-\bar\alpha_t}\\&amp;=-\frac{\epsilon}{\sqrt{1-\bar\alpha_t}}.\end{aligned}</div>
+        <p>这里可以看到：<strong>条件 score 就是噪声的反方向，二者差一个标准差的系数。</strong>因此，噪声预测网络也可以换一种参数化方式，表示为 score 网络：</p>
+        <div data-math="block">s_\theta(x_t,t)=-\frac{\epsilon_\theta(x_t,t)}{\sqrt{1-\bar\alpha_t}}.</div>
+        <p>把前面的条件 score 公式移项，DDPM 的加噪关系也可以这样写：</p>
+        <div data-math="block">x_t=\sqrt{\bar\alpha_t}\,x_0-(1-\bar\alpha_t)\nabla_{x_t}\log q(x_t\mid x_0).</div>
+        <aside class="editor-note"><strong>公式校注</strong><p>最后一式是前向关系的代数改写，不是新的采样算法。条件 score 指向 <span data-math>\sqrt{\bar\alpha_t}x_0</span>；实际网络学习的是加噪后整体分布的 score，不会知道每个输入对应的某一张原图。真实噪声 <span data-math>\epsilon</span> 与预测噪声 <span data-math>\epsilon_\theta</span> 也要区分。</p></aside>
+      </section>
+
+      <section class="article-section" id="score-matching">
+        <h2><a class="heading-anchor" href="#score-matching" aria-label="链接到此章节">#</a><span>Score Matching 构建梯度场</span></h2>
+        <p>与 flow matching 中拟合向量场的形式相似，score matching 也采用平方误差来学习一个向量场。但问题是：真实分布的 score 求不出来。一个经典操作就是<strong>加上条件</strong>，把不可计算的目标换成可以直接计算的高斯条件 score。</p>
+        <h3>从加噪的条件分布出发</h3>
+        <p>这里改用原论文的加性高斯噪声记法。设干净样本为 <span data-math>x_0\sim p_{\mathrm{data}}</span>，噪声尺度为 <span data-math>\sigma&gt;0</span>：</p>
+        <div data-math="block">\tilde x=x_0+\sigma\epsilon,\qquad\epsilon\sim\mathcal N(0,I).</div>
+        <div data-math="block">\begin{aligned}q_\sigma(\tilde x\mid x_0)&amp;=\frac{1}{(2\pi\sigma^2)^{d/2}}\exp\!\left(-\frac{\|\tilde x-x_0\|_2^2}{2\sigma^2}\right),\\q_\sigma(\tilde x)&amp;=\int q_\sigma(\tilde x\mid x_0)p_{\mathrm{data}}(x_0)\,\mathrm{d}x_0.\end{aligned}</div>
+        <p><span data-math>d</span> 是样本维度。条件分布的梯度容易计算：</p>
+        <div data-math="block">\begin{aligned}\nabla_{\tilde x}\log q_\sigma(\tilde x\mid x_0)&amp;=-\frac{\tilde x-x_0}{\sigma^2}\\&amp;=-\frac{\epsilon}{\sigma}.\end{aligned}</div>
+        <p>这里也进一步证明了：对于固定的 <span data-math>x_0</span>，条件 score 是噪声的反方向。</p>
+
+        <h3>为什么加条件后可以训练？</h3>
+        <p>我们本来希望最小化的是：</p>
+        <div data-math="block">\mathcal J_{\mathrm{SM}}(\theta;\sigma)=\frac12\mathbb E_{\tilde x\sim q_\sigma}\!\left[\left\|s_\theta(\tilde x,\sigma)-\nabla_{\tilde x}\log q_\sigma(\tilde x)\right\|_2^2\right].</div>
+        <p>把整体分布的 score 换成条件 score，就得到 Denoising Score Matching（DSM）：</p>
+        <div data-math="block">\begin{aligned}\ell(\theta;\sigma)&amp;=\frac12\mathbb E_{x_0,\tilde x}\!\left[\left\|s_\theta(\tilde x,\sigma)-\nabla_{\tilde x}\log q_\sigma(\tilde x\mid x_0)\right\|_2^2\right]\\&amp;=\frac12\mathbb E_{x_0,\epsilon}\!\left[\left\|s_\theta(x_0+\sigma\epsilon,\sigma)+\frac{\epsilon}{\sigma}\right\|_2^2\right].\end{aligned}</div>
+        <p>两者只相差一个与模型参数 <span data-math>\theta</span> 无关的常数，所以它们对训练的优化目标是等价的：</p>
+        <div data-math="block">\ell(\theta;\sigma)=\mathcal J_{\mathrm{SM}}(\theta;\sigma)+C_\sigma.</div>
+        <details class="derivation">
+          <summary>展开推导：这个常数从哪里来？</summary>
+          <p>记条件 score 为 <span data-math>u=\nabla_{\tilde x}\log q_\sigma(\tilde x\mid x_0)</span>。在通常的可微与可积条件下：</p>
+          <div data-math="block">\begin{aligned}\mathbb E[u\mid\tilde x]&amp;=\frac{\int p_{\mathrm{data}}(x_0)\nabla_{\tilde x}q_\sigma(\tilde x\mid x_0)\,\mathrm{d}x_0}{q_\sigma(\tilde x)}\\&amp;=\frac{\nabla_{\tilde x}q_\sigma(\tilde x)}{q_\sigma(\tilde x)}=\nabla_{\tilde x}\log q_\sigma(\tilde x).\end{aligned}</div>
+          <p>把条件期望记作 <span data-math>\bar u</span>，平方误差可分解为：</p>
+          <div data-math="block">\mathbb E\|s_\theta-u\|_2^2=\mathbb E\|s_\theta-\bar u\|_2^2+\mathbb E\|u-\bar u\|_2^2.</div>
+          <p>交叉项为零，第二项不依赖于网络参数，这就是 <span data-math>2C_\sigma</span>。</p>
+        </details>
+        <a class="reference-card" href="https://www.bilibili.com/video/BV1i4421D7tn/"><span class="reference-kind">延伸视频 · BILIBILI</span><strong>真正搞懂扩散模型 Score Matching 一定要理解的三大核心问题</strong><span>原文推荐的推导讲解 ↗</span></a>
+
+        <h3>多个噪声尺度，一起学习</h3>
+        <p>原论文选取一组从大到小的噪声尺度，并让同一个网络接收样本和噪声尺度两个输入：</p>
+        <div data-math="block">\sigma_1&gt;\sigma_2&gt;\cdots&gt;\sigma_L&gt;0,\qquad s_\theta(\tilde x,\sigma_i)\approx\nabla_{\tilde x}\log q_{\sigma_i}(\tilde x).</div>
+        <p>使用权重 <span data-math>\lambda(\sigma_i)=\sigma_i^2</span>，总损失为：</p>
+        <div data-math="block">\begin{aligned}\mathcal L(\theta)&amp;=\frac1L\sum_{i=1}^L\sigma_i^2\ell(\theta;\sigma_i)\\&amp;=\frac1{2L}\sum_{i=1}^L\mathbb E_{x_0,\epsilon}\!\left[\left\|\sigma_i s_\theta(x_0+\sigma_i\epsilon,\sigma_i)+\epsilon\right\|_2^2\right].\end{aligned}</div>
+        <p>这个加权有助于平衡不同噪声尺度下的训练目标。它并不意味着损失完全不依赖 <span data-math>\sigma_i</span>，因为输入样本和网络的条件仍然随噪声尺度改变。</p>
+        <p>经过训练，我们希望得到类似下面这样的梯度场：</p>
+        <figure class="article-figure"><img src="score-field.jpg" width="959" height="935" loading="lazy" alt="二维双峰分布的梯度场示意：箭头指向两个高概率密度区域，背景等高线表示密度"><figcaption>原文中的梯度场示意图。箭头表示局部概率密度增长的方向。</figcaption></figure>
+        <p>更准确地说，整体分布的 score 指向的是条件均值的方向，而不是指定的一张原图：</p>
+        <div data-math="block">\nabla_{\tilde x}\log q_\sigma(\tilde x)=\frac{\mathbb E[x_0\mid\tilde x]-\tilde x}{\sigma^2}.</div>
+      </section>
+
+      <section class="article-section" id="langevin">
+        <h2><a class="heading-anchor" href="#langevin" aria-label="链接到此章节">#</a><span>Langevin dynamics 如何从 score 得到图像</span></h2>
+        <p>有了梯度场，下一步就是采样。这里宋飏大佬借助了物理学中的<strong>朗之万动力学</strong>（Langevin dynamics）：粒子一方面受到势能力和摩擦的影响，另一方面受到随机热噪声的扰动。</p>
+        <p>直观上，score 把样本推向高密度区域，随机扰动则让样本保持探索。两者一起作用，才是在采样一个分布，而不只是做梯度上升、最终停在某个峰值。</p>
+
+        <h3>从粒子运动到采样公式</h3>
+        <p>设势能为 <span data-math>U(x)</span>，温度为 <span data-math>T_{\mathrm{phys}}</span>，玻尔兹曼常数为 <span data-math>k_B</span>。平衡分布与势能力分别是：</p>
+        <div data-math="block">p_{\mathrm{eq}}(x)=\frac1Z\exp\!\left(-\frac{U(x)}{k_BT_{\mathrm{phys}}}\right),\qquad F(x)=-\nabla_x U(x).</div>
+        <p>因此，力和 score 的关系为：</p>
+        <div data-math="block">\nabla_x\log p_{\mathrm{eq}}(x)=-\frac{\nabla_x U(x)}{k_BT_{\mathrm{phys}}}=\frac{F(x)}{k_BT_{\mathrm{phys}}}.</div>
+        <p>包含惯性的朗之万方程写作：</p>
+        <div data-math="block">\begin{aligned}\mathrm{d}X_t&amp;=V_t\,\mathrm{d}t,\\m\,\mathrm{d}V_t&amp;=-\gamma V_t\,\mathrm{d}t-\nabla U(X_t)\,\mathrm{d}t+\sqrt{2\gamma k_BT_{\mathrm{phys}}}\,\mathrm{d}W_t.\end{aligned}</div>
+        <p>其中 <span data-math>\gamma</span> 是摩擦系数，<span data-math>W_t</span> 是布朗运动。当惯性弛豫时间 <span data-math>m/\gamma</span> 远短于关注的时间尺度时，可以忽略惯性项，采用过阻尼近似：</p>
+        <div data-math="block">\begin{aligned}\mathrm{d}X_t&amp;=-\frac1\gamma\nabla U(X_t)\,\mathrm{d}t+\sqrt{\frac{2k_BT_{\mathrm{phys}}}{\gamma}}\,\mathrm{d}W_t\\&amp;=\frac{k_BT_{\mathrm{phys}}}{\gamma}\nabla\log p_{\mathrm{eq}}(X_t)\,\mathrm{d}t+\sqrt{\frac{2k_BT_{\mathrm{phys}}}{\gamma}}\,\mathrm{d}W_t.\end{aligned}</div>
+        <p>离散化时，布朗运动的增量满足 <span data-math>\Delta W\sim\mathcal N(0,\Delta t\,I)</span>。令 <span data-math>\eta=2k_BT_{\mathrm{phys}}\Delta t/\gamma</span>，就得到常见的采样形式：</p>
+        <div data-math="block">X_{n+1}=X_n+\frac\eta2\nabla\log p(X_n)+\sqrt\eta\,z_n,\qquad z_n\sim\mathcal N(0,I).</div>
+        <p>将真实 score 换成学习到的网络，就能用它来更新样本：</p>
+        <div data-math="block">\tilde x_{n+1}=\tilde x_n+\frac\eta2s_\theta(\tilde x_n,\sigma)+\sqrt\eta\,z_n.</div>
+        <aside class="editor-note"><strong>公式校注</strong><p>这里重排了原手写推导中的物理符号：加入势能力后，漂移自然沿着正 score 方向；无需为了生成而人为翻转力的符号。随机项按 <span data-math>\sqrt{\Delta t}</span> 缩放，而不是 <span data-math>\Delta t</span>。固定步长与有限迭代得到的是近似样本。</p></aside>
+
+        <h3>退火朗之万动力学采样</h3>
+        <p>单一噪声尺度还不够。原论文从大噪声开始，逐级减小标准差，在每一级上执行若干次 Langevin 更新。这就是 Annealed Langevin Dynamics。</p>
+        <section class="algorithm" aria-labelledby="algorithm-title">
+          <h4 id="algorithm-title">Algorithm 1 · Annealed Langevin Dynamics</h4>
+          <p><strong>输入：</strong>噪声序列 <span data-math>\sigma_1&gt;\cdots&gt;\sigma_L&gt;0</span>，最小噪声级的步长 <span data-math>\eta_{\min}&gt;0</span>，每级迭代次数 <span data-math>K</span>。</p>
+          <ol>
+            <li>从一个容易采样的初始分布取样，记为 <span data-math>x^{(0)}</span>。</li>
+            <li>依次遍历 <span data-math>i=1,\ldots,L</span>，设置该级步长，对每个噪声级执行下面两步：<div data-math="block">\eta_i=\eta_{\min}\frac{\sigma_i^2}{\sigma_L^2}.</div></li>
+            <li>在第 <span data-math>i</span> 级内，重复 <span data-math>k=1,\ldots,K</span>：<div data-math="block">\begin{aligned}z_k&amp;\sim\mathcal N(0,I),\\x^{(k)}&amp;=x^{(k-1)}+\frac{\eta_i}{2}s_\theta(x^{(k-1)},\sigma_i)+\sqrt{\eta_i}\,z_k.\end{aligned}</div></li>
+            <li>把当前输出传给下一个噪声级：<span data-math>x^{(0)}\leftarrow x^{(K)}</span>；全部噪声级完成后返回最终样本。</li>
+          </ol>
+        </section>
+        <p>这里的 <span data-math>\eta_{\min}</span> 对应原论文算法中的步长参数 <span data-math>\epsilon</span>，<span data-math>K</span> 对应原算法的内循环次数 <span data-math>T</span>；换一组符号，是为了不和高斯噪声、物理温度混淆。</p>
+        <p>模型在每次更新时的输入，是<strong>上一步的样本和当前循环的标准差</strong>。每个噪声级的最后一个样本，作为下一级的初始样本。</p>
+        <div class="sampling-path"><div data-math="block">p_{\mathrm{init}}\longrightarrow q_{\sigma_1}\longrightarrow q_{\sigma_2}\longrightarrow\cdots\longrightarrow q_{\sigma_L}\approx p_{\mathrm{data}}.</div></div>
+        <p>这条路径表示采样逐步逼近不同噪声尺度的分布。大噪声级负责探索整体结构，小噪声级逐渐补上细节；步长与 <span data-math>\sigma_i^2</span> 成正比，随机项的幅度则与 <span data-math>\sigma_i</span> 成正比。</p>
+      </section>
+
+      <section class="article-section" id="discussion">
+        <h2><a class="heading-anchor" href="#discussion" aria-label="链接到此章节">#</a><span>问题讨论</span></h2>
+        <h3>1. 流形假设</h3>
+        <p>真实数据可能集中在高维空间中的低维流形附近。如果直接对这样的分布求 score，环境空间中的概率密度与梯度可能不好定义；远离数据的区域，也缺少足够的样本来学习可靠的方向。</p>
+        <p><strong>加噪声有助于解决这个问题。</strong>高斯扰动把分布平滑到周围空间，让梯度更容易定义和学习；较大的噪声还能覆盖原始数据的低密度区域。</p>
+        <h3>2. 标准差为什么要改变？</h3>
+        <p>我的直观理解是：大的标准差用于“铺开”数据，增加覆盖范围；小的标准差用于最后逐步靠近真实数据。</p>
+        <ul><li><strong>大标准差：</strong>平滑分布，帮助跨越低密度区域、探索不同模式，可以看成比简单数据增广更进一步的作用。</li><li><strong>小标准差：</strong>让加噪分布接近原始数据分布，在已有结构上逐步细化。</li></ul>
+        <p>所以，这里的目标不是恢复某一张指定的 <span data-math>x_0</span>，而是让最终生成的样本分布接近 <span data-math>p_{\mathrm{data}}</span>。从这个角度再看“加噪—去噪”，整个过程就连起来了。</p>
+      </section>
+
+      <section class="article-section" id="references">
+        <h2><a class="heading-anchor" href="#references" aria-label="链接到此章节">#</a>参考与延伸阅读</h2>
+        <ol class="article-references">
+          <li>Yang Song &amp; Stefano Ermon. <a href="https://arxiv.org/abs/1907.05600">Generative Modeling by Estimating Gradients of the Data Distribution</a>, NeurIPS 2019. Score Matching 与退火 Langevin 算法。</li>
+          <li>Jonathan Ho, Ajay Jain &amp; Pieter Abbeel. <a href="https://arxiv.org/abs/2006.11239">Denoising Diffusion Probabilistic Models</a>, NeurIPS 2020. DDPM 加噪与噪声预测参数化。</li>
+          <li><a href="https://www.bilibili.com/video/BV1i4421D7tn/">真正搞懂扩散模型 Score Matching 一定要理解的三大核心问题</a>，原文推荐视频。</li>
+          <li>Hiba Assi et al. <a href="https://arxiv.org/abs/1509.02227">Disordered vortex matter out of equilibrium: a Langevin molecular dynamics study</a>, 2015. 第 2.1–2.2 节，朗之万方程与涨落耗散关系的补充参考。</li>
+        </ol>
+      </section>
+
+      <footer class="article-end">
+        <a class="author-profile" href="../../"><img src="../../assets/images/头像.jpg?v=9dfdd1931b47" width="48" height="48" loading="lazy" alt=""><span><strong>钟祚栋</strong><span>记录学习过程，分享一点理解。</span></span><span class="author-arrow" aria-hidden="true">↗</span></a>
+        <p>本文由作者的<a href="https://zhuanlan.zhihu.com/p/25390096275">知乎原文</a>整理。手写公式已转为文字排版；补充区分了条件与边缘 score，并校正了朗之万推导中的符号。梯度场图示保留自原文；封面为 AI 生成的原创插画。</p>
+        <a href="../ddim/">← 学习 02 · DDIM</a><a href="../">返回博客</a><a href="#top">回到顶部 ↑</a>
+      </footer>
+    </article>
+  </main>
+  <a class="reading-return" href="#top" aria-label="回到顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg><span data-reading-percent aria-hidden="true"></span></a>
+  <footer class="blog-footer"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+</body>
+</html>

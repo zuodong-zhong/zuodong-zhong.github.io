@@ -1,0 +1,13 @@
+Tool: built-in image_gen.imagegen
+Intent: original editorial art cover, not a scientific illustration or experimental result.
+Source: /Users/zhongzuodong/.codex/generated_images/01a12fa0-478a-7bf0-bdae-06f4e7ed8e68/exec-bf88a93d-eec0-4bab-8430-70068bc3847a.png
+Outputs: cover.png (original), cover.jpg (sips JPEG 88 quality)
+
+Final prompt:
+Use case: stylized-concept.
+Asset type: original full-bleed horizontal art cover for a thoughtful Chinese essay about DDIM, part of a restrained abstract scientific-essay cover series. Wide landscape approximately 1.9:1.
+Primary request: express a continuous smooth trajectory taking a shorter path from scattered noise to clear structure, as refined tactile silkscreen editorial art. The left third is quiet cream paper with sparse crisp sage pigment flecks. Two or three thin elegant sweeping curves begin low in this quiet left region and arch fluidly through three separated, semi-transparent narrow elliptical slices suspended across the middle-right, suggesting that the curve skips some intermediate slices. These curves unite into the folded edges of an airy, sculptural but flat-drawn dark forest-green ribbon loop at the far right. The ribbon loop has an asymmetric vertical oval opening, layered paper-like bands and crisp contrasting contours. Do not make a concentric target; the long flowing S-curve and open folded ribbon should define a distinctly graceful composition.
+Composition: asymmetric, lots of calmer light space on the left for future web text, visual weight and clearly resolved detail concentrated in right 55%, unusually elegant big curved movement, overlapping translucent planes, full bleed and no border. The path and the folds must remain sharply defined, with delicate material detail.
+Style and material: flat modernist abstraction, fine cotton-paper grain, dry ink edges, delicate pastel surface, translucent silkscreen overprinting, sophisticated magazine art. No glossy rendering, no photographic blur.
+Palette: warm cream/off-white, sage green, muted moss, deep forest ink green, a little soft gray-green. Low-saturation and natural with strong dark contrast at the right.
+Avoid: any text, letters, words, numbers, formulas, logos, watermark, labels, frame, robot, neon, glow, generic AI particle sphere, glossy 3D balls, ordinary technology wallpaper, too many straight facets, a rectangular staircase composition, excessive blur.
