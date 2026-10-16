@@ -1,0 +1,22 @@
+Tool: built-in image_gen.imagegen
+Intent: original editorial cover art, not a scientific diagram or experimental result.
+Direction: a lighter interpretation of this site's diffusion-cover silkscreen style, retaining the quiet geometry of the original quantum SVGs.
+Original retained unchanged: blog/quantum/basics-cover.svg
+Generated source: /Users/zhongzuodong/.codex/generated_images/01a14278-9433-7b93-aea4-f40b13eab8fd/exec-47c2d393-36fa-497a-82b2-efa111bab2ed.png
+Outputs: basics-cover-v2.png (generated original), basics-cover-v2.jpg (sips JPEG quality 88)
+
+Generation prompt:
+Use case: stylized-concept.
+Asset type: original editorial illustration for a personal science-note blog cover, wide landscape about 1.9:1, preferably 1728 x 912. One finished image, full bleed.
+Art direction: a restrained midpoint between a clean mathematical sketch and tactile abstract silkscreen art. Bright warm off-white cotton paper, extremely fine even paper grain, a few overlapping translucent ink shapes, precise hairline contours, only a little dry pigment at selected edges. Mostly flat printmaking, not 3D rendering. About two-thirds of the image should remain pale and quiet. Richer pigment is limited to a few small focal areas; no heavy black mass, no all-over grunge, no particle cloud. More character and depth than a plain diagram, much lighter and simpler than a dense abstract painting.
+Composition: generous quiet space in left third, because the website overlays its title there; dominant conceptual motif centered around 65-72% of image width. All important forms comfortably inside the edges. Elegant deliberate geometry, subtle asymmetry and breathing room. No decorative border.
+No text of any kind: no words, labels, letters, formulas, numbers, logos, signature, watermark. No UI, no photo, no robots, no neon, no glossy glass, no sci-fi technology wallpaper. This is conceptual cover art, not a chart or experimental result.
+Subject: a single Bloch-sphere-inspired geometric form, composed of one translucent pale slate-blue circular disc and two or three intersecting elliptical ink contours with small overlapping crescent-shaped washes. Let the ellipses suggest latitude and a tilted meridian without a busy wireframe. One fine deep-blue vector extends from its center diagonally upward-right, ending at a small muted terracotta dot. A very faint projected contour below gives a hint of spatial depth. Keep the geometry open and readable; the sphere is an airy printed construction, not a glossy ball or atom illustration. Palette: mist blue, pale mineral blue-gray, small restrained indigo accents, one tiny warm rust point on ivory paper. The main form spans roughly half the image height, with open space all around it.
+
+Targeted edit source: /Users/zhongzuodong/.codex/generated_images/01a14278-9433-7b93-aea4-f40b13eab8fd/exec-83a92a03-db83-4ca6-83b8-8912ed80cf3d.png
+Edit prompt:
+Use case: precise-object-edit.
+Edit the supplied Bloch-sphere editorial illustration with ONE narrowly targeted geometry correction. Keep the exact canvas, paper texture, colors, all sphere contours, translucent crescent washes, soft projected ellipse, subject scale and placement, and generous empty left region.
+The blue state-vector arrow currently extends outside the sphere. Shorten that same diagonal vector so its arrowhead ends comfortably inside the visible circular silhouette, near the upper-right portion of the sphere. Move the small terracotta endpoint dot to that new endpoint as well. The terracotta dot and the entire blue vector must sit on/in the sphere's visible disc, not float outside it. Keep the vector's central origin and diagonal direction unchanged. Make the endpoint dot a little more delicate. Remove all traces of the old outside arrow segment and old outside dot, restoring the unchanged ivory paper there.
+Do not change anything else. No text, no labels, no extra geometry, no border. This is still the same airy silkscreen conceptual illustration.
+

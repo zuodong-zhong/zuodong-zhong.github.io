@@ -1,0 +1,15 @@
+Tool: built-in image_gen.imagegen
+Intent: original editorial cover art, not a scientific diagram or experimental result.
+Direction: a lighter interpretation of this site's diffusion-cover silkscreen style, retaining the quiet geometry of the original quantum SVGs.
+Original retained unchanged: blog/quantum/grover-cover.svg
+Generated source: /Users/zhongzuodong/.codex/generated_images/01a14278-9433-7b93-aea4-f40b13eab8fd/exec-2eb720cd-a909-4bf9-a0ff-9ab2c57e71e5.png
+Outputs: grover-cover-v2.png (generated original), grover-cover-v2.jpg (sips JPEG quality 88)
+
+Generation prompt:
+Use case: stylized-concept.
+Asset type: original editorial illustration for a personal science-note blog cover, wide landscape about 1.9:1, preferably 1728 x 912. One finished image, full bleed.
+Art direction: a restrained midpoint between a clean mathematical sketch and tactile abstract silkscreen art. Bright warm off-white cotton paper, extremely fine even paper grain, a few overlapping translucent ink shapes, precise hairline contours, only a little dry pigment at selected edges. Mostly flat printmaking, not 3D rendering. About two-thirds of the image should remain pale and quiet. Richer pigment is limited to a few small focal areas; no heavy black mass, no all-over grunge, no particle cloud. More character and depth than a plain diagram, much lighter and simpler than a dense abstract painting.
+Composition: generous quiet space in left third, because the website overlays its title there; dominant conceptual motif centered around 65-72% of image width. All important forms comfortably inside the edges. Elegant deliberate geometry, subtle asymmetry and breathing room. No decorative border.
+No text of any kind: no words, labels, letters, formulas, numbers, logos, signature, watermark. No UI, no photo, no robots, no neon, no glossy glass, no sci-fi technology wallpaper. This is conceptual cover art, not a chart or experimental result.
+Subject: amplitude amplification suggested by a quiet row of slim vertical rectangular ink planes sharing a fine horizontal baseline. Most planes are short, pale sage-gray and evenly spaced; one toward the right is noticeably taller and printed in muted ochre, giving one crisp visual focus. Two broad, extremely light translucent curved sweeps cross behind the row, suggesting reflection and interference. A few faint shorter reflected shapes below the baseline add conceptual depth, without making a literal labeled statistical chart. Avoid arrow symbols and magnifying glasses. This should feel poised and airy, with clear geometric rhythm, very few shapes, almost no speckles. Palette: ivory, pale sage, muted olive-gray, one warm ochre plane, limited dark moss hairlines.
+

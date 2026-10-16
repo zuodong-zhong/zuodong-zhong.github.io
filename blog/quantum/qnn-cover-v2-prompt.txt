@@ -1,0 +1,15 @@
+Tool: built-in image_gen.imagegen
+Intent: original editorial cover art, not a scientific diagram or experimental result.
+Direction: a lighter interpretation of this site's diffusion-cover silkscreen style, retaining the quiet geometry of the original quantum SVGs.
+Original retained unchanged: blog/quantum/qnn-cover.svg
+Generated source: /Users/zhongzuodong/.codex/generated_images/01a14278-9433-7b93-aea4-f40b13eab8fd/exec-185350b1-333d-4894-8342-33ae2a2acfcc.png
+Outputs: qnn-cover-v2.png (generated original), qnn-cover-v2.jpg (sips JPEG quality 88)
+
+Generation prompt:
+Use case: stylized-concept.
+Asset type: original editorial illustration for a personal science-note blog cover, wide landscape about 1.9:1, preferably 1728 x 912. One finished image, full bleed.
+Art direction: a restrained midpoint between a clean mathematical sketch and tactile abstract silkscreen art. Bright warm off-white cotton paper, extremely fine even paper grain, a few overlapping translucent ink shapes, precise hairline contours, only a little dry pigment at selected edges. Mostly flat printmaking, not 3D rendering. About two-thirds of the image should remain pale and quiet. Richer pigment is limited to a few small focal areas; no heavy black mass, no all-over grunge, no particle cloud. More character and depth than a plain diagram, much lighter and simpler than a dense abstract painting.
+Composition: generous quiet space in left third, because the website overlays its title there; dominant conceptual motif centered around 65-72% of image width. All important forms comfortably inside the edges. Elegant deliberate geometry, subtle asymmetry and breathing room. No decorative border.
+No text of any kind: no words, labels, letters, formulas, numbers, logos, signature, watermark. No UI, no photo, no robots, no neon, no glossy glass, no sci-fi technology wallpaper. This is conceptual cover art, not a chart or experimental result.
+Subject: an abstract but recognizable small quantum circuit as a quiet composition of THREE thin parallel horizontal ink paths. Across the middle-right, these paths pass through a few translucent upright rectangular planes in a gently staggered arrangement, like very light layered paper gates. Include one or two fine partial elliptical rotation contours around selected gate planes and two short vertical connections between neighboring paths, each with a tiny ink endpoint. The three lines stay distinct; no dense network. A single very fine sweeping return arc underneath softly suggests a parameter update. Use only 4-6 large shapes and a handful of small marks. Make it feel like thoughtful editorial print art, not an engineering schematic or blocky staircase. Palette: pale gray-lilac, dusty lavender, soft mauve, restrained deep plum-blue contours and one tiny desaturated clay accent on warm ivory paper.
+

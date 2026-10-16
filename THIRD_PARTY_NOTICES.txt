@@ -83,3 +83,11 @@ The three SVG covers, Bell/QNN circuit diagrams, and HTML/SVG interactive
 figures in blog/quantum/ were created for this site. They are explanatory
 illustrations and ideal-state calculations, not quantum-hardware results.
 No photographed notebook pages are included in the published site.
+
+The current quantum-series covers are original image_gen.imagegen editorial
+illustrations, using a lighter interpretation of this site's diffusion-cover
+style. blog/quantum/{basics,qnn,grover}-cover-v2.png retain the generated
+originals; matching .jpg files are web exports. Each *-cover-v2-prompt.txt
+records its complete prompt and source. The original three *-cover.svg files
+are preserved unchanged. The covers are conceptual artwork, not quantitative
+plots, exact circuit diagrams, or experimental results.
