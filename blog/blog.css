@@ -101,9 +101,10 @@ h1, h2, h3 { color: var(--blog-ink); }
 .blog-sidebar h2 { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; color: var(--blog-ink); font-size: 15px; font-weight: 650; line-height: 1.6; }
 .blog-sidebar h2 svg { width: 19px; height: 19px; color: #4e515c; }
 .collection-card { display: grid; gap: 9px; padding: 17px; border: 1px solid var(--blog-border); border-radius: 10px; background: #ffffff70; transition: background .2s, border-color .2s; }
+.collection-card + .collection-card { margin-top: 12px; }
 .collection-title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; color: #363840; font-size: 16px; font-weight: 550; }
-.collection-title > span { color: var(--blog-muted); transition: transform .2s ease; }
-.collection-card:hover .collection-title > span { transform: translateX(3px); }
+.collection-title > span[aria-hidden="true"] { color: var(--blog-muted); transition: transform .2s ease; }
+.collection-card:hover .collection-title > span[aria-hidden="true"] { transform: translateX(3px); }
 .collection-card:hover { border-color: #b7bac4; background: #fff; }
 .collection-description { color: var(--blog-muted); font-size: 12px; line-height: 1.9; }
 .collection-source { color: #585c66; font-size: 11px; }

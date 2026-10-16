@@ -1,0 +1,93 @@
+/* Shared only by the quantum series. All diagrams are original SVG/HTML. */
+.quantum-demo {
+  --q-accent: #356e8c;
+  --q-warm: #ad6552;
+  margin: 34px 0;
+  padding: 25px;
+  border: 1px solid color-mix(in srgb, var(--article-accent) 24%, #fff);
+  border-radius: 14px;
+  background: rgba(255,255,255,.65);
+  color: #364b58;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.quantum-demo *, .quantum-table * { box-sizing: border-box; }
+.quantum-demo .demo-heading { display: flex; flex-wrap: wrap; gap: 5px 14px; align-items: baseline; margin-bottom: 10px; }
+.quantum-demo .demo-heading h3 { margin: 0; font-size: 18px; line-height: 1.6; }
+.demo-number { color: var(--q-accent); font-size: 10px; font-weight: 650; letter-spacing: .12em; }
+.article-content .quantum-demo p { margin: 10px 0 18px; }
+.quantum-demo .demo-hint { color: #5c6f79; font-size: 12px; }
+.demo-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+.quantum-demo fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.quantum-demo fieldset:disabled { opacity: .55; }
+.quantum-demo label { display: block; margin: 12px 0 6px; font-size: 13px; }
+.quantum-demo label output { float: right; font-variant-numeric: tabular-nums; }
+.quantum-demo input[type="range"] { display: block; width: 100%; height: 25px; margin: 5px 0 14px; accent-color: var(--q-accent); cursor: pointer; }
+.quantum-demo select { width: 100%; min-height: 38px; padding: 7px 10px; border: 1px solid #c5d3dc; border-radius: 6px; background: #fff; color: #354b59; font: inherit; font-size: 13px; }
+.demo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+.quantum-demo button { min-height: 38px; padding: 7px 13px; border: 1px solid #b9ccd7; border-radius: 7px; background: #fff; color: #355a72; font: inherit; font-size: 12px; font-weight: 550; cursor: pointer; }
+.quantum-demo button:hover { background: #edf4f8; border-color: #7496ad; }
+.quantum-demo button.primary { color: #fff; background: #356e8c; border-color: #356e8c; }
+.quantum-demo button.primary:hover { background: #285974; }
+.quantum-demo button:disabled { opacity: .5; cursor: default; }
+.quantum-demo :is(button, input, select):focus-visible { outline: 2px solid #356e8c; outline-offset: 4px; }
+.quantum-demo svg.q-viz { display: block; width: 100%; height: auto; fill: none; stroke: none; overflow: visible; }
+.q-viz .q-wire { stroke: #a8bdca; stroke-width: 1.3; }
+.q-viz .q-grid { stroke: #dce5eb; stroke-width: 1; }
+.q-viz .q-guide { stroke: #a8bdca; stroke-width: 1; stroke-dasharray: 4 5; }
+.q-viz .q-accent { stroke: #356e8c; stroke-width: 2.5; }
+.q-viz .q-warm { stroke: #ad6552; stroke-width: 2.5; }
+.q-viz text { fill: #627582; font-family: var(--site-font); font-size: 12px; stroke: none; }
+.q-viz .q-label { fill: #244a65; font-size: 14px; font-weight: 600; }
+.q-viz .q-point { fill: #356e8c; stroke: #fff; stroke-width: 2; }
+.q-viz .q-target { fill: #fff; stroke: #ad6552; stroke-width: 2; }
+.q-state { padding: 12px 14px; background: #edf3f7; border-radius: 7px; color: #335c76; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.q-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 18px 0; }
+.q-stats > div { padding: 10px 8px; border-block: 1px solid #dce5eb; text-align: center; }
+.q-stats small { display: block; color: #627582; font-size: 11px; }
+.q-stats strong { display: block; color: #244a65; font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.q-prob { margin-top: 13px; }
+.q-prob-label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.q-track { height: 7px; margin-top: 5px; overflow: hidden; border-radius: 4px; background: #e2ebf0; }
+.q-track > span { display: block; width: 50%; height: 100%; background: #5288a7; }
+.q-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.quantum-table { width: 100%; margin: 25px 0; border-collapse: collapse; color: var(--article-text); font-size: 14px; line-height: 1.75; text-align: left; }
+.quantum-table th, .quantum-table td { padding: 10px 12px; border-bottom: 1px solid var(--article-rule); vertical-align: middle; }
+.quantum-table th { color: var(--article-ink); font-size: 12px; font-weight: 600; }
+.quantum-table th:first-child, .quantum-table td:first-child { padding-left: 0; }
+.quantum-table th:last-child, .quantum-table td:last-child { padding-right: 0; }
+.quantum-demo .quantum-table { margin: 18px 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+.quantum-demo .quantum-table th { font-size: 11px; }
+.quantum-demo .quantum-table td, .quantum-demo .quantum-table th { padding-block: 8px; }
+.q-results td:nth-child(2) { min-width: 110px; }
+.q-results td:nth-child(3) { min-width: 95px; }
+.q-amplitude { display: inline-block; position: relative; width: 65px; height: 9px; margin-left: 10px; vertical-align: middle; background: linear-gradient(90deg, #eef2f5 49%, #acbcc8 49%, #acbcc8 51%, #eef2f5 51%); }
+.q-amplitude span { position: absolute; top: 0; height: 100%; background: #5288a7; }
+.q-amplitude span.negative { background: #ad6552; }
+.q-marked { background: #edf4f8; }
+.q-stage { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 8px; font-size: 11px; }
+.q-stage span { border: 1px solid #d5e0e8; border-radius: 5px; padding: 4px 8px; }
+.q-stage [aria-current="step"] { color: #fff; border-color: #356e8c; background: #356e8c; }
+.quantum-demo .q-feedback { min-height: 2em; margin-bottom: 0; color: #526d7e; font-size: 12px; }
+.quantum-diagram { width: 100%; margin: 30px 0; }
+.quantum-diagram img { display: block; width: 100%; height: auto; }
+.quantum-diagram figcaption { margin: 10px 0 0; font-size: 12px; color: var(--article-muted); line-height: 1.8; }
+.quantum-series-nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 32px 0; padding-top: 20px; border-top: 1px solid var(--article-rule); font-size: 14px; }
+.article-content .quantum-series-nav a { color: var(--article-accent); }
+@media (max-width: 600px) {
+  .quantum-demo { padding: 19px 15px; }
+  .demo-grid { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .demo-grid > .q-viz { max-width: 330px; margin-inline: auto; }
+  .q-stats { gap: 5px; }
+  .q-stats strong { font-size: 17px; }
+  .quantum-table { font-size: 12px; }
+  .quantum-table td, .quantum-table th { padding-inline: 6px; }
+  .q-amplitude { width: 38px; margin-left: 6px; }
+  .q-results td:nth-child(2) { min-width: 91px; }
+  .q-results td:nth-child(3) { min-width: 65px; }
+  .q-selects { grid-template-columns: 1fr; gap: 0; }
+}
+@media print {
+  .quantum-demo { break-inside: avoid; background: #fff; }
+  .quantum-demo fieldset, .demo-actions { display: none; }
+}

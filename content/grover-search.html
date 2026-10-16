@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" class="article-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title lang="zh-CN">Grover 搜索：标记相位，放大正确答案的振幅 | 钟祚栋</title>
+  <meta name="description" content="从四选一的完整推导出发，逐步执行 Oracle 和 Diffusion，观察振幅放大、测量概率与过度迭代。">
+  <meta name="theme-color" content="#e4e8d8">
+  <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Grover 搜索：标记相位，放大正确答案的振幅">
+  <meta property="og:description" content="从四选一的完整推导出发，逐步执行 Oracle 和 Diffusion，观察振幅放大、测量概率与过度迭代。">
+  <meta property="og:image" content="https://zuodong-zhong.github.io/blog/quantum/grover-cover.svg">
+  <link rel="canonical" href="https://zuodong-zhong.github.io/blog/grover-search/">
+  <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
+  <link rel="stylesheet" href="../../site-theme.css?v=0325a12068d1">
+  <link rel="stylesheet" href="../article.css?v=8c73710039e0">
+  <link rel="stylesheet" href="../../site-header.css?v=41802d76fa51">
+  <link rel="stylesheet" href="../quantum/demos.css?v=1">
+  <style>:root { --article-wash-start: #e4e8d8; --article-wash-middle: #eef0e5; --article-wash-end: #f6f7f0; --article-surface: #fbfcf8; --article-accent: #6b7950; --article-cover-image: url("/blog/quantum/grover-cover.svg"); }</style>
+  <script src="../../site.js?v=1d16e7250071" defer></script>
+  <script src="../article.js?v=3" defer></script>
+  <script src="../quantum/quantum-math.js?v=1" defer></script>
+  <script src="../quantum/demos.js?v=1" defer></script>
+  <script src="../../analytics.js?v=1" defer></script>
+</head>
+<body class="blog-page article-page" id="top">
+  <a class="skip-link" href="#intro" lang="zh-CN">跳转到正文</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="../../" data-zh="钟祚栋">Zuodong Zhong</a>
+      <nav class="site-nav" data-site-nav aria-label="Main navigation">
+        <a href="../../#about" data-zh="简介">About</a>
+        <a href="../../#news" data-zh="动态">News</a>
+        <a href="../../#publications" data-zh="论文">Publications</a>
+        <a href="../../#experience" data-zh="经历">Experience</a>
+        <a href="../" class="is-active" data-zh="博客">Blog</a>
+      </nav>
+      <div class="site-tools">
+        <button class="site-language" type="button" data-language-toggle aria-label="切换到中文" hidden><span data-language="en">EN</span><span data-language="zh" lang="zh-CN">中</span></button>
+      </div>
+    </div>
+  </header>
+  <main class="article-layout" lang="zh-CN">
+    <aside class="article-sidebar">
+      <details class="article-toc" open>
+        <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <nav aria-label="文章目录">
+          <a href="#intro">从“验证答案”到“更容易找到答案”</a>
+          <a href="#oracle">Oracle：标记答案，却还没有提高概率</a>
+          <a href="#diffusion">Diffusion：以平均振幅为中心反射</a>
+          <a href="#four">四选一：完整算一次</a>
+          <a href="#iterations">为什么不能无限次放大？</a>
+          <a href="#references">回看这组笔记</a>
+        </nav>
+      </details>
+      <a class="article-back" href="../?collection=quantum"><span aria-hidden="true">←</span> 量子计算专栏</a>
+    </aside>
+    <article class="article-content">
+      <figure class="article-cover"><img src="../quantum/grover-cover.svg" width="1400" height="740" fetchpriority="high" alt="Grover 搜索原创概念封面"></figure>
+      <header class="article-header">
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><time datetime="2026-10-16">2026 年 10 月 16 日</time></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>11 分钟阅读</span>
+          <span class="article-tags"><a href="../?collection=quantum">quantum</a><span aria-hidden="true">/</span><a href="../?tag=grover">grover</a></span>
+        </div>
+        <h1>Grover 搜索</h1>
+        <p class="article-subtitle">标记相位，放大正确答案的振幅</p>
+        <p class="article-byline">钟祚栋 <span aria-hidden="true">/</span> 学习笔记</p>
+        <a class="article-series" href="../?collection=quantum"><span>Quantum Notes · 量子计算入门</span><span class="series-lesson">学习 03 <span aria-hidden="true">↗</span></span></a>
+      </header>
+<section class="article-section" id="intro"><h2><a class="heading-anchor" href="#intro" aria-label="链接到此章节">#</a>从“验证答案”到“更容易找到答案”</h2>
+
+<p>笔记的最后一页写下了一个很有吸引力的想法：如果能判断某个候选是不是答案，能不能把判断规则放进量子电路，让正确答案更容易被测到？</p>
+<p>Grover 搜索给出了一个清楚的例子。与<a href="../quantum-neural-networks/">上一篇的 QNN</a>不同，它不靠训练参数拟合数据，而是设计两种反射：<strong>Oracle 改变相位，Diffusion 把相位差转成振幅差。</strong>读这篇只需要前面关于<a href="../quantum-computing-basics/#interference">相位与干涉</a>的基础。</p>
+<noscript><p class="editor-note">公式与四选一示例可以直接阅读；启用 JavaScript 后可逐步操作搜索演示。</p></noscript>
+
+</section>
+
+<section class="article-section" id="oracle"><h2><a class="heading-anchor" href="#oracle" aria-label="链接到此章节">#</a>Oracle：标记答案，却还没有提高概率</h2>
+
+<p>设有 <span data-math>N=2^n</span> 个候选，验证规则 <span data-math>f(x)\in\{0,1\}</span> 在正确候选上取 1。先用 H 门制备均匀叠加：</p>
+<div data-math="block">|s\rangle=H^{\otimes n}|0\rangle^{\otimes n}=\frac1{\sqrt N}\sum_{x=0}^{N-1}|x\rangle.</div>
+<p>每个候选的初始振幅是 <span data-math>1/\sqrt N</span>，概率是 <span data-math>1/N</span>。相位 Oracle 的作用为：</p>
+<div data-math="block">U_f|x\rangle=(-1)^{f(x)}|x\rangle.</div>
+<p>它把正确候选的振幅乘以 −1。这个负号对不同候选而言是相对相位；但 <span data-math>|a|^2=|-a|^2</span>，所以<strong>只做 Oracle 后立即测量，成功概率没有提高</strong>。</p>
+<h3>Oracle 并不是免费知道答案</h3>
+<p>通常从可逆计算验证函数的电路出发，<span data-math>V_f|x,b\rangle=|x,b\oplus f(x)\rangle</span>。让辅助位处于 <span data-math>|-\rangle</span>，就可通过相位回踢得到：</p>
+<div data-math="block">V_f\bigl(|x\rangle|-\rangle\bigr)=(-1)^{f(x)}|x\rangle|-\rangle.</div>
+<p>实际实现还可能需要工作辅助位、可逆逻辑与反计算来清除临时信息。能快速验证候选，并不意味着这些门的实现成本为零。演示中让读者直接指定目标，是为了看清放大过程；真正的问题通常根据验证规则构造 Oracle，而不是先把答案找出来。</p>
+
+</section>
+
+<section class="article-section" id="diffusion"><h2><a class="heading-anchor" href="#diffusion" aria-label="链接到此章节">#</a>Diffusion：以平均振幅为中心反射</h2>
+
+<p>接下来施加：</p>
+<div data-math="block">D=2|s\rangle\langle s|-I.</div>
+<p>设当前状态是 <span data-math>|\psi\rangle=\sum_i a_i|i\rangle</span>，平均振幅为 <span data-math>\bar a=\frac1N\sum_i a_i</span>。因为：</p>
+<div data-math="block">|s\rangle\langle s|\psi\rangle=\sum_i\bar a\,|i\rangle,</div>
+<p>所以 D 对每个振幅的作用恰好是：</p>
+<div data-math="block">\boxed{a_i'=2\bar a-a_i}.</div>
+<p>也就是把每个振幅以均值为中心反射。对下面的实振幅例子，可以直接画出带正负号的柱状图来理解；一般复振幅也满足同一线性公式。</p>
+<p>一次完整的 Grover 迭代是 <span data-math>G=DU_f</span>：先标记，再反射。这里的 Diffusion 是振幅空间中的反射操作，与本站扩散模型系列中的加噪、去噪过程不是同一概念。</p>
+
+</section>
+
+<section class="article-section" id="four"><h2><a class="heading-anchor" href="#four" aria-label="链接到此章节">#</a>四选一：完整算一次</h2>
+
+<p>设目标是 <code>10</code>。四个候选的初始振幅都是 0.5，Oracle 只把目标的符号翻转：</p>
+<table class="quantum-table"><thead><tr><th scope="col">候选</th><th scope="col">初始振幅</th><th scope="col">Oracle 后</th><th scope="col">Diffusion 后</th></tr></thead><tbody><tr><td>00</td><td>+0.5</td><td>+0.5</td><td>0</td></tr><tr><td>01</td><td>+0.5</td><td>+0.5</td><td>0</td></tr><tr><td><strong>10</strong></td><td>+0.5</td><td>−0.5</td><td>1</td></tr><tr><td>11</td><td>+0.5</td><td>+0.5</td><td>0</td></tr></tbody></table>
+<p>Oracle 后的平均振幅为：</p>
+<div data-math="block">\bar a=\frac{0.5+0.5-0.5+0.5}{4}=0.25.</div>
+<p>目标反射到 <span data-math>2(0.25)-(-0.5)=1</span>；其他三个候选反射到 <span data-math>2(0.25)-0.5=0</span>。因此在<strong>理想四选一、只有一个答案</strong>的这个特例里，一次迭代后就能以 100% 概率得到 10。</p>
+<div class="quantum-demo" data-quantum-demo="grover" role="group" aria-label="一步一步放大正确答案"><div class="demo-heading"><span class="demo-number">EXPERIMENT 05</span><h3>一步一步放大正确答案</h3></div><p class="demo-hint">★ 为满足验证条件的候选。振幅保留正负号，测量概率是其平方；每次点击只执行半个 Grover 迭代。</p><fieldset disabled aria-label="设置搜索空间和目标"><div class="q-selects"><div><label for="grover-size">候选数量 N</label><select id="grover-size" data-q="size"><option value="4">4 个 · 2 qubits</option><option value="8">8 个 · 3 qubits</option><option value="16">16 个 · 4 qubits</option></select></div><div><label for="grover-target">Oracle 标记的候选</label><select id="grover-target" data-q="target"><option value="0">00</option><option value="1">01</option><option value="2" selected>10</option><option value="3">11</option></select></div></div><div class="demo-actions"><button type="button" class="primary" data-q="next">下一步：Oracle 标记</button><button type="button" data-q="reset">重新制备</button><button type="button" data-q="sample">采样 200 次</button></div></fieldset><div class="q-stage" aria-label="当前步骤"><span data-stage="initial" aria-current="step">均匀叠加</span><span data-stage="oracle">Oracle</span><span data-stage="diffusion">Diffusion</span></div><div class="q-stats"><div><small>完成迭代</small><strong data-q="iterations">0</strong></div><div><small>正确答案概率</small><strong data-q="success">25.0%</strong></div><div><small>当前平均振幅</small><strong data-q="mean">0.500</strong></div></div><table class="quantum-table q-results"><caption class="visually-hidden">各候选的带符号振幅和测量概率</caption><thead><tr><th scope="col">候选</th><th scope="col">振幅 a</th><th scope="col">概率 |a|²</th></tr></thead><tbody data-q="rows"><tr><td>00</td><td>0.500</td><td>25.0%</td></tr><tr><td>01</td><td>0.500</td><td>25.0%</td></tr><tr><td>10 ★</td><td>0.500</td><td>25.0%</td></tr><tr><td>11</td><td>0.500</td><td>25.0%</td></tr></tbody></table><p class="demo-hint" data-q="optimal">单个答案、4 个候选：首次峰值为 1 次迭代。</p><p class="q-feedback" data-q="feedback" aria-live="polite">先观察 Oracle 是否改变测量概率。</p><p class="q-feedback" data-q="samples" aria-live="polite"></p></div>
+<p>先用默认设置点击两次，复现表格；再多执行一轮，观察成功率是否继续上升。也可以切换到 8 或 16 个候选，看“只做一次就成功”为什么不是普遍规律。</p>
+<p>采样按钮表示独立地重新制备并执行到当前步骤，再测量 200 次。它不会把一次测量后的坍缩状态拿来继续做相干迭代。</p>
+
+</section>
+
+<section class="article-section" id="iterations"><h2><a class="heading-anchor" href="#iterations" aria-label="链接到此章节">#</a>为什么不能无限次放大？</h2>
+
+<p>若 N 个候选里有 M 个答案，令：</p>
+<div data-math="block">\sin\vartheta=\sqrt{\frac MN}.</div>
+<p>均匀叠加态在“所有答案的均匀叠加”方向上已有一个角度 <span data-math>\vartheta</span>。一次 Grover 迭代等效于在正确与错误子空间张成的二维平面里再旋转 <span data-math>2\vartheta</span>。执行 r 次后的成功概率是：</p>
+<div data-math="block">P_{\mathrm{success}}(r)=\sin^2\bigl((2r+1)\vartheta\bigr).</div>
+<p>第一次转到接近 <span data-math>\pi/2</span> 时，成功率接近峰值：</p>
+<div data-math="block">r\approx\frac{\pi}{4\vartheta}-\frac12.</div>
+<p>因为 r 必须是整数，可以比较附近的整数。单个答案且 N 较大时，<span data-math>\vartheta\approx1/\sqrt N</span>，所以查询次数为 <span data-math>O(\sqrt N)</span>。对于 <span data-math>M\ll N</span> 个答案，对应 <span data-math>O(\sqrt{N/M})</span> 的尺度。</p>
+<p>继续旋转会越过目标方向，成功概率反而降低。默认四选一的例子中，r 从 0 到 1 再到 2，成功率分别是 25%、100%、25%。这不是数值误差，而是理想算法本身的振荡。推导可对照 <a href="https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/grover-algorithm/grover-algorithm-description">IBM Quantum 的 Grover 课程</a>。</p>
+<aside class="editor-note"><strong>“加速”比较的是什么</strong><p>这里比较的是无结构搜索的 Oracle 查询次数，单答案时从经典的 <span data-math>O(N)</span> 到量子的 <span data-math>O(\sqrt N)</span>，是平方级改进。总运行时间还要计算 Oracle、辅助位、门深度与读出的成本；不能把查询复杂度直接当作任意真实任务的耗时结论。</p></aside>
+
+</section>
+
+<section class="article-section" id="references"><h2><a class="heading-anchor" href="#references" aria-label="链接到此章节">#</a>回看这组笔记</h2>
+
+<p>这三个部分终于连在了一起：复振幅让状态拥有相位；酉门让这些振幅相干地演化；测量把它们变成经典结果。QNN 用损失函数来调整演化，Grover 则直接设计相位标记与反射。</p>
+<p>对我而言，入门时最有用的区分是：状态不等于测量结果，叠加不等于纠缠，联合空间很大也不等于能免费读出其中所有信息。先把这些区别算清楚，才更容易判断一个量子算法究竟利用了什么。</p>
+<ol class="article-references"><li><a href="https://arxiv.org/abs/quant-ph/9605043">Lov K. Grover · A fast quantum mechanical algorithm for database search</a>，1996：原始搜索算法论文。</li><li><a href="https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/grover-algorithm/grover-algorithm-description">John Watrous / IBM Quantum Learning · Grover's algorithm description</a>：Oracle、Grover 操作与算法流程。</li><li><a href="https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/grover-algorithm/analysis">IBM Quantum Learning · Grover's algorithm analysis</a>：二维旋转与成功概率。</li></ol>
+
+</section>
+
+      <nav class="quantum-series-nav" aria-label="量子计算系列文章"><a href="../quantum-computing-basics/">01 · 量子计算入门 →</a><a href="../quantum-neural-networks/">02 · 量子神经网络 →</a></nav>
+      <footer class="article-end"><p>根据自己的手写笔记与整理稿编辑。封面、电路图及交互演示均为本站绘制；数值为理想模型的教学计算。</p><a href="../?collection=quantum">← 量子计算专栏</a><a href="../">全部文章 →</a></footer>
+    </article>
+  </main>
+  <footer class="blog-footer" lang="zh-CN"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+  <a class="reading-return" href="#top" aria-label="回到文章顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg><span data-reading-percent>0%</span></a>
+</body>
+</html>

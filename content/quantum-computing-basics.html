@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" class="article-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title lang="zh-CN">量子计算入门：从复振幅、相位到测量与纠缠 | 钟祚栋</title>
+  <meta name="description" content="用布洛赫球、振幅干涉和联合测量实验，整理量子比特、酉门、测量基与纠缠之间的关系。">
+  <meta name="theme-color" content="#dce8ef">
+  <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="量子计算入门：从复振幅、相位到测量与纠缠">
+  <meta property="og:description" content="用布洛赫球、振幅干涉和联合测量实验，整理量子比特、酉门、测量基与纠缠之间的关系。">
+  <meta property="og:image" content="https://zuodong-zhong.github.io/blog/quantum/basics-cover.svg">
+  <link rel="canonical" href="https://zuodong-zhong.github.io/blog/quantum-computing-basics/">
+  <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
+  <link rel="stylesheet" href="../../site-theme.css?v=0325a12068d1">
+  <link rel="stylesheet" href="../article.css?v=8c73710039e0">
+  <link rel="stylesheet" href="../../site-header.css?v=41802d76fa51">
+  <link rel="stylesheet" href="../quantum/demos.css?v=1">
+  <style>:root { --article-wash-start: #dce8ef; --article-wash-middle: #eaf0f4; --article-wash-end: #f4f7f8; --article-surface: #fafbfc; --article-accent: #356e8c; --article-cover-image: url("/blog/quantum/basics-cover.svg"); }</style>
+  <script src="../../site.js?v=1d16e7250071" defer></script>
+  <script src="../article.js?v=3" defer></script>
+  <script src="../quantum/quantum-math.js?v=1" defer></script>
+  <script src="../quantum/demos.js?v=1" defer></script>
+  <script src="../../analytics.js?v=1" defer></script>
+</head>
+<body class="blog-page article-page" id="top">
+  <a class="skip-link" href="#intro" lang="zh-CN">跳转到正文</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="../../" data-zh="钟祚栋">Zuodong Zhong</a>
+      <nav class="site-nav" data-site-nav aria-label="Main navigation">
+        <a href="../../#about" data-zh="简介">About</a>
+        <a href="../../#news" data-zh="动态">News</a>
+        <a href="../../#publications" data-zh="论文">Publications</a>
+        <a href="../../#experience" data-zh="经历">Experience</a>
+        <a href="../" class="is-active" data-zh="博客">Blog</a>
+      </nav>
+      <div class="site-tools">
+        <button class="site-language" type="button" data-language-toggle aria-label="切换到中文" hidden><span data-language="en">EN</span><span data-language="zh" lang="zh-CN">中</span></button>
+      </div>
+    </div>
+  </header>
+  <main class="article-layout" lang="zh-CN">
+    <aside class="article-sidebar">
+      <details class="article-toc" open>
+        <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <nav aria-label="文章目录">
+          <a href="#intro">从一个问题出发</a>
+          <a href="#state">量子态：振幅不是概率</a>
+          <a href="#bloch">布洛赫球：两个角度与一种冗余</a>
+          <a href="#gates">量子门：线性、酉性与顺序</a>
+          <a href="#interference">干涉：先加振幅，再算概率</a>
+          <a href="#measurement">测量：读出什么，取决于测量基</a>
+          <a href="#entanglement">多个 qubit：叠加不等于纠缠</a>
+          <a href="#references">参考与下一步</a>
+        </nav>
+      </details>
+      <a class="article-back" href="../?collection=quantum"><span aria-hidden="true">←</span> 量子计算专栏</a>
+    </aside>
+    <article class="article-content">
+      <figure class="article-cover"><img src="../quantum/basics-cover.svg" width="1400" height="740" fetchpriority="high" alt="量子计算入门原创概念封面"></figure>
+      <header class="article-header">
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><time datetime="2026-10-16">2026 年 10 月 16 日</time></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>22 分钟阅读</span>
+          <span class="article-tags"><a href="../?collection=quantum">quantum</a></span>
+        </div>
+        <h1>量子计算入门</h1>
+        <p class="article-subtitle">从复振幅、相位到测量与纠缠</p>
+        <p class="article-byline">钟祚栋 <span aria-hidden="true">/</span> 学习笔记</p>
+        <a class="article-series" href="../?collection=quantum"><span>Quantum Notes · 量子计算入门</span><span class="series-lesson">学习 01 <span aria-hidden="true">↗</span></span></a>
+      </header>
+<section class="article-section" id="intro"><h2><a class="heading-anchor" href="#intro" aria-label="链接到此章节">#</a>从一个问题出发</h2>
+
+<p>最近出于好奇，开始了解量子计算与量子神经网络。手写笔记记下了不少公式，但真正让我想继续追问的是：<strong>如果量子门都是线性变换，量子计算的特殊之处到底在哪里？</strong></p>
+<p>这组文章按自己的学习顺序整理：先理解复振幅、相位与测量，再看多个量子比特如何组成联合系统；接着用一个可以训练的最小电路理解 <a href="../quantum-neural-networks/">QNN</a>，最后用 <a href="../grover-search/">Grover 搜索</a>看相位如何变成更高的答案概率。</p>
+<aside class="editor-note"><strong>阅读范围</strong><p>以理想量子电路和纯态为主，比较纠缠时会引入一个简单的经典混合态。文中的交互图是本地数学模拟，静态图根据笔记重画；均不是真实量子硬件的实验结果。</p></aside>
+<noscript><p class="editor-note">正文、公式和静态示意图可以正常阅读。启用 JavaScript 后，可以操作文中的五个系列实验。</p></noscript>
+
+</section>
+
+<section class="article-section" id="state"><h2><a class="heading-anchor" href="#state" aria-label="链接到此章节">#</a>量子态：振幅不是概率</h2>
+
+<p>经典比特取值为 0 或 1。单个量子比特的纯态用两个复振幅表示：</p>
+<div data-math="block">|\psi\rangle=\alpha|0\rangle+\beta|1\rangle=\begin{bmatrix}\alpha\\\beta\end{bmatrix},\qquad \alpha,\beta\in\mathbb C.</div>
+<p>其中 <span data-math>|0\rangle=[1,0]^T</span>、<span data-math>|1\rangle=[0,1]^T</span> 是计算基态。对这个状态做 Z 基测量，Born 规则给出：</p>
+<div data-math="block">P(0)=|\alpha|^2,\qquad P(1)=|\beta|^2,\qquad |\alpha|^2+|\beta|^2=1.</div>
+<p>这也是笔记里反复提醒自己的地方：<strong>先区分振幅与概率，再讨论叠加。</strong>复数的模长平方需要共轭。若 <span data-math>z=a+bi</span>，则：</p>
+<div data-math="block">z^*=a-bi,\qquad |z|^2=z^*z=(a-bi)(a+bi)=a^2+b^2.</div>
+<p>Dirac 记号中的 bra 是 ket 的共轭转置，不是简单转置：</p>
+<div data-math="block">\langle\psi|=(|\psi\rangle)^\dagger=\begin{bmatrix}\alpha^*&amp;\beta^*\end{bmatrix},\qquad \langle\psi|\psi\rangle=1.</div>
+<p>因此，<span data-math>\frac{|0\rangle+|1\rangle}{\sqrt2}</span> 与 <span data-math>\frac{|0\rangle-|1\rangle}{\sqrt2}</span> 在 Z 基下都有一半概率得到 0、一半概率得到 1，但它们并不是同一个物理状态。只看一组测量概率，会丢掉相位信息。</p>
+
+</section>
+
+<section class="article-section" id="bloch"><h2><a class="heading-anchor" href="#bloch" aria-label="链接到此章节">#</a>布洛赫球：两个角度与一种冗余</h2>
+
+<p>两个复振幅包含四个实参数。归一化约束去掉一个自由度；把整个状态乘上同一个 <span data-math>e^{i\gamma}</span>，不会改变任何测量概率，又去掉一个物理自由度。于是，忽略整体相位后，可以写成：</p>
+<div data-math="block">|\psi\rangle=\cos\frac\theta2|0\rangle+e^{i\phi}\sin\frac\theta2|1\rangle,\quad 0\leq\theta\leq\pi,\quad 0\leq\phi&lt;2\pi.</div>
+<p><span data-math>\theta</span> 是极角，<span data-math>\phi</span> 是方位角，也就是两个振幅之间的<strong>相对相位</strong>。布洛赫球坐标为：</p>
+<div data-math="block">x=\sin\theta\cos\phi,\qquad y=\sin\theta\sin\phi,\qquad z=\cos\theta=P(0)-P(1).</div>
+<p>北极与南极分别是 <span data-math>|0\rangle</span>、<span data-math>|1\rangle</span>；正负 X 方向分别是 <span data-math>|+\rangle=(|0\rangle+|1\rangle)/\sqrt2</span> 与 <span data-math>|-\rangle=(|0\rangle-|1\rangle)/\sqrt2</span>。在两极，<span data-math>\phi</span> 不再区分不同物理状态。</p>
+<div class="quantum-demo" data-quantum-demo="bloch" role="group" aria-label="把量子态放到布洛赫球上"><div class="demo-heading"><span class="demo-number">EXPERIMENT 01</span><h3>把量子态放到布洛赫球上</h3></div><p class="demo-hint">拖动 θ 和 φ，再改变整体相位 γ。比较球上位置与三个测量基下的概率。</p><div class="demo-grid"><svg class="q-viz" viewBox="0 0 330 310" role="img" aria-labelledby="bloch-title bloch-desc"><title id="bloch-title">单量子比特的布洛赫球</title><desc id="bloch-desc" data-q="sphere-description">球面上的点由 θ 和 φ 决定，整体相位不改变这个点。</desc><defs><radialGradient id="bloch-fill" cx=".32" cy=".25"><stop stop-color="#fff"/><stop offset="1" stop-color="#d3e2ed" stop-opacity=".6"/></radialGradient><marker id="bloch-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L8 4L0 8" fill="#356e8c"/></marker></defs><circle cx="165" cy="155" r="112" fill="url(#bloch-fill)" stroke="#bed0dc"/><path d="M85.80,194.60 L90.06,196.62 L94.52,198.52 L99.17,200.30 L104.00,201.97 L109.00,203.50 L114.15,204.90 L119.45,206.16 L124.86,207.28 L130.39,208.26 L136.01,209.09 L141.71,209.78 L147.48,210.31 L153.29,210.69 L159.14,210.92 L165.00,211.00 L170.86,210.92 L176.71,210.69 L182.52,210.31 L188.29,209.78 L193.99,209.09 L199.61,208.26 L205.14,207.28 L210.55,206.16 L215.85,204.90 L221.00,203.50 L226.00,201.97 L230.83,200.30 L235.48,198.52 L239.94,196.62 L244.20,194.60 L248.23,192.47 L252.04,190.24 L255.61,187.92 L258.93,185.50 L261.99,183.00 L264.79,180.42 L267.32,177.78 L269.56,175.07 L271.52,172.30 L273.18,169.49 L274.55,166.64 L275.62,163.76 L276.39,160.85 L276.85,157.93 L277.00,155.00 L276.85,152.07 L276.39,149.15 L275.62,146.24 L274.55,143.36 L273.18,140.51 L271.52,137.70 L269.56,134.93 L267.32,132.22 L264.79,129.58 L261.99,127.00 L258.93,124.50 L255.61,122.08 L252.04,119.76 L248.23,117.53 L244.20,115.40 L239.94,113.38 L235.48,111.48 L230.83,109.70 L226.00,108.03 L221.00,106.50 L215.85,105.10 L210.55,103.84 L205.14,102.72 L199.61,101.74 L193.99,100.91 L188.29,100.22 L182.52,99.69 L176.71,99.31 L170.86,99.08 L165.00,99.00 L159.14,99.08 L153.29,99.31 L147.48,99.69 L141.71,100.22 L136.01,100.91 L130.39,101.74 L124.86,102.72 L119.45,103.84 L114.15,105.10 L109.00,106.50 L104.00,108.03 L99.17,109.70 L94.52,111.48 L90.06,113.38 L85.80,115.40 L81.77,117.53 L77.96,119.76 L74.39,122.08 L71.07,124.50 L68.01,127.00 L65.21,129.58 L62.68,132.22 L60.44,134.93 L58.48,137.70 L56.82,140.51 L55.45,143.36 L54.38,146.24 L53.61,149.15 L53.15,152.07 L53.00,155.00 L53.15,157.93 L53.61,160.85 L54.38,163.76 L55.45,166.64 L56.82,169.49 L58.48,172.30 L60.44,175.07 L62.68,177.78 L65.21,180.42 L68.01,183.00 L71.07,185.50 L74.39,187.92 L77.96,190.24 L81.77,192.47 L85.80,194.60" class="q-guide"/><path d="M85.80,194.60 L85.91,189.47 L86.24,184.24 L86.78,178.94 L87.53,173.57 L88.50,168.14 L89.68,162.69 L91.06,157.21 L92.65,151.72 L94.44,146.25 L96.41,140.80 L98.58,135.38 L100.93,130.02 L103.45,124.73 L106.15,119.52 L109.00,114.41 L112.01,109.42 L115.16,104.54 L118.45,99.80 L121.87,95.22 L125.40,90.80 L129.05,86.55 L132.79,82.50 L136.62,78.64 L140.53,74.99 L144.50,71.56 L148.53,68.36 L152.61,65.39 L156.72,62.68 L160.86,60.21 L165.00,58.01 L169.14,56.07 L173.28,54.40 L177.39,53.00 L181.47,51.89 L185.50,51.06 L189.47,50.52 L193.38,50.26 L197.21,50.28 L200.95,50.60 L204.60,51.20 L208.13,52.09 L211.55,53.25 L214.84,54.70 L217.99,56.42 L221.00,58.41 L223.85,60.67 L226.55,63.19 L229.07,65.95 L231.42,68.96 L233.59,72.21 L235.56,75.68 L237.35,79.37 L238.94,83.27 L240.32,87.37 L241.50,91.65 L242.47,96.10 L243.22,100.72 L243.76,105.48 L244.09,110.38 L244.20,115.40 L244.09,120.53 L243.76,125.76 L243.22,131.06 L242.47,136.43 L241.50,141.86 L240.32,147.31 L238.94,152.79 L237.35,158.28 L235.56,163.75 L233.59,169.20 L231.42,174.62 L229.07,179.98 L226.55,185.27 L223.85,190.48 L221.00,195.59 L217.99,200.58 L214.84,205.46 L211.55,210.20 L208.13,214.78 L204.60,219.20 L200.95,223.45 L197.21,227.50 L193.38,231.36 L189.47,235.01 L185.50,238.44 L181.47,241.64 L177.39,244.61 L173.28,247.32 L169.14,249.79 L165.00,251.99 L160.86,253.93 L156.72,255.60 L152.61,257.00 L148.53,258.11 L144.50,258.94 L140.53,259.48 L136.62,259.74 L132.79,259.72 L129.05,259.40 L125.40,258.80 L121.87,257.91 L118.45,256.75 L115.16,255.30 L112.01,253.58 L109.00,251.59 L106.15,249.33 L103.45,246.81 L100.93,244.05 L98.58,241.04 L96.41,237.79 L94.44,234.32 L92.65,230.63 L91.06,226.73 L89.68,222.63 L88.50,218.35 L87.53,213.90 L86.78,209.28 L86.24,204.52 L85.91,199.62 L85.80,194.60" class="q-guide"/><path d="M244.20,194.60 L244.09,189.47 L243.76,184.24 L243.22,178.94 L242.47,173.57 L241.50,168.14 L240.32,162.69 L238.94,157.21 L237.35,151.72 L235.56,146.25 L233.59,140.80 L231.42,135.38 L229.07,130.02 L226.55,124.73 L223.85,119.52 L221.00,114.41 L217.99,109.42 L214.84,104.54 L211.55,99.80 L208.13,95.22 L204.60,90.80 L200.95,86.55 L197.21,82.50 L193.38,78.64 L189.47,74.99 L185.50,71.56 L181.47,68.36 L177.39,65.39 L173.28,62.68 L169.14,60.21 L165.00,58.01 L160.86,56.07 L156.72,54.40 L152.61,53.00 L148.53,51.89 L144.50,51.06 L140.53,50.52 L136.62,50.26 L132.79,50.28 L129.05,50.60 L125.40,51.20 L121.87,52.09 L118.45,53.25 L115.16,54.70 L112.01,56.42 L109.00,58.41 L106.15,60.67 L103.45,63.19 L100.93,65.95 L98.58,68.96 L96.41,72.21 L94.44,75.68 L92.65,79.37 L91.06,83.27 L89.68,87.37 L88.50,91.65 L87.53,96.10 L86.78,100.72 L86.24,105.48 L85.91,110.38 L85.80,115.40 L85.91,120.53 L86.24,125.76 L86.78,131.06 L87.53,136.43 L88.50,141.86 L89.68,147.31 L91.06,152.79 L92.65,158.28 L94.44,163.75 L96.41,169.20 L98.58,174.62 L100.93,179.98 L103.45,185.27 L106.15,190.48 L109.00,195.59 L112.01,200.58 L115.16,205.46 L118.45,210.20 L121.87,214.78 L125.40,219.20 L129.05,223.45 L132.79,227.50 L136.62,231.36 L140.53,235.01 L144.50,238.44 L148.53,241.64 L152.61,244.61 L156.72,247.32 L160.86,249.79 L165.00,251.99 L169.14,253.93 L173.28,255.60 L177.39,257.00 L181.47,258.11 L185.50,258.94 L189.47,259.48 L193.38,259.74 L197.21,259.72 L200.95,259.40 L204.60,258.80 L208.13,257.91 L211.55,256.75 L214.84,255.30 L217.99,253.58 L221.00,251.59 L223.85,249.33 L226.55,246.81 L229.07,244.05 L231.42,241.04 L233.59,237.79 L235.56,234.32 L237.35,230.63 L238.94,226.73 L240.32,222.63 L241.50,218.35 L242.47,213.90 L243.22,209.28 L243.76,204.52 L244.09,199.62 L244.20,194.60" class="q-guide"/><path d="M165 283V28M64 206L268 104M64 104L268 206" class="q-wire"/><text x="174" y="28" class="q-label">|0⟩</text><text x="174" y="287" class="q-label">|1⟩</text><text x="51" y="222">x</text><text x="279" y="222">y</text><text x="147" y="27">z</text><line x1="262" y1="106.5" x2="262" y2="155" class="q-guide" data-q="projection"/><line x1="165" y1="155" x2="262" y2="106.5" class="q-accent" marker-end="url(#bloch-arrow)" data-q="vector"/><circle cx="262" cy="106.5" r="5" class="q-point" data-q="point"/></svg><fieldset disabled aria-label="设置量子态"><label for="bloch-theta">极角 θ<output for="bloch-theta" data-q="theta-value">60°</output></label><input id="bloch-theta" data-q="theta" type="range" min="0" max="180" step="0.1" value="60"><label for="bloch-phi">相对相位 φ<output for="bloch-phi" data-q="phi-value">135°</output></label><input id="bloch-phi" data-q="phi" type="range" min="0" max="360" step="0.1" value="135"><label for="bloch-gamma">整体相位 γ<output for="bloch-gamma" data-q="gamma-value">0°</output></label><input id="bloch-gamma" data-q="gamma" type="range" min="0" max="360" step="0.1" value="0"><div class="demo-actions"><button type="button" data-gate="H">H</button><button type="button" data-gate="X">X</button><button type="button" data-gate="Y">Y</button><button type="button" data-gate="Z">Z</button><button type="button" data-q="reset">重置 |0⟩</button></div></fieldset></div><div class="q-state" data-q="state">|ψ⟩ = cos(30°)|0⟩ + exp(i135°) sin(30°)|1⟩</div><div class="q-stats"><div><small>⟨X⟩ = x</small><strong data-q="x">−0.612</strong></div><div><small>⟨Y⟩ = y</small><strong data-q="y">0.612</strong></div><div><small>⟨Z⟩ = z</small><strong data-q="z">0.500</strong></div></div><div class="q-prob"><div class="q-prob-label"><span>Z 基 · P(0)</span><output data-q="z0-value">75.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="z0-bar" style="width:75%"></span></div></div><div class="q-prob"><div class="q-prob-label"><span>X 基 · P(+)</span><output data-q="xp-value">19.4%</output></div><div class="q-track" aria-hidden="true"><span data-q="xp-bar" style="width:19.4%"></span></div></div><div class="q-prob"><div class="q-prob-label"><span>Y 基 · P(+i)</span><output data-q="yp-value">80.6%</output></div><div class="q-track" aria-hidden="true"><span data-q="yp-bar" style="width:80.6%"></span></div></div><p class="q-feedback" data-q="feedback" aria-live="polite">每个测量基下另一个结果的概率为 1 减去所示概率。图中显示的是理想纯态。</p></div>
+<p>试着把 <span data-math>\theta</span> 设为 <span data-math>90^\circ</span>：无论怎样改变 <span data-math>\phi</span>，Z 基的两个结果始终各占 50%；X、Y 基下的概率却在改变。再拖动整体相位 <span data-math>\gamma</span>，所有测量概率都不变。这就是相对相位与整体相位的区别。</p>
+<p>如果笔记中把实振幅写作 <span data-math>\cos\alpha</span> 和 <span data-math>\sin\alpha</span>，那么 <span data-math>z=\cos^2\alpha-\sin^2\alpha=\cos2\alpha</span>，所以布洛赫球极角是 <span data-math>\theta=2\alpha</span>。这解释了公式里为什么要除以 2。</p>
+<aside class="editor-note"><strong>球面与球内</strong><p>单 qubit 的纯态在球面，混合态在球内。一个单 qubit 的布洛赫球不能完整描述多 qubit 的联合状态；纠缠系统的每个子系统即使都画出自己的球，也会遗漏联合关联。关于叠加、相位和布洛赫球，可以配合 <a href="https://quantum.cloud.ibm.com/learning/en/modules/quantum-mechanics/superposition-with-qiskit">IBM Quantum 的教学模块</a>阅读。</p></aside>
+
+</section>
+
+<section class="article-section" id="gates"><h2><a class="heading-anchor" href="#gates" aria-label="链接到此章节">#</a>量子门：线性、酉性与顺序</h2>
+
+<p>理想封闭系统的量子门由酉矩阵 <span data-math>U</span> 表示：</p>
+<div data-math="block">|\psi'\rangle=U|\psi\rangle,\qquad U^\dagger U=UU^\dagger=I.</div>
+<p>线性性意味着 <span data-math>U(\alpha|a\rangle+\beta|b\rangle)=\alpha U|a\rangle+\beta U|b\rangle</span>。酉性则保证内积不变：</p>
+<div data-math="block">\langle\psi'|\psi'\rangle=\langle\psi|U^\dagger U|\psi\rangle=\langle\psi|\psi\rangle=1.</div>
+<p>它既保持总概率，也存在逆变换 <span data-math>U^{-1}=U^\dagger</span>。<strong>可逆并不意味着同一个门再做一次就能撤销。</strong>只有某些门满足 <span data-math>U^2=I</span>；例如旋转门 <span data-math>R_z(\vartheta)</span> 的逆门通常是 <span data-math>R_z(-\vartheta)</span>。</p>
+<h3>四个常见的单 qubit 门</h3>
+<div data-math="block">X=\begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix},\qquad Y=\begin{bmatrix}0&amp;-i\\i&amp;0\end{bmatrix},</div>
+<div data-math="block">Z=\begin{bmatrix}1&amp;0\\0&amp;-1\end{bmatrix},\qquad H=\frac1{\sqrt2}\begin{bmatrix}1&amp;1\\1&amp;-1\end{bmatrix}.</div>
+<table class="quantum-table"><thead><tr><th scope="col">门</th><th scope="col">对基态的作用</th><th scope="col">可以怎样理解</th></tr></thead><tbody>
+<tr><td>X</td><td><span data-math>|0\rangle\leftrightarrow|1\rangle</span></td><td>交换计算基态，类似 NOT。</td></tr>
+<tr><td>Y</td><td><span data-math>|0\rangle\mapsto i|1\rangle</span>；<span data-math>|1\rangle\mapsto-i|0\rangle</span></td><td>翻转并引入相位。</td></tr>
+<tr><td>Z</td><td><span data-math>|0\rangle\mapsto|0\rangle</span>；<span data-math>|1\rangle\mapsto-|1\rangle</span></td><td>改变叠加分量间的相对符号。</td></tr>
+<tr><td>H</td><td><span data-math>|0\rangle\mapsto|+\rangle</span>；<span data-math>|1\rangle\mapsto|-\rangle</span></td><td>在 Z 基与 X 基之间切换。</td></tr>
+</tbody></table>
+<p>X、Y、Z 在布洛赫球上分别对应绕相应坐标轴旋转 <span data-math>180^\circ</span>，忽略整体相位。H 对应绕 <span data-math>(x+z)/\sqrt2</span> 方向的轴旋转 <span data-math>180^\circ</span>，<strong>并不是绕 Y 轴旋转</strong>。</p>
+<p>一个容易看错的例子是 <span data-math>Z|1\rangle=-|1\rangle</span>。这里只多了整体相位，点仍在南极；而 <span data-math>Z|+\rangle=|-\rangle</span> 改变了相对相位，点从正 X 移到负 X。</p>
+<p>电路从左向右执行，矩阵写在态的左侧，最右边的矩阵先作用。矩阵一般不交换，所以 <span data-math>HUH</span> 不能直接把两端的 H 消去。例如：</p>
+<div data-math="block">HH|0\rangle=|0\rangle,\qquad HZH|0\rangle=|1\rangle.</div>
+
+</section>
+
+<section class="article-section" id="interference"><h2><a class="heading-anchor" href="#interference" aria-label="链接到此章节">#</a>干涉：先加振幅，再算概率</h2>
+
+<p>线性性允许逐项计算量子门的作用；干涉则发生在不同路径对同一个最终结果贡献复振幅时。两个 H 门是最简单的例子：</p>
+<div data-math="block">H^2|0\rangle=H\frac{|0\rangle+|1\rangle}{\sqrt2}=\frac{(|0\rangle+|1\rangle)+(|0\rangle-|1\rangle)}2=|0\rangle.</div>
+<p>最终 <span data-math>|1\rangle</span> 的两个振幅贡献分别为 <span data-math>+1/2</span> 和 <span data-math>-1/2</span>，完全抵消。一般地：</p>
+<div data-math="block">|A_1+A_2|^2=|A_1|^2+|A_2|^2+2\operatorname{Re}(A_1^*A_2).</div>
+<p>最后一项就是相位可以影响结果的原因。若在两个 H 门之间加入 <span data-math>P(\phi)=\operatorname{diag}(1,e^{i\phi})</span>，则：</p>
+<div data-math="block">HP(\phi)H|0\rangle=\frac{1+e^{i\phi}}2|0\rangle+\frac{1-e^{i\phi}}2|1\rangle,</div>
+<div data-math="block">P(0)=\cos^2\frac\phi2,\qquad P(1)=\sin^2\frac\phi2.</div>
+<div class="quantum-demo" data-quantum-demo="interference" role="group" aria-label="让两条振幅路径相加"><div class="demo-heading"><span class="demo-number">EXPERIMENT 02</span><h3>让两条振幅路径相加</h3></div><p class="demo-hint">电路：|0⟩ → H → P(φ) → H。图中只画最终结果 0 的两项振幅，各自长度都是 1/2。</p><div class="demo-grid"><svg class="q-viz" viewBox="0 0 340 265" role="img" aria-label="复平面上两条振幅首尾相接，蓝色线段为总振幅"><path d="M35 143H310M90 235V28" class="q-grid"/><circle cx="175" cy="143" r="85" class="q-guide"/><line x1="90" y1="143" x2="175" y2="143" stroke="#a8bdca" stroke-width="5"/><line x1="175" y1="143" x2="260" y2="143" class="q-warm" data-q="phasor-two"/><line x1="90" y1="143" x2="260" y2="143" class="q-accent" data-q="phasor-sum"/><circle cx="260" cy="143" r="5" class="q-point" data-q="phasor-point"/><text x="292" y="163">Re</text><text x="99" y="32">Im</text><text x="68" y="161">0</text><text x="108" y="250">灰：1/2　橙：eⁱᵠ/2　蓝：总和</text></svg><fieldset disabled aria-label="设置两条路径的相对相位"><label for="interference-phase">相对相位 φ<output for="interference-phase" data-q="phase-value">0°</output></label><input id="interference-phase" data-q="phase" type="range" min="0" max="360" step="1" value="0"><div class="demo-actions"><button type="button" data-q="phase-zero">φ = 0</button><button type="button" data-q="phase-pi">φ = π</button></div><div class="q-state" data-q="sum">A(0) = 1.000 + 0.000i</div><div class="q-prob"><div class="q-prob-label"><span>测到 0</span><output data-q="p0-value">100.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="p0-bar" style="width:100%"></span></div></div><div class="q-prob"><div class="q-prob-label"><span>测到 1</span><output data-q="p1-value">0.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="p1-bar" style="width:0%"></span></div></div></fieldset></div><p class="q-feedback" data-q="feedback" aria-live="polite">同相增强；反相抵消。</p></div>
+<p>这里用 P 门让两条振幅路径更直观。它与 <span data-math>R_z(\phi)</span> 只差整体相位：<span data-math>P(\phi)=e^{i\phi/2}R_z(\phi)</span>。因此换成 Rz，最终测量概率相同。</p>
+<p>上面的振幅相加针对没有留下可区分路径记录的相干演化。如果中途测量、保存了路径信息，就不能继续按同一个纯态叠加来计算。所谓“先加振幅”有明确的适用前提。</p>
+
+</section>
+
+<section class="article-section" id="measurement"><h2><a class="heading-anchor" href="#measurement" aria-label="链接到此章节">#</a>测量：读出什么，取决于测量基</h2>
+
+<p>酉门与测量是两类操作。对一组正交归一基 <span data-math>\{|b_i\rangle\}</span>，理想投影测量给出：</p>
+<div data-math="block">P(i)=|\langle b_i|\psi\rangle|^2.</div>
+<p>对于单 qubit 的秩一投影测量，若得到结果 i 且其概率非零，条件状态成为相应的 <span data-math>|b_i\rangle</span>，忽略整体相位。不同测量基所区分的状态不同：</p>
+<table class="quantum-table"><thead><tr><th scope="col">测量基</th><th scope="col">本征态</th><th scope="col">本征值</th></tr></thead><tbody>
+<tr><td>Z</td><td><span data-math>|0\rangle,\ |1\rangle</span></td><td><span data-math>+1,\ -1</span></td></tr>
+<tr><td>X</td><td><span data-math>|+\rangle,\ |-\rangle</span></td><td><span data-math>+1,\ -1</span></td></tr>
+<tr><td>Y</td><td><span data-math>|+i\rangle,\ |-i\rangle</span></td><td><span data-math>+1,\ -1</span></td></tr>
+</tbody></table>
+<p>这里 <span data-math>|\pm i\rangle=(|0\rangle\pm i|1\rangle)/\sqrt2</span>。仪器可把两个结果编码为经典 0/1，但标签不等于量子态。以 <span data-math>|+\rangle</span> 为例，Z 基测量各得一半，X 基测量则一定得到“+”。</p>
+<p>可以先施加 H 再做 Z 基读出，以获得 X 基测量的统计。若还要使测量后的状态回到原表象下的 <span data-math>|+\rangle</span> 或 <span data-math>|-\rangle</span>，需把基变换逆回来；硬件实际留下什么状态还取决于读出实现。</p>
+<p>测量也不会让 qubit 永远停在某个状态：读出后仍可施加门。例如从测得的 <span data-math>|0\rangle</span> 出发，再做 H 就能重新得到 <span data-math>|+\rangle</span>。</p>
+<h3>一次结果与一个期望值</h3>
+<p>一次执行只得到一个结果。若要估计连续的输出，需要<strong>重新制备同一个输入、重新运行电路，再测量</strong>，重复很多次。对于 Z 可观测量：</p>
+<div data-math="block">\langle Z\rangle=P(0)-P(1),\qquad \widehat{\langle Z\rangle}=\frac{n_0-n_1}{S},\quad S=n_0+n_1.</div>
+<p>这与在同一个已坍缩的 qubit 上反复测量不同。前者是在估计原电路的概率分布，也是后面 QNN 读出期望值时需要的步骤。</p>
+
+</section>
+
+<section class="article-section" id="entanglement"><h2><a class="heading-anchor" href="#entanglement" aria-label="链接到此章节">#</a>多个 qubit：叠加不等于纠缠</h2>
+
+<p>两个 qubit 的状态空间是 <span data-math>\mathbb C^2\otimes\mathbb C^2=\mathbb C^4</span>。张量积负责组合系统，不自动产生纠缠。例如：</p>
+<div data-math="block">|0\rangle\otimes|+\rangle=\frac{|00\rangle+|01\rangle}{\sqrt2}.</div>
+<p>它虽然有两个基态的叠加，仍然是两个独立单 qubit 纯态的乘积。对联合<strong>纯态</strong>，不能分解为子系统纯态的张量积，才说明存在纠缠。Bell 态就是一个例子：</p>
+<div data-math="block">|\Phi^+\rangle=\frac{|00\rangle+|11\rangle}{\sqrt2}.</div>
+<details class="derivation"><summary>为什么这个 Bell 态不能分解？</summary><p>假设它等于 <span data-math>(a|0\rangle+b|1\rangle)\otimes(c|0\rangle+d|1\rangle)</span>。比较四项系数：</p><div data-math="block">ac=bd=\frac1{\sqrt2},\qquad ad=bc=0.</div>
+<p>前两个非零系数要求 a、b、c、d 都非零，后两个系数却要求乘积为零，产生矛盾。这是纯态判据；混合态的可分性需要更一般的定义。</p></details>
+<h3>用 H 与 CNOT 制备 Bell 态</h3>
+<p>本文约定 <span data-math>|q_0q_1\rangle</span> 左边是控制位，CNOT 的作用为 <span data-math>|a,b\rangle\mapsto|a,b\oplus a\rangle</span>。从 <span data-math>|00\rangle</span> 出发：</p>
+<figure class="quantum-diagram"><img src="../quantum/bell-circuit.svg" width="800" height="260" loading="lazy" alt="q0 从 |0⟩ 经过 H，随后控制作用于 q1 的 CNOT，得到 Bell 态"><figcaption>图 1 · 根据手写笔记重画。上方 q₀ 为控制位，下方 q₁ 为目标位。</figcaption></figure>
+<div data-math="block">|00\rangle\xrightarrow{H\otimes I}\frac{|00\rangle+|10\rangle}{\sqrt2}\xrightarrow{\mathrm{CNOT}}\frac{|00\rangle+|11\rangle}{\sqrt2}.</div>
+<p>H 之后仍是 <span data-math>|+\rangle\otimes|0\rangle</span>；CNOT 之后才成为纠缠态。不过 CNOT 并不总能制造纠缠：<span data-math>\mathrm{CNOT}|00\rangle=|00\rangle</span> 就是反例。<a href="https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/multiple-systems/quantum-information">IBM Quantum 的多系统课程</a>也用乘积态与 Bell 态来说明这个区别。</p>
+<h3>相关的结果，还不足以证明纠缠</h3>
+<p>如果经典地掷一次硬币，一半时候制备 <span data-math>|00\rangle</span>，一半时候制备 <span data-math>|11\rangle</span>，Z 基测量同样只看到 00 或 11。这种经典混合的密度矩阵是：</p>
+<div data-math="block">\rho_{\mathrm{mix}}=\frac12|00\rangle\langle00|+\frac12|11\rangle\langle11|.</div>
+<p>它没有 Bell 纯态中的相干交叉项。两者在 Z 基下看起来相同，换到 X 基就能区分：</p>
+<div class="quantum-demo" data-quantum-demo="entanglement" role="group" aria-label="纠缠，还是只有经典关联？"><div class="demo-heading"><span class="demo-number">EXPERIMENT 03</span><h3>纠缠，还是只有经典关联？</h3></div><p class="demo-hint">两侧总是选择同一个测量基。对比理论概率与独立重复制备后的采样计数。</p><fieldset disabled aria-label="选择联合状态与测量基"><div class="q-selects"><div><label for="joint-kind">联合状态</label><select id="joint-kind" data-q="kind"><option value="bell">Bell 态 (|00⟩ + |11⟩)/√2</option><option value="product">乘积态 |0⟩ ⊗ |+⟩</option><option value="mixture">经典混合：一半 |00⟩，一半 |11⟩</option></select></div><div><label for="joint-basis">两个 qubit 的测量基</label><select id="joint-basis" data-q="basis"><option value="Z">Z 基：0 / 1</option><option value="X">X 基：+ / −</option></select></div></div><div class="demo-actions"><button type="button" class="primary" data-q="sample">采样 200 次</button><button type="button" data-q="clear">清空计数</button></div></fieldset><table class="quantum-table"><caption class="visually-hidden">联合测量的理论概率与采样计数</caption><thead><tr><th scope="col">结果</th><th scope="col">理论概率</th><th scope="col">采样计数</th></tr></thead><tbody><tr><td data-q="label-0">00</td><td><div class="q-prob"><div class="q-prob-label"><span></span><output data-q="joint-0-value">50.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="joint-0-bar" style="width:50.0%"></span></div></div></td><td data-q="count-0">—</td></tr><tr><td data-q="label-1">01</td><td><div class="q-prob"><div class="q-prob-label"><span></span><output data-q="joint-1-value">0.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="joint-1-bar" style="width:0%"></span></div></div></td><td data-q="count-1">—</td></tr><tr><td data-q="label-2">10</td><td><div class="q-prob"><div class="q-prob-label"><span></span><output data-q="joint-2-value">0.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="joint-2-bar" style="width:0%"></span></div></div></td><td data-q="count-2">—</td></tr><tr><td data-q="label-3">11</td><td><div class="q-prob"><div class="q-prob-label"><span></span><output data-q="joint-3-value">50.0%</output></div><div class="q-track" aria-hidden="true"><span data-q="joint-3-bar" style="width:50.0%"></span></div></div></td><td data-q="count-3">—</td></tr></tbody></table><p class="demo-hint" data-q="joint-note">Bell 态在 Z 基和 X 基下均表现为完全相同的结果。</p><p class="q-feedback" data-q="feedback" aria-live="polite">选择状态与测量基，再对独立制备的电路采样。</p></div>
+<p>这个演示比较三个已知状态，展示“只看 Z 基关联”的不足；它不是一套通用的纠缠认证实验。纠缠也不能用来超光速传递信息：单独一侧的随机结果不能由另一侧自由控制。</p>
+<p>对 n 个 qubit，一般纯态有 <span data-math>2^n</span> 个复振幅，去掉归一化与整体相位后有 <span data-math>2^{n+1}-2</span> 个实自由度；乘积纯态只需 <span data-math>2n</span> 个。联合状态空间很丰富，但<strong>不能据此推断一次测量能读出全部振幅，或有纠缠就一定获得计算加速</strong>。</p>
+
+</section>
+
+<section class="article-section" id="references"><h2><a class="heading-anchor" href="#references" aria-label="链接到此章节">#</a>参考与下一步</h2>
+
+<p>这篇从自己的手写笔记和整理稿出发，补全了复共轭、门的旋转轴、测量基与纯态纠缠判据。下一篇将这些概念接成一个可以训练的函数：<a href="../quantum-neural-networks/">量子神经网络：从旋转门到训练闭环</a>。</p>
+<ol class="article-references"><li><a href="https://quantum.cloud.ibm.com/learning/en/modules/quantum-mechanics/superposition-with-qiskit">IBM Quantum Learning · Quantum Coins: superposition and interference</a>：叠加、相位、布洛赫球与干涉。</li><li><a href="https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/multiple-systems/quantum-information">John Watrous / IBM Quantum Learning · Multiple systems: Quantum information</a>：张量积、联合测量与纠缠。</li></ol>
+
+</section>
+
+      <nav class="quantum-series-nav" aria-label="量子计算系列文章"><a href="../quantum-neural-networks/">02 · 量子神经网络 →</a><a href="../grover-search/">03 · Grover 搜索 →</a></nav>
+      <footer class="article-end"><p>根据自己的手写笔记与整理稿编辑。封面、电路图及交互演示均为本站绘制；数值为理想模型的教学计算。</p><a href="../?collection=quantum">← 量子计算专栏</a><a href="../">全部文章 →</a></footer>
+    </article>
+  </main>
+  <footer class="blog-footer" lang="zh-CN"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+  <a class="reading-return" href="#top" aria-label="回到文章顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg><span data-reading-percent>0%</span></a>
+</body>
+</html>

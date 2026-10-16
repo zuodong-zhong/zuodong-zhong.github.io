@@ -68,3 +68,18 @@ Each directory contains cover.png (generated original) and cover.jpg
 (web-ready image). The existing Score cover has corresponding records in
 blog/score-based-generative-models/cover-prompt.txt, with diffusion-cover.png
 and diffusion-cover.jpg in the same directory.
+
+Quantum-computing article series
+The sources content/quantum-computing-basics.html,
+content/quantum-neural-networks.html, and content/grover-search.html are
+edited from the site author's handwritten notes and supplied text draft.
+Corrections and explanatory additions are incorporated into the articles.
+The articles link to IBM Quantum Learning, PennyLane's quantum-gradient
+tutorial, and the original/review papers by Grover, Cerezo et al., and
+McClean et al. No external figures or screenshots from those sources are
+redistributed.
+
+The three SVG covers, Bell/QNN circuit diagrams, and HTML/SVG interactive
+figures in blog/quantum/ were created for this site. They are explanatory
+illustrations and ideal-state calculations, not quantum-hardware results.
+No photographed notebook pages are included in the published site.

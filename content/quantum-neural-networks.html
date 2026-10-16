@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" class="article-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title lang="zh-CN">量子神经网络：从旋转门到一个可训练的量子模型 | 钟祚栋</title>
+  <meta name="description" content="把编码、参数化电路、测量与经典优化连成闭环，亲手训练一个最小 QNN，理解参数位移和非线性的来源。">
+  <meta name="theme-color" content="#e6e0ed">
+  <meta name="cloudflare-web-analytics-token" content="fadc7d9e94934e929d942f3db425607f">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="量子神经网络：从旋转门到一个可训练的量子模型">
+  <meta property="og:description" content="把编码、参数化电路、测量与经典优化连成闭环，亲手训练一个最小 QNN，理解参数位移和非线性的来源。">
+  <meta property="og:image" content="https://zuodong-zhong.github.io/blog/quantum/qnn-cover.svg">
+  <link rel="canonical" href="https://zuodong-zhong.github.io/blog/quantum-neural-networks/">
+  <link rel="icon" type="image/jpeg" href="../../assets/images/头像.jpg?v=9dfdd1931b47">
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css?v=0.16.22">
+  <link rel="stylesheet" href="../../site-theme.css?v=0325a12068d1">
+  <link rel="stylesheet" href="../article.css?v=8c73710039e0">
+  <link rel="stylesheet" href="../../site-header.css?v=41802d76fa51">
+  <link rel="stylesheet" href="../quantum/demos.css?v=1">
+  <style>:root { --article-wash-start: #e6e0ed; --article-wash-middle: #f0ebf4; --article-wash-end: #f7f4f8; --article-surface: #fcfafc; --article-accent: #756080; --article-cover-image: url("/blog/quantum/qnn-cover.svg"); }</style>
+  <script src="../../site.js?v=1d16e7250071" defer></script>
+  <script src="../article.js?v=3" defer></script>
+  <script src="../quantum/quantum-math.js?v=1" defer></script>
+  <script src="../quantum/demos.js?v=1" defer></script>
+  <script src="../../analytics.js?v=1" defer></script>
+</head>
+<body class="blog-page article-page" id="top">
+  <a class="skip-link" href="#intro" lang="zh-CN">跳转到正文</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="../../" data-zh="钟祚栋">Zuodong Zhong</a>
+      <nav class="site-nav" data-site-nav aria-label="Main navigation">
+        <a href="../../#about" data-zh="简介">About</a>
+        <a href="../../#news" data-zh="动态">News</a>
+        <a href="../../#publications" data-zh="论文">Publications</a>
+        <a href="../../#experience" data-zh="经历">Experience</a>
+        <a href="../" class="is-active" data-zh="博客">Blog</a>
+      </nav>
+      <div class="site-tools">
+        <button class="site-language" type="button" data-language-toggle aria-label="切换到中文" hidden><span data-language="en">EN</span><span data-language="zh" lang="zh-CN">中</span></button>
+      </div>
+    </div>
+  </header>
+  <main class="article-layout" lang="zh-CN">
+    <aside class="article-sidebar">
+      <details class="article-toc" open>
+        <summary><span class="toc-desktop-label">TABLE OF CONTENTS</span><span class="toc-mobile-label">文章目录</span><svg class="toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <nav aria-label="文章目录">
+          <a href="#intro">把量子电路看成可训练的函数</a>
+          <a href="#pipeline">编码、演化、读出与经典优化器</a>
+          <a href="#minimal">最小 QNN：一条正弦曲线也能训练</a>
+          <a href="#gradient">参数位移：用两次电路求导</a>
+          <a href="#nonlinearity">门都是线性的，模型为什么还能非线性？</a>
+          <a href="#references">从教学模型走向实际问题</a>
+        </nav>
+      </details>
+      <a class="article-back" href="../?collection=quantum"><span aria-hidden="true">←</span> 量子计算专栏</a>
+    </aside>
+    <article class="article-content">
+      <figure class="article-cover"><img src="../quantum/qnn-cover.svg" width="1400" height="740" fetchpriority="high" alt="量子神经网络原创概念封面"></figure>
+      <header class="article-header">
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><time datetime="2026-10-16">2026 年 10 月 16 日</time></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>14 分钟阅读</span>
+          <span class="article-tags"><a href="../?collection=quantum">quantum</a><span aria-hidden="true">/</span><a href="../?tag=qnn">qnn</a></span>
+        </div>
+        <h1>量子神经网络</h1>
+        <p class="article-subtitle">从旋转门到一个可训练的量子模型</p>
+        <p class="article-byline">钟祚栋 <span aria-hidden="true">/</span> 学习笔记</p>
+        <a class="article-series" href="../?collection=quantum"><span>Quantum Notes · 量子计算入门</span><span class="series-lesson">学习 02 <span aria-hidden="true">↗</span></span></a>
+      </header>
+<section class="article-section" id="intro"><h2><a class="heading-anchor" href="#intro" aria-label="链接到此章节">#</a>把量子电路看成可训练的函数</h2>
+
+<p>在<a href="../quantum-computing-basics/">上一篇</a>里，量子门负责演化，测量负责产生经典结果。顺着这个思路，就可以理解笔记中那条 QNN 流程：<strong>把输入编码成量子态，用带参数的门改变它，再把测量统计量作为模型输出。</strong></p>
+<p>这里讨论的是变分量子电路形式的量子神经网络。QNN 是一组模型的统称，不只有一种固定结构；这篇先围绕一个能完整算清楚、也能在网页中训练的例子展开。</p>
+<noscript><p class="editor-note">正文与公式可直接阅读；启用 JavaScript 后可操作训练演示。</p></noscript>
+
+</section>
+
+<section class="article-section" id="pipeline"><h2><a class="heading-anchor" href="#pipeline" aria-label="链接到此章节">#</a>编码、演化、读出与经典优化器</h2>
+
+<p>把经典输入记作 x，把可训练参数记作 <span data-math>\boldsymbol\theta</span>。一个常见流程是：</p>
+<div data-math="block">|\psi(x,\boldsymbol\theta)\rangle=U_{\mathrm{train}}(\boldsymbol\theta)U_{\mathrm{enc}}(x)|0\rangle^{\otimes n}.</div>
+<p>选定可观测量 O 后，模型可输出期望值：</p>
+<div data-math="block">f_{\boldsymbol\theta}(x)=\langle\psi(x,\boldsymbol\theta)|O|\psi(x,\boldsymbol\theta)\rangle.</div>
+<p>也可以直接把某个测量结果的概率作为输出。随后在经典计算机上计算损失、更新参数，再重新运行量子电路。<a href="https://arxiv.org/abs/2012.09265">Cerezo 等人的变分量子算法综述</a>对这种量子—经典优化闭环有系统介绍。</p>
+<figure class="quantum-diagram"><img src="../quantum/qnn-circuit.svg" width="800" height="350" loading="lazy" alt="重画笔记中的三比特电路：Ry 输入编码、Ry 可训练角度、两组 CNOT 和测量，以及经典参数更新回路"><figcaption>图 1 · 根据原笔记重画的三 qubit 电路。CNOT 提供可能产生纠缠的联合操作；是否纠缠还取决于输入。虚线表示经典优化器更新 θ，不是额外的量子门。</figcaption></figure>
+<h3>输入怎样进入电路？</h3>
+<table class="quantum-table"><thead><tr><th scope="col">编码</th><th scope="col">一个例子</th><th scope="col">要注意的成本</th></tr></thead><tbody>
+<tr><td>基态编码</td><td>二进制 101 → <span data-math>|101\rangle</span></td><td>按位表示离散输入。</td></tr>
+<tr><td>角度编码</td><td><span data-math>R_y(x)|0\rangle</span></td><td>特征需缩放到合适角度，旋转具有周期性。</td></tr>
+<tr><td>振幅编码</td><td><span data-math>x/\|x\|</span> → 态振幅</td><td>qubit 数少，不代表一般态制备免费。</td></tr>
+</tbody></table>
+<p>最容易直接理解的是角度编码：</p>
+<div data-math="block">R_y(x)=\begin{bmatrix}\cos(x/2)&amp;-\sin(x/2)\\\sin(x/2)&amp;\cos(x/2)\end{bmatrix},\qquad R_y(x)|0\rangle=\cos\frac x2|0\rangle+\sin\frac x2|1\rangle.</div>
+<p>若向量有 <span data-math>2^n</span> 个分量，振幅编码可以用 n 个 qubit 来表示归一化后的方向，但任意输入的制备过程仍可能需要大量操作，而且向量的原始模长需要另行处理。表示空间的维度不能直接等同于端到端效率。</p>
+
+</section>
+
+<section class="article-section" id="minimal"><h2><a class="heading-anchor" href="#minimal" aria-label="链接到此章节">#</a>最小 QNN：一条正弦曲线也能训练</h2>
+
+<p>先暂时去掉多 qubit 和纠缠，只保留两次绕 Y 轴的旋转：</p>
+<div data-math="block">|0\rangle\xrightarrow{R_y(x)}\xrightarrow{R_y(\theta)}\xrightarrow{Z\ \mathrm{measurement}}\{0,1\}.</div>
+<p>同轴旋转可以合并，因此：</p>
+<div data-math="block">|\psi_{\mathrm{out}}\rangle=R_y(\theta)R_y(x)|0\rangle=R_y(x+\theta)|0\rangle.</div>
+<p>把测到 1 的概率作为模型输出：</p>
+<div data-math="block">f_\theta(x)=P(1\mid x,\theta)=\sin^2\frac{x+\theta}{2}=\frac{1-\cos(x+\theta)}2.</div>
+<p>如果选择期望值读出，则 <span data-math>\langle Z\rangle=\cos(x+\theta)</span>，两种输出之间有 <span data-math>f_\theta=(1-\langle Z\rangle)/2</span> 的关系。它们都来自同一条电路。</p>
+<h3>从预测到损失，再到参数更新</h3>
+<p>对 m 个训练样本，可以定义均方误差：</p>
+<div data-math="block">\mathcal L(\theta)=\frac1m\sum_{j=1}^{m}\bigl(f_\theta(x_j)-y_j\bigr)^2,\qquad\theta\leftarrow\theta-\eta\,\partial_\theta\mathcal L.</div>
+<p>下面准备 9 个等间距输入，<span data-math>x_j=-\pi+j\pi/4</span>（<span data-math>j=0,\ldots,8</span>），并用 <span data-math>y_j=\sin^2((x_j+1.1)/2)</span> 生成软目标值。目标特意选在这个模型能表达的函数族里，用来观察训练机制；这不是一个真实数据集上的性能实验。</p>
+<div class="quantum-demo" data-quantum-demo="qnn" role="group" aria-label="训练一个只有 θ 的量子模型"><div class="demo-heading"><span class="demo-number">EXPERIMENT 04</span><h3>训练一个只有 θ 的量子模型</h3></div><p class="demo-hint">蓝线是模型输出，橙色点是训练目标。拖动 θ 会平移整条曲线；拖动 x 只移动蓝色读数点。</p><svg class="q-viz" viewBox="0 0 580 240" role="img" aria-labelledby="qnn-title qnn-desc"><title id="qnn-title">单 qubit QNN 的预测曲线与训练点</title><desc id="qnn-desc" data-q="curve-description">在九个合成样本上最小化预测概率的均方误差。</desc><path d="M42 40H538M42 120H538M42 200H538" class="q-grid"/><path d="M42 25V200H548" class="q-wire"/><text x="12" y="44">1</text><text x="9" y="124">0.5</text><text x="14" y="204">0</text><text x="35" y="226">−π</text><text x="285" y="226">0</text><text x="529" y="226">π</text><text x="552" y="207">x</text><text x="50" y="21">P(1)</text><path data-q="curve" d="M42.000,64.263 L46.133,61.336 L50.267,58.570 L54.400,55.972 L58.533,53.550 L62.667,51.309 L66.800,49.257 L70.933,47.399 L75.067,45.740 L79.200,44.285 L83.333,43.036 L87.467,41.999 L91.600,41.176 L95.733,40.569 L99.867,40.179 L104.000,40.009 L108.133,40.057 L112.267,40.325 L116.400,40.811 L120.533,41.514 L124.667,42.432 L128.800,43.563 L132.933,44.903 L137.067,46.449 L141.200,48.197 L145.333,50.141 L149.467,52.277 L153.600,54.599 L157.733,57.100 L161.867,59.773 L166.000,62.612 L170.133,65.607 L174.267,68.752 L178.400,72.037 L182.533,75.454 L186.667,78.993 L190.800,82.644 L194.933,86.397 L199.067,90.243 L203.200,94.170 L207.333,98.168 L211.467,102.226 L215.600,106.333 L219.733,110.477 L223.867,114.647 L228.000,118.832 L232.133,123.020 L236.267,127.200 L240.400,131.360 L244.533,135.489 L248.667,139.575 L252.800,143.608 L256.933,147.576 L261.067,151.468 L265.200,155.275 L269.333,158.984 L273.467,162.587 L277.600,166.073 L281.733,169.432 L285.867,172.657 L290.000,175.737 L294.133,178.664 L298.267,181.430 L302.400,184.028 L306.533,186.450 L310.667,188.691 L314.800,190.743 L318.933,192.601 L323.067,194.260 L327.200,195.715 L331.333,196.964 L335.467,198.001 L339.600,198.824 L343.733,199.431 L347.867,199.821 L352.000,199.991 L356.133,199.943 L360.267,199.675 L364.400,199.189 L368.533,198.486 L372.667,197.568 L376.800,196.437 L380.933,195.097 L385.067,193.551 L389.200,191.803 L393.333,189.859 L397.467,187.723 L401.600,185.401 L405.733,182.900 L409.867,180.227 L414.000,177.388 L418.133,174.393 L422.267,171.248 L426.400,167.963 L430.533,164.546 L434.667,161.007 L438.800,157.356 L442.933,153.603 L447.067,149.757 L451.200,145.830 L455.333,141.832 L459.467,137.774 L463.600,133.667 L467.733,129.523 L471.867,125.353 L476.000,121.168 L480.133,116.980 L484.267,112.800 L488.400,108.640 L492.533,104.511 L496.667,100.425 L500.800,96.392 L504.933,92.424 L509.067,88.532 L513.200,84.725 L517.333,81.016 L521.467,77.413 L525.600,73.927 L529.733,70.568 L533.867,67.343 L538.000,64.263" class="q-accent"/><circle cx="42" cy="83.712" r="4" class="q-target"/><circle cx="104" cy="144.755" r="4" class="q-target"/><circle cx="166" cy="191.297" r="4" class="q-target"/><circle cx="228" cy="196.074" r="4" class="q-target"/><circle cx="290" cy="156.288" r="4" class="q-target"/><circle cx="352" cy="95.245" r="4" class="q-target"/><circle cx="414" cy="48.703" r="4" class="q-target"/><circle cx="476" cy="43.926" r="4" class="q-target"/><circle cx="538" cy="83.712" r="4" class="q-target"/><circle cx="345" cy="199" r="5" class="q-point" data-q="input-dot"/></svg><fieldset disabled aria-label="设置输入、参数与训练"><div class="q-selects"><div><label for="qnn-input">输入 x<output for="qnn-input" data-q="input-value">0.7 rad</output></label><input id="qnn-input" data-q="input" type="range" min="-3.14159" max="3.14159" step="0.01" value="0.7"></div><div><label for="qnn-weight">可训练参数 θ<output for="qnn-weight" data-q="weight-value">-0.8 rad</output></label><input id="qnn-weight" data-q="weight" type="range" min="-3.14159" max="3.14159" step="0.001" value="-0.8"></div></div><div class="demo-actions"><button type="button" data-q="step">训练 1 步</button><button type="button" class="primary" data-q="train">训练 50 步</button><button type="button" data-q="reset">重置</button></div></fieldset><div class="q-stats"><div><small>参数 θ</small><strong data-q="theta">−0.800</strong></div><div><small>训练集 MSE</small><strong data-q="loss">0.29571</strong></div><div><small>训练步数</small><strong data-q="steps">0</strong></div></div><div class="q-prob"><div class="q-prob-label"><span>当前输入的预测 P(1)</span><output data-q="prediction-value">0.2%</output></div><div class="q-track" aria-hidden="true"><span data-q="prediction-bar" style="width:0.2%"></span></div></div><p class="demo-hint">当前损失梯度 ∂L/∂θ = <output data-q="gradient">−0.20060</output>。使用精确期望值与参数位移梯度；这里没有加入有限 shots 的采样噪声。</p><p class="q-feedback" data-q="feedback" aria-live="polite">初始 θ = −0.8，学习率 η = 0.8。</p></div>
+<p>可以先手动拖动 θ，观察曲线怎样整体平移；再重置，点击“训练 50 步”。优化器根据当前损失梯度更新 θ，而不是把答案参数直接写入模型。输入 x 的滑块只用于观察一个位置的预测，不会改变训练集。</p>
+<aside class="editor-note"><strong>这个模型的能力边界</strong><p>它只有一个有效角度，只能表达固定频率、固定幅度、不同相位的这族曲线。它没有纠缠，也不需要量子计算机才能高效计算。这个例子的意义是把 QNN 的训练闭环拆开看清楚。</p></aside>
+
+</section>
+
+<section class="article-section" id="gradient"><h2><a class="heading-anchor" href="#gradient" aria-label="链接到此章节">#</a>参数位移：用两次电路求导</h2>
+
+<p>这个例子可以直接微分：</p>
+<div data-math="block">\frac{\partial f_\theta(x)}{\partial\theta}=\frac12\sin(x+\theta).</div>
+<p>也可以把参数向两个方向分别平移 <span data-math>\pi/2</span>，重新计算电路输出：</p>
+<div data-math="block">\frac{\partial f_\theta(x)}{\partial\theta}=\frac{f_{\theta+\pi/2}(x)-f_{\theta-\pi/2}(x)}2.</div>
+<p>这是参数位移规则（parameter-shift）。对一个参数只出现于一个 <span data-math>e^{-i\theta P/2}</span> 形式的 Pauli 旋转门、其余门固定时，这个两项规则精确成立。它不是用一个很小的步长近似导数。更一般的生成元、共享参数或重复出现的参数，需要相应推广或按出现位置求导再相加。可参阅 <a href="https://pennylane.ai/demos/tutorial_backprop">PennyLane 的量子梯度教程</a>。</p>
+<p>要特别区分<strong>电路输出的导数</strong>与<strong>损失的导数</strong>。对这里的平方损失，仍需要链式法则：</p>
+<div data-math="block">\partial_\theta\mathcal L=\frac2m\sum_j\bigl(f_\theta(x_j)-y_j\bigr)\,\partial_\theta f_\theta(x_j).</div>
+<p>不能直接把平方损失代入同一个两项位移式，就当作损失梯度。网页演示正是先计算输出的参数位移导数，再通过上式更新参数。</p>
+<h3>理想期望值与有限 shots</h3>
+<p>网页模拟可以直接计算振幅，从而得到精确概率。真实采样通常需要 S 次独立运行，用 <span data-math>\widehat p=n_1/S</span> 估计概率：</p>
+<div data-math="block">\operatorname{Var}(\widehat p)=\frac{p(1-p)}S\leq\frac1{4S}.</div>
+<p>因此，标准误差通常按 <span data-math>1/\sqrt S</span> 缩小。参数位移需要估计两个不同电路的输出，采样噪声也会进入梯度。这些执行次数是训练成本的一部分。</p>
+
+</section>
+
+<section class="article-section" id="nonlinearity"><h2><a class="heading-anchor" href="#nonlinearity" aria-label="链接到此章节">#</a>门都是线性的，模型为什么还能非线性？</h2>
+
+<p>这里需要分清楚“对什么变量线性”。固定门参数时，所有酉门对<strong>输入量子态向量</strong>都是线性的。多层门仍可合并成：</p>
+<div data-math="block">U_{\mathrm{total}}=U_L\cdots U_2U_1.</div>
+<p>但模型从<strong>经典输入 x 到经典预测</strong>的映射，不必是线性的。角度编码把 x 放进三角函数；测量概率又是振幅模长平方。我们的例子就是 <span data-math>f_\theta(x)=\sin^2((x+\theta)/2)</span>。</p>
+<p>“测量是非线性的”还需要限定描述方式：Born 概率对态向量的振幅是二次的，但对密度矩阵 <span data-math>\rho</span> 是线性的，<span data-math>P(i)=\operatorname{Tr}(\rho\Pi_i)</span>。不能据此把测量直接当作经典网络里的 ReLU。</p>
+<p>这也解释了为什么不能把“堆更多量子门”直接类比为“更深的经典神经网络”。本例里连续的两个同轴旋转就可以合并；更复杂模型的函数族取决于编码、旋转轴、参数共享、联合门、重复编码与读出方式。</p>
+<p>实践中还要考虑可训练性。<a href="https://arxiv.org/abs/1803.11173">McClean 等人关于 barren plateaus 的工作</a>表明，在满足相应随机电路条件的情形下，梯度会随系统规模变得极小。这不意味着每条 QNN 都无法训练，但提醒我们不能仅凭参数量或 qubit 数判断模型是否有用。</p>
+
+</section>
+
+<section class="article-section" id="references"><h2><a class="heading-anchor" href="#references" aria-label="链接到此章节">#</a>从教学模型走向实际问题</h2>
+
+<p>对一个 QNN，我现在更愿意依次问：输入怎么编码？可训练门能表达什么函数？测量什么统计量？怎样估计梯度？为了达到给定精度，需要多少次电路执行？最后再把总成本与合适的经典模型比较。</p>
+<p>多 qubit、纠缠与重复编码可能改变模型的表达能力，但不会自动构成量子优势。下一篇换一个不依赖训练的例子，看看如何主动设计相位与干涉：<a href="../grover-search/">Grover 搜索：标记相位，放大振幅</a>。</p>
+<ol class="article-references"><li><a href="https://arxiv.org/abs/2012.09265">Cerezo et al. · Variational Quantum Algorithms</a>，Nature Reviews Physics, 2021。</li><li><a href="https://pennylane.ai/demos/tutorial_backprop">Josh Izaac / PennyLane · Quantum gradients with backpropagation</a>：参数位移与模拟器反向传播。</li><li><a href="https://arxiv.org/abs/1803.11173">McClean et al. · Barren plateaus in quantum neural network training landscapes</a>，Nature Communications, 2018。</li></ol>
+
+</section>
+
+      <nav class="quantum-series-nav" aria-label="量子计算系列文章"><a href="../quantum-computing-basics/">01 · 量子计算入门 →</a><a href="../grover-search/">03 · Grover 搜索 →</a></nav>
+      <footer class="article-end"><p>根据自己的手写笔记与整理稿编辑。封面、电路图及交互演示均为本站绘制；数值为理想模型的教学计算。</p><a href="../?collection=quantum">← 量子计算专栏</a><a href="../">全部文章 →</a></footer>
+    </article>
+  </main>
+  <footer class="blog-footer" lang="zh-CN"><p>© 2026 钟祚栋</p><p>阅读布局参考 <a href="https://axi404.top/blog/embodied-talk-5">Axi’s Blog</a></p></footer>
+  <a class="reading-return" href="#top" aria-label="回到文章顶部"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg><span data-reading-percent>0%</span></a>
+</body>
+</html>

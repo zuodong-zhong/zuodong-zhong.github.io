@@ -12,10 +12,13 @@ My personal academic website, featuring my research, publications, and academic 
 
 博客布局参考 [Axi's Blog](https://axi404.top/blog/research)，主页保持统一的浅灰白色调；文章使用横向封面卡片，标题与简介叠在轻度虚化、渐隐的图片上。卡片高度随文字自然增长，手机上会加强遮罩以保证可读性。列表本身不需要安装依赖或构建，可直接部署到 GitHub Pages。
 
-目前有三篇可在本站完整阅读的扩散模型学习笔记。页面日期为知乎原文显示的最后编辑日期，不是首次发布日期。
+目前有六篇可在本站完整阅读的学习笔记，分为量子计算与扩散模型两个系列。量子计算系列根据作者提供的手写笔记与整理稿编辑，日期为本站整理发布日期；扩散模型系列的日期为知乎原文显示的最后编辑日期，不是首次发布日期。
 
 | 文章 | 正文源文件 | 生成页面 | 文章色调 |
 | --- | --- | --- | --- |
+| 量子计算入门 | `content/quantum-computing-basics.html` | `blog/quantum-computing-basics/index.html` | 雾蓝 |
+| 量子神经网络 | `content/quantum-neural-networks.html` | `blog/quantum-neural-networks/index.html` | 灰紫 |
+| Grover 搜索 | `content/grover-search.html` | `blog/grover-search/index.html` | 苔绿 |
 | Score-based Generative Models | `content/score-based-generative-models.html` | `blog/score-based-generative-models/index.html` | 暖灰与金棕 |
 | DDPM：从逐步去噪到一步加噪 | `content/ddpm.html` | `blog/ddpm/index.html` | 冷蓝灰 |
 | DDIM：相同前向分布与跳步采样 | `content/ddim.html` | `blog/ddim/index.html` | 灰绿与墨绿 |
@@ -43,7 +46,13 @@ npm run build:blog
 2. 填写 `data-collection`、空格分隔的 `data-tags`，以及中英文搜索关键词 `data-search`。新增专栏或标签时，在筛选按钮中添加对应的 `data-filter`。搜索与专栏/标签筛选可组合使用。
 3. 英文文案放在元素正文，中文放在同一元素的 `data-zh` 中；`data-zh` 只用于纯文本元素。中文文章标题也可以直接保留中文并设置 `lang="zh-CN"`。新增独立文章页时可复用 `site.js`，并给 `<title>` 设置 `data-zh` 以支持双语标题。
 4. 同步文章计数的静态默认值，保证关闭 JavaScript 时仍显示正确的数量。脚本启用后会自动计算数量；正文列表和文章链接在不启用 JavaScript 时也能正常访问。
-5. 在 `index.html` 的 Writing（写作）区块 `.writing-list` 中按相同顺序添加一项，标题、副标题、日期和阅读时长与博客列表保持一致。缩略图使用封面的 360px 副本 `blog/<slug>/thumb.jpg`，可用 macOS 自带命令生成：`sips -Z 360 -s format jpeg -s formatOptions 82 blog/<slug>/cover.jpg --out blog/<slug>/thumb.jpg`。
+5. `index.html` 的 Blogs（博客）区块保留精选文章，不自动同步完整博客列表；本次量子计算系列只加入博客页，首页原有三项保持不变。为兼容原有链接和样式，区块仍保留 `writing` 锚点与 `.writing-list` 类名。只有需要在首页展示文章时才添加项目；已有精选文章的缩略图为封面的 360px 副本 `blog/<slug>/thumb.jpg`。
+
+### 量子计算交互演示
+
+`blog/quantum/` 保存三张原创 SVG 封面、两张根据手写笔记重画的电路图，以及不依赖第三方运行时的交互样式和脚本。五个演示分别为：布洛赫球与单比特门、相位干涉、Bell 态与经典混合态的联合测量、单 qubit QNN 的参数位移训练、Grover 分步振幅放大。数值为理想模型的教学计算；采样按钮表示独立重复制备和测量，不模拟硬件噪声。
+
+数学计算集中在 `quantum-math.js`，界面在 `demos.js` / `demos.css`。QNN 的九个软目标由文中公开的正弦公式生成；训练通过当前输出的参数位移梯度和损失链式法则更新参数。关闭 JavaScript 时，正文、预渲染公式、电路图与默认示例仍可阅读，交互控件禁用。`npm test` 包含酉门、相位不变性、联合测量、梯度、训练收敛与 Grover 成功概率的数值检查。
 
 本地预览：在仓库根目录运行 `python3 -m http.server 8000 --bind 127.0.0.1`，打开 `http://127.0.0.1:8000/blog/`。页面复用首页的语言偏好与访问统计排除设置。
 
