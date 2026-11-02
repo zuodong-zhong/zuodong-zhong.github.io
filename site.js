@@ -27,6 +27,67 @@
 })();
 
 (() => {
+  // Gather the wide header into a floating pill as the reader leaves the top.
+  const header = document.querySelector('.site-header');
+  const inner = header?.querySelector('.site-header-inner');
+  const name = header?.querySelector('.site-name');
+  const navigation = header?.querySelector('[data-site-nav]');
+  const tools = header?.querySelector('.site-tools');
+  if (!inner || !name || !navigation || !tools) return;
+
+  const narrow = matchMedia('(max-width: 760px)');
+  let compact = false;
+  let framePending = false;
+
+  function measure() {
+    const width = inner.clientWidth;
+    if (!width) return;
+    let surfaceWidth;
+    let shift;
+    if (narrow.matches) {
+      surfaceWidth = width + 24;
+      shift = 8;
+    } else {
+      const sideWidth = Math.max(name.offsetWidth, tools.offsetWidth);
+      const navWidth = navigation.offsetWidth;
+      surfaceWidth = Math.min(width, Math.max(840, navWidth + 2 * (sideWidth + 32)));
+      const padding = Math.max(0, Math.min(20, (surfaceWidth - navWidth) / 2 - sideWidth - 12));
+      shift = (width - surfaceWidth) / 2 + padding;
+    }
+    inner.style.setProperty('--header-compact-width', `${surfaceWidth}px`);
+    inner.style.setProperty('--header-shift', `${shift}px`);
+    inner.style.setProperty('--header-surface-scale', Math.max(1, width / surfaceWidth));
+  }
+
+  function update() {
+    framePending = false;
+    // Separate thresholds avoid flickering near the top and during elastic overscroll.
+    const next = window.scrollY > (compact ? 24 : 48);
+    if (next === compact) return;
+    compact = next;
+    header.classList.toggle('is-compact', compact);
+  }
+
+  function requestUpdate() {
+    if (framePending) return;
+    framePending = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', measure);
+  window.addEventListener('pageshow', () => { measure(); update(); });
+  document.querySelector('[data-language-toggle]')?.addEventListener('click', measure);
+  if (typeof ResizeObserver === 'function') {
+    const observer = new ResizeObserver(measure);
+    [inner, name, navigation, tools].forEach((element) => observer.observe(element));
+  }
+  measure();
+  update();
+  header.classList.add('has-scroll-effect');
+})();
+
+(() => {
   // On narrow screens the header links scroll sideways; keep the current one in view.
   function revealActiveLinks() {
     document.querySelectorAll('[data-site-nav]').forEach((navigation) => {

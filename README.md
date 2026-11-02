@@ -8,7 +8,7 @@ My personal academic website, featuring my research, publications, and academic 
 
 ## 博客
 
-博客列表位于 `blog/index.html`。个人主页、博客列表和文章页共用同一个顶部导航，布局参考 [Haoyi Zhu](https://www.haoyizhu.site/)：左侧姓名回到主页，中间是 `About / News / Publications / Experience / Blog`（简介 / 动态 / 论文 / 经历 / 博客），右侧是 `EN | 中` 语言切换。在主页上，链接跳到对应章节并随滚动高亮当前章节；在博客页上，章节链接回到主页对应位置，`Blog` 保持高亮。桌面端页眉为吸顶的浅色毛玻璃，手机上链接排成可横滑的第二行，并随页面滚走，给正文留出空间。页眉样式在 `site-header.css`。全站共用的字体、颜色和 1040px 内容宽度集中在 `site-theme.css`，每个页面都要先加载它，再加载自己的样式。页眉、博客列表（`blog/blog.css`）和文章页使用无衬线字体；主页（`styles.css`）保留学术主页的衬线字体、蓝色章节标题与标题下的细线，并共用同一链接蓝色和内容宽度。文章页保留各自的阅读色调。页眉 HTML 直接写在 `index.html`、`blog/index.html` 和 `content/*.html` 中，导航不依赖 JavaScript。修改页眉结构时需同步这些源文件，再运行 `npm run build:blog`。
+博客列表位于 `blog/index.html`。个人主页、博客列表和文章页共用同一个顶部导航，布局参考 [Haoyi Zhu](https://www.haoyizhu.site/)：左侧姓名回到主页，中间是 `About / News / Publications / Experience / Blog`（简介 / 动态 / 论文 / 经历 / 博客），右侧是 `EN | 中` 语言切换。在主页上，链接跳到对应章节并随滚动高亮当前章节；在博客页上，章节链接回到主页对应位置，`Blog` 保持高亮。页眉参考 [DeepSeek Harness](https://www.deepseek.com/harness/) 的滚动收拢交互：顶部舒展开，向下滚动超过 48px 后姓名和语言切换向中间靠拢，浮现圆角毛玻璃底板；回到距顶部 24px 内时展开。桌面收拢宽度为 840px（按实际导航宽度调整），手机保留两行与可横滑链接。页眉始终吸顶，占位高度不变，章节跳转预留遮挡空间；系统减少动态效果时直接切换状态。页眉样式在 `site-header.css`。全站共用的字体、颜色和 1040px 内容宽度集中在 `site-theme.css`，每个页面都要先加载它，再加载自己的样式。页眉、博客列表（`blog/blog.css`）和文章页使用无衬线字体；主页（`styles.css`）保留学术主页的衬线字体、蓝色章节标题与标题下的细线，并共用同一链接蓝色和内容宽度。文章页保留各自的阅读色调。页眉 HTML 直接写在 `index.html`、`blog/index.html` 和 `content/*.html` 中，导航不依赖 JavaScript。修改页眉结构时需同步这些源文件，再运行 `npm run build:blog`。
 
 博客布局参考 [Axi's Blog](https://axi404.top/blog/research)，主页保持统一的浅灰白色调；文章使用横向封面卡片，标题与简介叠在轻度虚化、渐隐的图片上。卡片高度随文字自然增长，手机上会加强遮罩以保证可读性。列表本身不需要安装依赖或构建，可直接部署到 GitHub Pages。
 

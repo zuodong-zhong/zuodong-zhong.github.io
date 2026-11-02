@@ -3,6 +3,7 @@
 :root {
   --site-header-height: 64px;
   --site-header-offset: var(--site-header-height);
+  --site-header-motion: 280ms cubic-bezier(.22, 1, .36, 1);
 }
 
 html { scroll-padding-top: calc(var(--site-header-offset) + 20px); }
@@ -12,29 +13,58 @@ html { scroll-padding-top: calc(var(--site-header-offset) + 20px); }
   z-index: 50;
   flex: none;
   width: 100%;
-  border-bottom: 1px solid var(--site-line);
-  background: #fafafaf2;
+  background: transparent;
   color: var(--site-ink);
   font-family: var(--site-font);
   -webkit-font-smoothing: antialiased;
+  /* Only the visible controls intercept clicks over the reading area. */
+  pointer-events: none;
 }
-@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header {
-    background: #fafafacc;
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    backdrop-filter: blur(14px) saturate(140%);
-  }
+.site-header:not(.has-scroll-effect) {
+  background: #fafafa;
+  box-shadow: 0 1px var(--site-line);
 }
 .site-header, .site-header * { box-sizing: border-box; }
 .site-header-inner {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
   grid-template-areas: "name nav tools";
   align-items: center;
   column-gap: 20px;
   width: min(var(--site-width), calc(100% - 80px));
-  height: calc(var(--site-header-height) - 1px);
+  height: var(--site-header-height);
   margin-inline: auto;
+}
+/* A separate surface contracts without scaling the text or moving the document. */
+.site-header-inner::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 8px 0;
+  width: var(--header-compact-width, 100%);
+  margin-inline: auto;
+  border: 1px solid var(--site-line);
+  border-radius: 999px;
+  background: #fafafaf5;
+  box-shadow: 0 2px 6px #25262b05, 0 8px 24px #25262b08;
+  opacity: 0;
+  transform: scaleX(var(--header-surface-scale, 1));
+  transition: transform var(--site-header-motion), opacity var(--site-header-motion);
+  pointer-events: none;
+}
+.site-header.is-compact .site-header-inner::before { opacity: 1; transform: scaleX(1); }
+.site-header.is-compact .site-name { transform: translateX(var(--header-shift, 0px)); }
+.site-header.is-compact .site-tools { transform: translateX(calc(-1 * var(--header-shift, 0px))); }
+.site-name, .site-nav, .site-tools { pointer-events: auto; }
+.site-tools { transition: transform var(--site-header-motion); }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header-inner::before {
+    background: #fafafae6;
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
 }
 .site-header a { border: 0; color: inherit; text-decoration: none; }
 .site-name {
@@ -46,7 +76,7 @@ html { scroll-padding-top: calc(var(--site-header-offset) + 20px); }
   letter-spacing: -.02em;
   line-height: 1.4;
   white-space: nowrap;
-  transition: color .2s ease;
+  transition: transform var(--site-header-motion), color .2s ease;
 }
 .site-name:hover { color: var(--site-accent); }
 .site-nav { grid-area: nav; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
@@ -108,15 +138,18 @@ html[lang^="zh"] .site-language [data-language="zh"] { color: var(--site-accent)
 @media (max-width: 840px) {
   .site-header-inner { width: min(720px, calc(100% - 48px)); }
 }
-/* Phones get a second, swipeable row of links; the bar scrolls away to leave room for reading. */
+/* Keep every link on phones: two rows gather into one rounded, floating surface. */
 @media (max-width: 760px) {
-  :root { --site-header-height: 97px; --site-header-offset: 0px; }
-  .site-header { position: relative; }
+  :root { --site-header-height: 97px; }
   .site-header-inner {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-rows: 54px 42px;
     grid-template-areas: "name tools" "nav nav";
     column-gap: 12px;
+  }
+  .site-header-inner::before {
+    inset: 4px -12px 0;
+    border-radius: 24px;
   }
   .site-nav {
     align-self: start;
@@ -134,10 +167,11 @@ html[lang^="zh"] .site-language [data-language="zh"] { color: var(--site-accent)
   .site-header-inner { width: calc(100% - 40px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .site-name, .site-nav a, .site-language, .site-language span { transition: none; }
+  .site-header-inner::before, .site-name, .site-tools,
+  .site-nav a, .site-language, .site-language span { transition: none; }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .site-header {
+  .site-header-inner::before {
     background: #fafafa;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
