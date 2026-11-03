@@ -29,7 +29,6 @@
     });
     count.textContent = visible;
     empty.hidden = visible !== 0;
-    document.querySelector('.posts-end').hidden = visible === 0;
     filters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.filter === activeFilter)));
     collections.forEach((link) => {
       if (link.dataset.collectionLink === activeFilter) link.setAttribute('aria-current', 'true');

@@ -14,7 +14,8 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 - Each article card uses the same sequence and spacing: calendar/date, clock/reading time, series/study number, linked title/subtitle, summary, and topic tags/read arrow. Quantum cards receive the same calendar and clock icons as diffusion cards. Publication and update dates retain their distinct meanings.
 - Use one shared card style for both collections, with consistent metadata, two topic tags, and the same bilingual study numbering. Render QNN and Grover labels consistently with the topic filters.
 - Preserve search, collection/topic filtering, whole-card links, visible keyboard focus, bilingual content, and responsive wrapping. Verify all six cards and representative article pages at desktop and phone widths; formulas keep their own math font.
-- Collections in the sidebar are the sole collection navigation; do not repeat them as tabs above the post list. Place search beside the introduction on desktop and below it on phones. Collection URLs remain valid independently of topic buttons, and the current collection is highlighted in the sidebar.
+- Collections in the sidebar are the sole collection navigation; do not repeat them as tabs above the post list. Place search beside the page title on desktop and below it on phones. Collection URLs remain valid independently of topic buttons, and the current collection is highlighted in the sidebar.
+- Keep the blog copy concise: no generic introductory or closing slogans. Collection cards show their titles and useful counts. Preserve article summaries and the bilingual Feynman technique paragraph.
 
 ### Blog verification (2026-11-04)
 
