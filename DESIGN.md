@@ -6,7 +6,19 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 
 - Preserve the white academic homepage, serif body, blue headings, color portrait, and 1040px content width.
 - Shared navigation uses the existing system sans-serif stack and `site-theme.css` tokens. Blue identifies links and the current section.
-- Blog and article pages retain their existing reading palettes and layouts.
+- Blog content and article reading text use the homepage's serif stack. Navigation and search/filter controls use the shared sans-serif UI stack. Articles retain their individual reading palettes and layouts.
+
+## Blog consistency
+
+- Match the homepage's white background, blue headings and links, 1040px content width, serif text, and normal letter spacing. Keep the existing archive layout, cover artwork, series order, and article content. Visual variation 2/10, motion 1/10, information density 6/10: familiar academic styling, quiet interactions, readable summaries.
+- Each article card uses the same sequence and spacing: calendar/date, clock/reading time, series/study number, linked title/subtitle, summary, and topic tags/read arrow. Quantum cards receive the same calendar and clock icons as diffusion cards. Publication and update dates retain their distinct meanings.
+- Use one shared card style for both collections, with consistent metadata, two topic tags, and the same bilingual study numbering. Render QNN and Grover labels consistently with the topic filters.
+- Preserve search, collection/topic filtering, whole-card links, visible keyboard focus, bilingual content, and responsive wrapping. Verify all six cards and representative article pages at desktop and phone widths; formulas keep their own math font.
+
+### Blog verification (2026-11-04)
+
+- Inspected both collections and languages on desktop and the 351px phone layout. All six cards have two metadata icons, matching series numbering and topic labels; the page has no horizontal overflow at 351px and 390px.
+- Verified search results, the no-results state, reset, collection and topic filters. Checked serif text and independently styled KaTeX formulas in DDPM and QNN articles. All six articles build successfully, and all 27 existing tests pass.
 
 ## Gathering header
 
