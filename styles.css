@@ -832,7 +832,7 @@ li p {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  box-shadow: 0 8px 24px rgb(44 81 145 / 14%);
+  box-shadow: 0 4px 12px rgb(44 81 145 / 10%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 160ms ease;
@@ -851,7 +851,7 @@ li p {
 @media (hover: hover) and (pointer: fine) {
   .visitor-map-card:hover {
     border-color: #a8bfdf;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
   .visitor-map-card:hover::after { opacity: 1; }
   .visitor-map-card:active { transform: translateY(0); }
