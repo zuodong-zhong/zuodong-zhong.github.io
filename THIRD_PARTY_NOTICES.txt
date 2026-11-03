@@ -91,3 +91,11 @@ originals; matching .jpg files are web exports. Each *-cover-v2-prompt.txt
 records its complete prompt and source. The live site uses the original three
 *-cover.svg files, preserved unchanged. The covers are conceptual artwork, not quantitative
 plots, exact circuit diagrams, or experimental results.
+
+Visitor map land outlines
+Source: https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson
+Natural Earth 1:110m land data, public domain:
+https://www.naturalearthdata.com/about/terms-of-use/
+assets/images/visitor-world.svg converts these polygons to an equirectangular
+projection. No third-party visitor records are bundled.
+The small light footer map was inspired by https://hq-fang.github.io/.

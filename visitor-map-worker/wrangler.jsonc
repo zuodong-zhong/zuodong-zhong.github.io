@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zuodong-visitor-map",
+  "pages_build_output_dir": "../.preview/visitor-map-deploy",
+  "compatibility_date": "2026-11-03",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "zuodong-visitor-map",
+      "database_id": "0e95a758-42f8-4c87-bc7d-7ddec151cef9"
+    }
+  ]
+}

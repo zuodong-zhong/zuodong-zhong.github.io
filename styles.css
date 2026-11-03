@@ -767,8 +767,8 @@ li p {
 }
 
 #footer {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
   justify-content: space-between;
   gap: 8px var(--entry-gap);
@@ -787,6 +787,115 @@ li p {
   color: #666666;
   font-size: small;
 }
+
+.visitor-map {
+  grid-column: 1 / -1;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  margin: 16px auto 28px;
+  font-family: var(--site-font);
+  color: var(--site-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.visitor-map-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.visitor-map-heading h2 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--site-text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.visitor-map p { margin: 0; }
+.visitor-map [hidden] { display: none; }
+.visitor-map-totals { font-variant-numeric: tabular-nums; }
+
+.visitor-map-world {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 12px 0 4px;
+}
+
+.visitor-map-world circle {
+  fill: var(--site-accent);
+  fill-opacity: .72;
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.visitor-map-caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px 8px;
+  text-align: center;
+}
+
+.visitor-map-retry {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--site-accent);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.visitor-map-details { margin-top: 8px; }
+.visitor-map-details summary {
+  width: fit-content;
+  min-height: 44px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 10px 4px;
+  color: var(--site-accent);
+  cursor: pointer;
+}
+
+.visitor-map-details summary:focus-visible,
+.visitor-map-retry:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.visitor-map-countries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 4px 32px;
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.visitor-map-countries li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--site-line);
+}
+
+.visitor-map-countries span { overflow-wrap: anywhere; }
+.visitor-map-countries strong { font-weight: 500; font-variant-numeric: tabular-nums; }
+.visitor-map-note { text-align: center; }
 
 .skip-link {
   position: absolute;
@@ -934,6 +1043,7 @@ li p {
   }
 
   .footer-credit {
+    grid-column: 1 / -1;
     flex-basis: 100%;
     margin-left: 0;
     text-align: left;

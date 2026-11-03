@@ -1,4 +1,6 @@
 (() => {
+  // Shared permission for the homepage map; keep every tracker behind these gates.
+  window.homepageAnalyticsAllowed = false;
   const storageKey = 'homepage-analytics-excluded';
   const excludedByLink = new URLSearchParams(window.location.search).getAll('analytics').includes('off');
 
@@ -60,6 +62,8 @@
 
   if (excludedByLink || exclusionState() !== false) return;
   if (window.location.protocol !== 'https:' || window.location.hostname !== 'zuodong-zhong.github.io') return;
+
+  window.homepageAnalyticsAllowed = true;
 
   const token = document.querySelector('meta[name="cloudflare-web-analytics-token"]')?.content.trim();
   if (!/^[a-f0-9]{32}$/i.test(token || '')) return;
