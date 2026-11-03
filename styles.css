@@ -768,87 +768,115 @@ li p {
 
 #footer {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px var(--entry-gap);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 20px 32px;
   border-top: 1px solid #c0c0c0;
-  padding-top: 12px;
+  padding-top: 16px;
   margin-top: 48px;
 }
 
-.footer-copyright {
-  margin: 0;
-}
-
-.footer-credit {
-  margin: 0 0 0 auto;
-  text-align: right;
-  color: #666666;
-  font-size: small;
-}
+.footer-info { display: grid; align-content: end; min-height: 120px; gap: 6px; }
+.footer-copyright { margin: 0; font-size: 14px; color: var(--site-muted); }
+.footer-credit { margin: 0; color: #666666; font-size: small; }
 
 .visitor-map {
-  grid-column: 1 / -1;
   box-sizing: border-box;
-  width: 100%;
-  max-width: 640px;
-  margin: 16px auto 28px;
+  width: 240px;
+  max-width: 100%;
+  justify-self: end;
   font-family: var(--site-font);
   color: var(--site-muted);
   font-size: 14px;
   line-height: 1.6;
 }
 
-.visitor-map-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 4px 16px;
-}
-
-.visitor-map-heading h2 {
-  margin: 0;
+.visitor-map-accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
   border: 0;
-  color: var(--site-text);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.6;
 }
 
 .visitor-map p { margin: 0; }
 .visitor-map [hidden] { display: none; }
-.visitor-map-totals { font-variant-numeric: tabular-nums; }
-
-.visitor-map-world {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 12px 0 4px;
+.visitor-map-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: stretch;
+  box-sizing: border-box;
+  height: 120px;
+  padding: 4px;
+  list-style: none;
+  background: #eaf1fc;
+  border: 1px solid #dce6f5;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 #ffffffb3;
+  cursor: pointer;
 }
 
-.visitor-map-world circle {
-  fill: var(--site-accent);
-  fill-opacity: .72;
-  stroke: #fff;
-  stroke-width: 1;
+.visitor-map-card::-webkit-details-marker { display: none; }
+.visitor-map-card::marker { content: ''; }
+.visitor-map-card:focus-visible,
+.visitor-map-retry:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 4px;
 }
 
-.visitor-map-caption {
+.visitor-map-card:active { background: #dee9fa; }
+.visitor-map-details[open] .visitor-map-card { border-color: #a8bfdf; }
+@media (hover: hover) and (pointer: fine) {
+  .visitor-map-card:hover { border-color: #a8bfdf; }
+}
+
+.visitor-map-world { display: block; width: 100%; height: 100%; }
+.visitor-map-halo { fill: var(--site-accent); opacity: .12; }
+.visitor-map-ring { fill: none; stroke: var(--site-accent); stroke-width: 1.5; opacity: .65; }
+.visitor-map-dot { fill: var(--site-accent); stroke: #fff; stroke-width: 1.5; }
+
+.visitor-map-counter {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: baseline;
-  gap: 4px 8px;
-  text-align: center;
+  min-width: 0;
+  padding: 8px 3px;
+  border: 1px solid #fff;
+  border-radius: 9px;
+  background: #f8fbff;
+  color: var(--site-accent);
+  box-shadow: 0 1px 3px #2c51911a, 0 3px 8px #2c519108;
+  line-height: 1.2;
 }
 
+.visitor-map-beacon {
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #c6d7ef;
+  border-radius: 50%;
+  background: var(--site-accent);
+  box-shadow: 0 0 0 2px #e7effb;
+}
+
+.visitor-map-beacon:not([data-state="ready"]) { background: #9baac0; }
+.visitor-map-counter strong { color: var(--site-accent); font-size: 18px; font-weight: 600; letter-spacing: -.5px; font-variant-numeric: tabular-nums; }
+.visitor-map-unit { margin-top: 3px; font-size: 8px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.visitor-map-period { width: 100%; margin-top: 9px; padding-top: 7px; border-top: 1px solid #dce6f5; font-size: 8px; font-weight: 500; letter-spacing: .04em; text-align: center; text-transform: uppercase; }
+
+.visitor-map-panel { padding: 14px 2px 0; }
+.visitor-map-totals { color: var(--site-accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+.visitor-map-since { font-size: 12px; }
+.visitor-map-status:empty { display: none; }
 .visitor-map-retry {
   min-height: 44px;
-  padding: 0 8px;
+  padding: 0;
   border: 0;
   background: none;
   color: var(--site-accent);
@@ -858,44 +886,17 @@ li p {
   cursor: pointer;
 }
 
-.visitor-map-details { margin-top: 8px; }
-.visitor-map-details summary {
-  width: fit-content;
-  min-height: 44px;
-  box-sizing: border-box;
-  margin: 0 auto;
-  padding: 10px 4px;
-  color: var(--site-accent);
-  cursor: pointer;
-}
-
-.visitor-map-details summary:focus-visible,
-.visitor-map-retry:focus-visible {
-  outline: 2px solid var(--site-accent);
-  outline-offset: 3px;
-  border-radius: 3px;
-}
-
-.visitor-map-countries {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: 4px 32px;
-  margin: 8px 0 16px;
-  padding: 0;
-  list-style: none;
-}
-
-.visitor-map-countries li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--site-line);
-}
-
+.visitor-map-countries { margin: 8px 0 12px; padding: 0; list-style: none; }
+.visitor-map-countries:empty { display: none; }
+.visitor-map-countries li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--site-line); }
 .visitor-map-countries span { overflow-wrap: anywhere; }
 .visitor-map-countries strong { font-weight: 500; font-variant-numeric: tabular-nums; }
-.visitor-map-note { text-align: center; }
+.visitor-map-note { font-size: 12px; }
+
+@media (max-width: 600px) {
+  #footer { grid-template-columns: minmax(0, 1fr); }
+  .footer-info { min-height: 0; }
+}
 
 .skip-link {
   position: absolute;
@@ -1042,12 +1043,6 @@ li p {
     height: 64px;
   }
 
-  .footer-credit {
-    grid-column: 1 / -1;
-    flex-basis: 100%;
-    margin-left: 0;
-    text-align: left;
-  }
 }
 
 @media (max-width: 480px) {

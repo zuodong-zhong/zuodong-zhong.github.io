@@ -7,7 +7,9 @@
   const since = root.querySelector('[data-visitor-since]');
   const points = root.querySelector('[data-visitor-points]');
   const countries = root.querySelector('[data-visitor-countries]');
-  const details = root.querySelector('[data-visitor-details]');
+  const compactCount = root.querySelector('[data-visitor-count]');
+  const beacon = root.querySelector('[data-visitor-beacon]');
+  const card = root.querySelector('.visitor-map-card');
   const retry = root.querySelector('[data-visitor-retry]');
   const configured = document.querySelector('meta[name="visitor-map-endpoint"]')?.content.trim();
   let endpoint;
@@ -36,7 +38,11 @@
     retry.hidden = state !== 'error';
     totals.hidden = !data;
     since.hidden = !data?.since;
-    details.hidden = !data?.countries.length;
+    compactCount.textContent = data
+      ? new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 }).format(data.total)
+      : state === 'error' || state === 'unavailable' ? '!' : '—';
+    beacon.setAttribute('data-state', state);
+    card.setAttribute('title', status.textContent || text('View visitor statistics', '查看地区统计'));
     if (!data) return;
 
     const count = data.countries.filter(({ country }) => country !== 'ZZ').length;
@@ -44,6 +50,7 @@
       `${number.format(data.total)} ${data.total === 1 ? 'visit' : 'visits'} · ${number.format(count)} ${count === 1 ? 'region' : 'regions'}`,
       `${number.format(data.total)} 次访问 · ${number.format(count)} 个地区`,
     );
+    card.setAttribute('title', totals.textContent);
     since.textContent = data.since ? text(`Since ${data.since} · All time`, `自 ${data.since} 起累计`) : '';
 
     countries.replaceChildren(...data.countries.map(({ country, visits }) => {
@@ -56,14 +63,19 @@
       return item;
     }));
     points.replaceChildren(...data.locations.map(({ country, latitude, longitude, visits }) => {
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      dot.setAttribute('cx', (longitude + 180) * 2);
-      dot.setAttribute('cy', (90 - latitude) * 2);
-      dot.setAttribute('r', Math.min(9, 3 + Math.log2(visits + 1)));
+      const marker = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      marker.setAttribute('transform', `translate(${(longitude + 180) * 2} ${(90 - latitude) * 2})`);
+      const radius = Math.min(10, 5 + Math.log2(visits + 1));
+      for (const [kind, r] of [['halo', radius + 6], ['ring', radius + 2], ['dot', radius * .6]]) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('class', `visitor-map-${kind}`);
+        circle.setAttribute('r', r);
+        marker.append(circle);
+      }
       const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
       title.textContent = text(`${countryName(country)} · ${number.format(visits)} visits`, `${countryName(country)} · ${number.format(visits)} 次访问`);
-      dot.append(title);
-      return dot;
+      marker.append(title);
+      return marker;
     }));
   }
 

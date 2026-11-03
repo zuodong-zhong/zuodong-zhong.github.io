@@ -20,12 +20,13 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 
 ## Visitor map
 
-- Extend the existing academic homepage with a quiet 640px world map at the footer. The map answers where readers come from; totals and an expandable region list provide an accessible text equivalent.
-- Follow the supplied Haoquan Fang reference's small footer placement and light map. Keep this site's system font, blue accent, hairline rules and 8px spacing. Visual variation 2/10 (blend into the existing site), motion 1/10 (static), density 4/10 (map plus a short summary).
+- Use a compact 240 × 120px visitor card at the right of the footer, following the user's 2026-11-04 screenshot. Keep the copyright and template credit together on the left. On phones, the card sits below that text and retains its small size.
+- The card pairs a pale blue map on the left with a narrow white statistics panel on the right: a location dot, compact visit count, unit and explicit all-time label. White land outlines, blue ring markers and the existing `--site-accent` (#2c5191) adapt the reference's purple treatment to this site's identity. Visual variation 2/10, static motion 1/10, compact information density 6/10.
 - From the existing Linear reference, retain the 14px compact link scale, medium 500 label weight (adapted from 510), and thin separators. Keep the site's own light palette and font. The map silhouette, tabular totals, branded focus rings, native disclosure and fine list rules provide detail without decorative animation.
 - Use Natural Earth's public-domain land outlines and an equirectangular projection. Markers use this site's blue, with radius increasing with visit count. Location is rounded to a one-degree grid; no precise location is shown.
 - Show actual data only. A service that has not been connected shows unavailable statistics, a connected empty service shows an empty map, and request failures offer a retry. No example traffic is included in the public page.
-- The native details control expands region counts and works with keyboard and touch. Loading the map is deferred until near the viewport; tracking is independent of scrolling and obeys the existing analytics exclusion.
+- The entire card is a native details control, with a visible focus ring; expanding it reveals full counts, region names, since date and failure recovery. Keep loading/unavailable indicators distinct from a true zero. Loading the map is deferred until near the viewport; tracking is independent of scrolling and obeys the existing analytics exclusion.
+- Keep the existing cumulative data contract. The reference's 30-day caption must not be copied onto all-time data. No service redeployment or data migration is required for this visual change.
 - Verify both languages, a narrow viewport, empty/error states, actual marker projection, duplicate visit IDs, invalid origins, and local/owner tracking exclusions. Deployment and live collection require a separately verified Cloudflare Worker and D1 binding.
 
 ### Visitor map verification (2026-11-03)
@@ -34,6 +35,12 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 - Local fixtures cover populated, empty and unavailable responses, and retry after failure; the fixture is visibly marked as test data and excluded from publication. Browser console checks reported no errors.
 - All 27 repository tests passed, including service aggregation against real SQLite and the shared analytics exclusion gates.
 - Deployed the service as a Cloudflare Pages advanced-mode Worker, bound its dedicated D1 database, and verified that the public `/stats` endpoint returns HTTP 200 with an empty initial dataset and the homepage's CORS origin.
+
+### Compact card verification (2026-11-04)
+
+- Measured the rendered card at 240 × 120px in a 1280px desktop viewport, aligned with the footer's right edge. Inspected the 390px phone layout in both languages with no horizontal overflow.
+- Verified the compact English count (1.1K), Chinese count (1100), full region list, keyboard disclosure, true-zero state and recovery after a failed request using clearly marked local-only fixtures.
+- Kept the copyright block independent of the expanded statistics height. Browser error logs were empty, and all 27 repository tests passed. Only presentation code and cache versions changed; the existing service and tracking exclusions are retained.
 
 ## Header verification
 
