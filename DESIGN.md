@@ -20,7 +20,7 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 
 ## Visitor map
 
-- Use a compact 240 × 120px visitor card at the right of the footer, following the user's 2026-11-04 screenshot. Vertically center the copyright and template credit against the card, using the shared sans-serif font at 13px and 12px with a 4px gap. On phones, center both the text and the card in a compact stack. Opening details must not move the copyright block.
+- Use a compact 170 × 85px visitor card at the right of the footer, following the user's 2026-11-04 size correction. Vertically center the copyright and template credit against the card, retaining their original inherited serif font, 14px/small sizes and 6px gap. Only the map uses the shared sans-serif UI font. On phones, center both the text and the card in a compact stack. Opening details must not move the copyright block.
 - The card pairs a pale blue map on the left with a narrow white statistics panel on the right: a location dot, compact visit count, unit and explicit single-line all-time label. White land outlines, blue ring markers and the existing `--site-accent` (#2c5191) adapt the reference's purple treatment to this site's identity. Visual variation 2/10, hover motion 2/10, compact information density 6/10.
 - The requested hover is grounded in the reference homepage's public `assets/css/main.css`, checked on 2026-11-04: a 2px lift, 160ms ease transition, soft border and 0 8px 24px accent shadow at 14% opacity. Use our blue, fade a fixed shadow with opacity, and only enable the lift for fine pointers with hover. Reduced-motion users retain the color/shadow feedback without movement or animation; keyboard focus retains its blue outline.
 - From the existing Linear reference, retain the 14px compact link scale, medium 500 label weight (adapted from 510), and thin separators. Keep the site's own light palette and font. The map silhouette, tabular totals, branded focus rings, native disclosure and fine list rules provide detail without decorative animation.
@@ -48,6 +48,11 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 - Inspected the revised desktop footer at 1280px in both languages: the two text lines sit at the card's vertical center, and the English all-time label stays on one line.
 - Triggered actual pointer hover and observed the animated upward transform and blue shadow; leaving the card restored its resting state. Clicking and pressing Enter still toggle the region details.
 - At 390px the card and copyright are centered, with a 240px card and no horizontal overflow. Changes are limited to CSS and its cache version; collection code and service data are untouched.
+
+### Smaller card and original typography (2026-11-04)
+
+- Reduced the card to 170 × 85px, approximately half its previous area, including proportionally smaller counter spacing. Confirmed the rendered dimensions, no counter overflow, and the original inherited Georgia/serif typography at 14px for copyright.
+- Checked desktop and narrow layouts with no horizontal overflow, Chinese footer text, and keyboard expansion of the full visitor statistics. The existing blue hover effect and analytics code are unchanged.
 
 ## Header verification
 
