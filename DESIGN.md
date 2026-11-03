@@ -20,8 +20,9 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 
 ## Visitor map
 
-- Use a compact 240 × 120px visitor card at the right of the footer, following the user's 2026-11-04 screenshot. Keep the copyright and template credit together on the left. On phones, the card sits below that text and retains its small size.
-- The card pairs a pale blue map on the left with a narrow white statistics panel on the right: a location dot, compact visit count, unit and explicit all-time label. White land outlines, blue ring markers and the existing `--site-accent` (#2c5191) adapt the reference's purple treatment to this site's identity. Visual variation 2/10, static motion 1/10, compact information density 6/10.
+- Use a compact 240 × 120px visitor card at the right of the footer, following the user's 2026-11-04 screenshot. Vertically center the copyright and template credit against the card, using the shared sans-serif font at 13px and 12px with a 4px gap. On phones, center both the text and the card in a compact stack. Opening details must not move the copyright block.
+- The card pairs a pale blue map on the left with a narrow white statistics panel on the right: a location dot, compact visit count, unit and explicit single-line all-time label. White land outlines, blue ring markers and the existing `--site-accent` (#2c5191) adapt the reference's purple treatment to this site's identity. Visual variation 2/10, hover motion 2/10, compact information density 6/10.
+- The requested hover is grounded in the reference homepage's public `assets/css/main.css`, checked on 2026-11-04: a 2px lift, 160ms ease transition, soft border and 0 8px 24px accent shadow at 14% opacity. Use our blue, fade a fixed shadow with opacity, and only enable the lift for fine pointers with hover. Reduced-motion users retain the color/shadow feedback without movement or animation; keyboard focus retains its blue outline.
 - From the existing Linear reference, retain the 14px compact link scale, medium 500 label weight (adapted from 510), and thin separators. Keep the site's own light palette and font. The map silhouette, tabular totals, branded focus rings, native disclosure and fine list rules provide detail without decorative animation.
 - Use Natural Earth's public-domain land outlines and an equirectangular projection. Markers use this site's blue, with radius increasing with visit count. Location is rounded to a one-degree grid; no precise location is shown.
 - Show actual data only. A service that has not been connected shows unavailable statistics, a connected empty service shows an empty map, and request failures offer a retry. No example traffic is included in the public page.
@@ -41,6 +42,12 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 - Measured the rendered card at 240 × 120px in a 1280px desktop viewport, aligned with the footer's right edge. Inspected the 390px phone layout in both languages with no horizontal overflow.
 - Verified the compact English count (1.1K), Chinese count (1100), full region list, keyboard disclosure, true-zero state and recovery after a failed request using clearly marked local-only fixtures.
 - Kept the copyright block independent of the expanded statistics height. Browser error logs were empty, and all 27 repository tests passed. Only presentation code and cache versions changed; the existing service and tracking exclusions are retained.
+
+### Footer alignment and hover follow-up (2026-11-04)
+
+- Inspected the revised desktop footer at 1280px in both languages: the two text lines sit at the card's vertical center, and the English all-time label stays on one line.
+- Triggered actual pointer hover and observed the animated upward transform and blue shadow; leaving the card restored its resting state. Clicking and pressing Enter still toggle the region details.
+- At 390px the card and copyright are centered, with a 240px card and no horizontal overflow. Changes are limited to CSS and its cache version; collection code and service data are untouched.
 
 ## Header verification
 
