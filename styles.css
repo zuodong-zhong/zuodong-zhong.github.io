@@ -119,6 +119,26 @@ body {
   border: none;
 }
 
+.portrait-illustration {
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portrait-frame.is-illustration-ready:hover .portrait-illustration {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-illustration { transition: none; }
+}
+
 .portrait-caption {
   margin: 10px 0 0;
   text-align: center;

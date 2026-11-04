@@ -8,6 +8,13 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 - Shared navigation uses the existing system sans-serif stack and `site-theme.css` tokens. Blue identifies links and the current section.
 - Blog content and article reading text use the homepage's serif stack. Navigation and search/filter controls use the shared sans-serif UI stack. Articles retain their individual reading palettes and layouts.
 
+## Portrait hover
+
+- Keep the real presentation photo as the initial portrait, with its existing crop and 3:4 frame. The user-approved hand-drawn version appears on fine-pointer hover and fades back when the pointer leaves; use an interruptible 300ms opacity transition with no scale, lift or layout movement.
+- Fit the full square illustration inside the frame on white so the hair and both hands remain visible. Reuse the existing 14px rounded frame and restrained shadow. The alternate image is decorative and does not duplicate the accessible name.
+- Enable the reveal only after the illustration has decoded; loading failure or disabled JavaScript keeps the real photo. Touch devices retain the real photo, and reduced-motion mode switches without animation.
+- Verified the default, pointer-enter and pointer-leave states in the desktop browser: illustration opacity returns from 1 to 0 and the 220 × 293px frame stays fixed. At 390px the 120 × 160px portrait and existing text layout remain intact without horizontal overflow.
+
 ## Blog consistency
 
 - Match the homepage's white background, blue headings and links, 1040px content width, serif text, and normal letter spacing. Keep the existing archive layout, cover artwork, series order, and article content. Visual variation 2/10, motion 1/10, information density 6/10: familiar academic styling, quiet interactions, readable summaries.

@@ -27,6 +27,15 @@
 })();
 
 (() => {
+  // Keep the real photo visible until the decorative hover portrait can render.
+  const illustration = document.querySelector('[data-portrait-illustration]');
+  if (!illustration) return;
+  illustration.decode().then(() => {
+    illustration.closest('.portrait-frame')?.classList.add('is-illustration-ready');
+  }).catch(() => { /* A missing illustration leaves the original photo intact. */ });
+})();
+
+(() => {
   // Gather the wide header into a floating pill as the reader leaves the top.
   const header = document.querySelector('.site-header');
   const inner = header?.querySelector('.site-header-inner');
