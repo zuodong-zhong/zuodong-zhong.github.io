@@ -78,6 +78,7 @@ html { scroll-padding-top: calc(var(--site-header-offset) + 20px); }
   white-space: nowrap;
   transition: transform var(--site-header-motion), color .2s ease;
 }
+.site-name:lang(zh) { letter-spacing: .12em; }
 .site-name:hover { color: var(--site-accent); }
 .site-nav { grid-area: nav; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
 .site-nav a {

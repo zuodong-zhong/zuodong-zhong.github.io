@@ -7,6 +7,7 @@
   --home-rule: #c5cad3;
   --section-gap: 40px;
   --entry-gap: 24px;
+  --publication-width: 260px;
   --portrait-width: 220px;
   --profile-gap: 56px;
 }
@@ -158,29 +159,142 @@ body {
 .profile-contact {
   display: grid;
   justify-items: center;
-  gap: 6px;
   text-align: center;
 }
 
-.profile-email {
-  font-size: 14px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
 .profile-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2px 8px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(44px, 1fr));
+  justify-items: center;
+  gap: 4px 0;
+  width: min(100%, 220px);
   margin: 0;
-  font-size: 15px;
-  line-height: 1.5;
 }
 
-.profile-links a,
-.profile-links button {
+.profile-links .profile-link {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: #62666d;
+  font-family: var(--site-font);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-link::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: #f0f2f3;
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: none;
+}
+
+.profile-link svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.profile-link[popovertarget] svg {
+  width: 22px;
+}
+
+.profile-link-wordmark {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.profile-link-label {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--site-ink);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
   white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0s linear;
+}
+
+.profile-link-detail {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.profile-link:nth-child(4n + 1) .profile-link-label {
+  left: 0;
+  transform: none;
+}
+
+.profile-links .profile-link:focus-visible,
+.profile-links .profile-link:active {
+  color: var(--site-ink);
+}
+
+.profile-link:focus-visible::before {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.profile-link:focus-visible .profile-link-label {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile-links .profile-link:hover {
+    color: var(--site-ink);
+  }
+
+  .profile-link:hover::before {
+    opacity: 1;
+    transform: none;
+  }
+
+  .profile-link:hover:not(:focus-visible) .profile-link-label {
+    opacity: 1;
+    transition-delay: 1s;
+  }
+}
+
+.profile-link:active::before {
+  opacity: 1;
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-link::before {
+    transform: none;
+    transition: none;
+  }
+
+  .profile-link:active::before {
+    transform: none;
+  }
 }
 
 h1, h2, h3 {
@@ -214,7 +328,8 @@ h2 {
 }
 
 /* Section headings sit on a hairline rule, as in the original academic layout. */
-#layout-content > h2 {
+#layout-content > h2,
+.section-heading {
   margin: var(--section-gap) 0 16px;
   padding: 0 0 6px;
   line-height: 1.3;
@@ -441,7 +556,7 @@ li p {
 
 .publication-entry {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: var(--publication-width) minmax(0, 1fr);
   align-items: start;
   column-gap: var(--entry-gap);
   margin: 0;
@@ -621,11 +736,15 @@ li p {
   line-height: 1.5;
 }
 
-.publication-title {
-  display: block;
+.publication-title,
+.writing-title {
   font-size: 1.05em;
   font-weight: bold;
   line-height: 1.4;
+}
+
+.publication-title {
+  display: block;
   margin-bottom: 0.55em;
 }
 
@@ -656,15 +775,12 @@ li p {
   margin-top: 0;
 }
 
-/* Writing: posts listed like publications, with a small cover beside each title. */
+/* Writing: equal columns, each ordered cover → date → title. Rows follow content height. */
 .section-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin: var(--section-gap) 0 16px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--home-rule);
 }
 
 .section-heading h2 {
@@ -680,7 +796,8 @@ li p {
 
 .writing-list {
   display: grid;
-  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px var(--entry-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -688,18 +805,24 @@ li p {
 
 .writing-list > li {
   margin: 0;
+  min-width: 0;
 }
 
 .writing-card {
-  display: grid;
-  grid-template-columns: 160px minmax(0, 1fr);
-  align-items: center;
-  gap: var(--entry-gap);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  border-radius: 8px;
   color: var(--home-text);
 }
 
 .writing-card:hover {
   text-decoration: none;
+}
+
+.writing-card:focus-visible {
+  outline-offset: 6px;
 }
 
 .writing-cover {
@@ -709,33 +832,44 @@ li p {
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  border: 1px solid var(--site-line);
-  border-radius: 6px;
-}
-
-.writing-text {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-  line-height: 1.5;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f5;
 }
 
 .writing-title {
+  margin: 8px 0 0;
+  padding: 0;
   color: var(--site-accent);
-  font-size: 1.05em;
-  font-weight: bold;
-  line-height: 1.4;
+  text-wrap: pretty;
 }
 
-.writing-card:hover .writing-title {
-  text-decoration: underline dotted gray;
+.writing-card:hover .writing-title,
+.writing-card:focus-visible .writing-title {
+  color: var(--site-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
 .writing-meta {
-  color: #666666;
+  margin-top: 16px;
+  color: var(--site-muted);
   font-size: 0.85em;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .writing-list {
+    grid-template-columns: repeat(2, minmax(0, var(--publication-width)));
+  }
+}
+
+@media (max-width: 560px) {
+  .writing-list {
+    grid-template-columns: minmax(0, var(--publication-width));
+  }
 }
 
 .institution-entry {
@@ -960,16 +1094,12 @@ li p {
 
 @media (max-width: 840px) {
   :root {
+    --publication-width: 220px;
     --portrait-width: 200px;
     --profile-gap: 40px;
   }
 
-  .profile-email {
-    font-size: 12px;
-  }
-
   .publication-entry {
-    grid-template-columns: 220px minmax(0, 1fr);
     column-gap: 24px;
   }
 
@@ -996,6 +1126,7 @@ li p {
 
 @media (max-width: 620px) {
   :root {
+    --publication-width: 320px;
     --portrait-width: 120px;
   }
 
@@ -1029,14 +1160,6 @@ li p {
     text-align: left;
   }
 
-  .profile-email {
-    font-size: 14px;
-  }
-
-  .profile-links {
-    justify-content: flex-start;
-  }
-
   .profile-bio {
     grid-area: bio;
   }
@@ -1060,12 +1183,6 @@ li p {
     font-size: 20px;
   }
 
-  .writing-card {
-    grid-template-columns: 96px minmax(0, 1fr);
-    align-items: start;
-    gap: 14px;
-  }
-
   .portrait-caption {
     font-size: 11px;
   }
@@ -1080,7 +1197,7 @@ li p {
   }
 
   .publication-figure {
-    width: min(100%, 320px);
+    width: min(100%, var(--publication-width));
   }
 
   .institution-entry {

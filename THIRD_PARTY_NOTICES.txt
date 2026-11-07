@@ -1,3 +1,15 @@
+Personal profile link symbols
+GitHub, X (x-twitter), and WeChat (weixin): Font Awesome Free 6.7.2
+Copyright Fonticons, Inc.
+Source: https://github.com/FortAwesome/Font-Awesome/tree/6.7.2/svgs/brands
+Icons licensed under Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/
+https://fontawesome.com/license/free
+The original paths are embedded in index.html; size and color are set by CSS.
+The scholar symbol is a locally drawn graduation-cap-and-person pictogram.
+The 知乎 and RED labels are typeset text. Brand names and symbols identify the
+existing profile destinations; their trademarks remain with their owners.
+
 News timeline structure
 Source: https://github.com/Cuzyoung/ZiyangGong.github.io
 The News list adapts the date-and-description timeline structure from Ziyang

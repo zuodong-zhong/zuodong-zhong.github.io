@@ -13,8 +13,8 @@
   <meta property="og:description" content="Ph.D. student at Peking University, researching efficient architectures and sparse attention for long-video understanding with multimodal large language models.">
   <link rel="icon" type="image/jpeg" href="assets/images/头像.jpg?v=9dfdd1931b47">
   <link rel="stylesheet" href="site-theme.css?v=0325a12068d1">
-  <link rel="stylesheet" href="styles.css?v=09482d14dda9">
-  <link rel="stylesheet" href="site-header.css?v=0d749170a145">
+  <link rel="stylesheet" href="styles.css?v=aaa62f649a40">
+  <link rel="stylesheet" href="site-header.css?v=9e99cc62615e">
   <script src="site.js?v=a5639818dc7d" defer></script>
   <script src="analytics.js?v=c43d561513f5" defer></script>
   <script src="visitor-map.js?v=77a4c749ceaf" defer></script>
@@ -61,15 +61,37 @@
           <p class="portrait-caption"><strong>Simple and Effective</strong><span data-zh="简洁且有效，是我的科研追求。">My research philosophy.</span></p>
         </div>
         <div class="profile-contact">
-          <a class="profile-email" href="mailto:zhongzuodong26@stu.pku.edu.cn">zhongzuodong26<wbr>@stu.pku.edu.cn</a>
-          <p class="profile-links">
-            <a href="https://github.com/zuodong-zhong">[GitHub]</a>
-            <a href="https://scholar.google.com/citations?user=mVHcUnMAAAAJ&amp;hl=zh-CN">[Google Scholar]</a>
-            <a href="https://www.zhihu.com/people/11-30-9-68/posts" data-zh="[知乎]">[Zhihu]</a>
-            <a href="https://www.xiaohongshu.com/user/profile/62b06ff9000000001b02a597" data-zh="[小红书]">[Xiaohongshu]</a>
-            <a href="https://x.com/Zhzdpaaa">[X]</a>
-            <button class="contact-button" type="button" popovertarget="wechat-contact" data-zh="[微信]">[WeChat]</button>
-          </p>
+          <div class="profile-links" role="group" aria-label="Personal links / 个人链接">
+            <a class="profile-link" href="mailto:zhongzuodong26@stu.pku.edu.cn" aria-labelledby="profile-email-label">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 6 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="profile-link-label" id="profile-email-label"><span data-zh="邮箱">Email</span> <span class="profile-link-detail">zhongzuodong26@stu.pku.edu.cn</span></span>
+            </a>
+            <a class="profile-link" href="https://scholar.google.com/citations?user=mVHcUnMAAAAJ&amp;hl=zh-CN" aria-labelledby="profile-scholar-label">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 1.5 1 9l5 3.4a7.5 7.5 0 0 1 12 0L23 9 12 1.5Z"/><circle cx="12" cy="17" r="6.5"/></svg>
+              <span class="profile-link-label" id="profile-scholar-label" data-zh="谷歌学术">Google Scholar</span>
+            </a>
+            <!-- GitHub, X and WeChat symbols: Font Awesome Free 6.7.2, CC BY 4.0; see THIRD_PARTY_NOTICES.txt. -->
+            <a class="profile-link" href="https://github.com/zuodong-zhong" aria-labelledby="profile-github-label">
+              <svg viewBox="0 0 496 512" aria-hidden="true" focusable="false"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+              <span class="profile-link-label" id="profile-github-label">GitHub</span>
+            </a>
+            <a class="profile-link" href="https://x.com/Zhzdpaaa" aria-labelledby="profile-x-label">
+              <svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+              <span class="profile-link-label" id="profile-x-label">X</span>
+            </a>
+            <a class="profile-link" href="https://www.zhihu.com/people/11-30-9-68/posts" aria-labelledby="profile-zhihu-label">
+              <span class="profile-link-wordmark" lang="zh-CN" aria-hidden="true">知乎</span>
+              <span class="profile-link-label" id="profile-zhihu-label" data-zh="知乎">Zhihu</span>
+            </a>
+            <a class="profile-link" href="https://www.xiaohongshu.com/user/profile/62b06ff9000000001b02a597" aria-labelledby="profile-red-label">
+              <span class="profile-link-wordmark" aria-hidden="true">RED</span>
+              <span class="profile-link-label" id="profile-red-label" data-zh="小红书">Xiaohongshu</span>
+            </a>
+            <button class="profile-link" type="button" popovertarget="wechat-contact" aria-labelledby="profile-wechat-label">
+              <svg viewBox="0 0 576 512" aria-hidden="true" focusable="false"><path d="M385.2 167.6c6.4 0 12.6.3 18.8 1.1C387.4 90.3 303.3 32 207.7 32 100.5 32 13 104.8 13 197.4c0 53.4 29.3 97.5 77.9 131.6l-19.3 58.6 68-34.1c24.4 4.8 43.8 9.7 68.2 9.7 6.2 0 12.1-.3 18.3-.8-4-12.9-6.2-26.6-6.2-40.8-.1-84.9 72.9-154 165.3-154zm-104.5-52.9c14.5 0 24.2 9.7 24.2 24.4 0 14.5-9.7 24.2-24.2 24.2-14.8 0-29.3-9.7-29.3-24.2.1-14.7 14.6-24.4 29.3-24.4zm-136.4 48.6c-14.5 0-29.3-9.7-29.3-24.2 0-14.8 14.8-24.4 29.3-24.4 14.8 0 24.4 9.7 24.4 24.4 0 14.6-9.6 24.2-24.4 24.2zM563 319.4c0-77.9-77.9-141.3-165.4-141.3-92.7 0-165.4 63.4-165.4 141.3S305 460.7 397.6 460.7c19.3 0 38.9-5.1 58.6-9.9l53.4 29.3-14.8-48.6C534 402.1 563 363.2 563 319.4zm-219.1-24.5c-9.7 0-19.3-9.7-19.3-19.6 0-9.7 9.7-19.3 19.3-19.3 14.8 0 24.4 9.7 24.4 19.3 0 10-9.7 19.6-24.4 19.6zm107.1 0c-9.7 0-19.3-9.7-19.3-19.6 0-9.7 9.7-19.3 19.3-19.3 14.5 0 24.4 9.7 24.4 19.3.1 10-9.9 19.6-24.4 19.6z"/></svg>
+              <span class="profile-link-label" id="profile-wechat-label" data-zh="微信">WeChat</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -144,44 +166,44 @@
       </li>
     </ul>
 
-    <!-- Selected posts for the homepage. The complete collection lives in blog/index.html.
-         Thumbnails are 360px copies of each cover (blog/<slug>/thumb.jpg). -->
-    <div class="section-heading">
-      <h2 id="writing" data-zh="博客">Blogs</h2>
-      <a href="blog/" data-zh="全部文章 →">All posts →</a>
-    </div>
-    <ul class="writing-list" role="list">
-      <li>
-        <a class="writing-card" href="blog/ddpm/">
-          <img class="writing-cover" src="blog/ddpm/thumb.jpg" alt="" width="360" height="189" loading="lazy" decoding="async">
-          <span class="writing-text">
-            <span class="writing-title">DDPM</span>
-            <span class="writing-subtitle" data-zh="一步加噪，逐步去噪">Adding noise in one step, denoising step by step</span>
-            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 1">Study 01</span> · <time datetime="2025-09-09">2025.09.09</time> <span data-zh="更新">Updated</span> · <span data-zh="18 分钟阅读">18 min read</span></span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="writing-card" href="blog/ddim/">
-          <img class="writing-cover" src="blog/ddim/thumb.jpg" alt="" width="360" height="190" loading="lazy" decoding="async">
-          <span class="writing-text">
-            <span class="writing-title">DDIM</span>
-            <span class="writing-subtitle" data-zh="相同边缘分布，跳步生成">The same marginals, fewer sampling steps</span>
-            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 2">Study 02</span> · <time datetime="2025-02-21">2025.02.21</time> <span data-zh="更新">Updated</span> · <span data-zh="8 分钟阅读">8 min read</span></span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="writing-card" href="blog/score-based-generative-models/">
-          <img class="writing-cover" src="blog/score-based-generative-models/thumb.jpg" alt="" width="360" height="190" loading="lazy" decoding="async">
-          <span class="writing-text">
-            <span class="writing-title">Score-based Generative Models</span>
-            <span class="writing-subtitle" data-zh="真正意义的“扩散”模型，从梯度角度理解加噪去噪">Understanding diffusion and denoising through gradients</span>
-            <span class="writing-meta">GO UP! Diffusion + RL · <span data-zh="学习 3">Study 03</span> · <time datetime="2025-09-09">2025.09.09</time> <span data-zh="更新">Updated</span> · <span data-zh="15 分钟阅读">15 min read</span></span>
-          </span>
-        </a>
-      </li>
-    </ul>
+    <!-- Selected diffusion notes follow their learning order, followed by a quantum introduction.
+         The complete collection and metadata live in the archive. -->
+    <section class="writing-section" aria-labelledby="writing">
+      <div class="section-heading">
+        <h2 id="writing" data-zh="博客">Blogs</h2>
+        <a href="blog/" data-zh="全部文章 →">All posts →</a>
+      </div>
+      <ul class="writing-list" role="list">
+        <li>
+          <a class="writing-card" href="blog/ddpm/" aria-labelledby="writing-ddpm-title">
+            <img class="writing-cover" src="blog/ddpm/cover.jpg" alt="" width="1729" height="910" loading="lazy">
+            <span class="writing-meta"><time datetime="2025-09-09" data-zh="2025 年 9 月 9 日">Sep 9, 2025</time> · <span data-zh="更新">Updated</span></span>
+            <h3 class="writing-title" id="writing-ddpm-title" data-zh="DDPM：一步加噪，逐步去噪">DDPM: Adding noise in one step, denoising step by step</h3>
+          </a>
+        </li>
+        <li>
+          <a class="writing-card" href="blog/ddim/" aria-labelledby="writing-ddim-title">
+            <img class="writing-cover" src="blog/ddim/cover.jpg" alt="" width="1727" height="911" loading="lazy">
+            <span class="writing-meta"><time datetime="2025-02-21" data-zh="2025 年 2 月 21 日">Feb 21, 2025</time> · <span data-zh="更新">Updated</span></span>
+            <h3 class="writing-title" id="writing-ddim-title" data-zh="DDIM：相同边缘分布，跳步生成">DDIM: The same marginals, fewer sampling steps</h3>
+          </a>
+        </li>
+        <li>
+          <a class="writing-card" href="blog/score-based-generative-models/" aria-labelledby="writing-score-title">
+            <img class="writing-cover" src="blog/score-based-generative-models/diffusion-cover.jpg" alt="" width="1726" height="911" loading="lazy">
+            <span class="writing-meta"><time datetime="2025-09-09" data-zh="2025 年 9 月 9 日">Sep 9, 2025</time> · <span data-zh="更新">Updated</span></span>
+            <h3 class="writing-title" id="writing-score-title" data-zh="Score-based Generative Models：真正意义的“扩散”模型，从梯度角度理解加噪去噪">Score-based Generative Models: Understanding diffusion and denoising through gradients</h3>
+          </a>
+        </li>
+        <li>
+          <a class="writing-card" href="blog/quantum-computing-basics/" aria-labelledby="writing-quantum-title">
+            <img class="writing-cover" src="blog/quantum/basics-cover.svg" alt="" width="1400" height="740" loading="lazy">
+            <span class="writing-meta"><time datetime="2026-10-16" data-zh="2026 年 10 月 16 日">Oct 16, 2026</time> · <span data-zh="发布">Posted</span></span>
+            <h3 class="writing-title" id="writing-quantum-title" data-zh="量子计算入门：从复振幅、相位到测量与纠缠">Quantum Computing: From amplitudes and phase to measurement and entanglement</h3>
+          </a>
+        </li>
+      </ul>
+    </section>
 
     <h2 id="experience" data-zh="科研经历">Research Experience</h2>
     <ul class="experience-list">

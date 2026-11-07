@@ -8,6 +8,16 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 - Shared navigation uses the existing system sans-serif stack and `site-theme.css` tokens. Blue identifies links and the current section.
 - Blog content and article reading text use the homepage's serif stack. Navigation and search/filter controls use the shared sans-serif UI stack. Articles retain their individual reading palettes and layouts.
 
+## Personal links
+
+- Follow the user's selected icon-link detail from the Wenhao Chai screenshots: email joins the six existing destinations in a quiet four-column grid, with four icons on the first row and three on the second. Use neutral gray (#62666d), 19px symbols (22px wide for WeChat), and 16px sans-serif wordmarks for 知乎 and RED.
+- Keep the current homepage layout and typography. Visual variation 2/10, motion 2/10, information density 6/10; the function is immediate access to email, the existing profiles and the WeChat QR code.
+- Retain the existing Linear reference's subdued #62666d neutral and 13px/500 UI labels. Adapt the user's hover reference with a #f0f2f3 background and 10px corners. The background fades and grows from 94% to 100% over an interruptible 180ms transition while the icon darkens. Keep at least 44px click targets and the site's blue focus outline; keyboard focus and reduced-motion background feedback appear immediately.
+- Use inline SVG symbols and text, without an icon font or remote asset dependency. Each control has a name that remains accessible. Its tooltip appears after one second of continuous pointer hover and hides immediately on exit; keyboard focus shows it immediately. Delay only the label, keeping the existing icon/background feedback responsive. Translate the tooltip text on a child span so language switching preserves the icons.
+- Keep all existing link destinations and the native WeChat popover. The email tooltip includes the full address. On phones, retain the same two rows aligned with the biography, and check narrow-screen overflow, both languages and keyboard access.
+- Verified the current version locally at 1280px, 390px and 320px. All seven targets remain at least 44px, the email tooltip fits the narrow viewport, both languages preserve all five SVG symbols, and the mailto address is unchanged. Actual pointer hover shows the gray background with a 180ms transition and leaving restores its transparent state; keyboard focus has an immediate background and visible outline. WeChat still opens and closes normally. All 68 original anchors are preserved.
+- Verified the tooltip delay on GitHub: hidden about 0.4 seconds after pointer entry with a computed 1s delay, visible afterward, and immediately hidden with a 0s delay on exit. Keyboard focus shows the label immediately with a 0s delay. The page stays on the local homepage throughout the interaction check.
+
 ## Portrait hover
 
 - Keep the real presentation photo as the initial portrait, with its existing crop and 3:4 frame. The user-approved hand-drawn version appears on fine-pointer hover and fades back when the pointer leaves; use an interruptible 300ms opacity transition with no scale, lift or layout movement.
@@ -15,7 +25,20 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 - Enable the reveal only after the illustration has decoded; loading failure or disabled JavaScript keeps the real photo. Touch devices retain the real photo, and reduced-motion mode switches without animation.
 - Verified the default, pointer-enter and pointer-leave states in the desktop browser: illustration opacity returns from 1 to 0 and the 220 × 293px frame stays fixed. At 390px the 120 × 160px portrait and existing text layout remain intact without horizontal overflow.
 
-## Blog consistency
+## Homepage blog grid
+
+- Extract the structure from the user's Experiments reference: a full-width heading row with the archive link at the far right, then equal-width columns. Each entry has exactly three visual levels in DOM order: cover, date, and linked article title. Use open whitespace instead of boxed cards, repeated buttons, or a metadata paragraph. The Blogs heading shares the other homepage sections' margin, padding, and hairline rule; its size, weight, color, and line height match those headings.
+- Desktop uses four equal columns that fill the content width, with the shared 24px entry gap and 32px row gaps. Within the 1040px content area, each cover is 242px wide, slightly smaller than the 260px publication figure frames. Cover frames share a 16:9 ratio and 8px corners; the wider ratio reduces visual weight and avoids clipping the quantum cover's lettering. The gap below a cover is 16px and date-to-title spacing is 8px. Article titles share the publication titles' 1.05em size (16.8px), bold weight, 1.4 line height, serif family and blue link color. Dates inherit the homepage's serif font and use the news dates' 0.85em size (13.6px). Titles wrap naturally, without line clamping, fixed card heights, or absolute positioning. CSS Grid aligns the following row to the tallest entry above it.
+- At 900px and below use two columns; at 560px and below use one column. Retain the compact column caps on smaller screens using the publication width: 260px by default, 220px at 840px and below, and 320px at 620px and below. Cards shrink further when their available space is narrower. Keep the heading and archive link on opposite sides at every width. All covers and text align to their column's left edge.
+- Show the three diffusion-model posts in their learning order (DDPM, DDIM, and Score-based Generative Models), followed by Quantum Computing. Preserve the diffusion update dates and label the quantum article's October 16, 2026 posting date as Posted / 发布. Retain the existing bilingual titles, descriptions within the title, actual destinations, and approved artwork. Covers use the archive's original images with lazy loading.
+- Each entry is one native link with a semantic heading as its accessible name, a machine-readable time, and a decorative cover. Keep visible keyboard focus and the archive link. The full blog archive retains its summaries, collections, search and filters.
+
+### Homepage blog grid verification (2026-11-07)
+
+- Verified four entries in one row at a 1280px viewport: all covers measure 242 × 136.125px with 24px gutters and share the same top edge. The initial 16:10 frame clipped the quantum cover's left-hand lettering; the final 16:9 frame preserves it and makes all four covers less prominent. The Blogs heading retains the other sections' spacing and hairline rule.
+- Checked two 220px columns at 820px and a single 320px column at 390px, with no horizontal overflow at any checked width. All four images load, the full Chinese titles wrap naturally, and the added quantum link opens the existing article. Confirmed the restored shared title rule: all four homepage blog titles and both publication titles measure 16.8px with a 23.52px line height. The quantum entry displays Oct 16, 2026 · Posted in English and retains 发布 in Chinese. Verified full English and Chinese titles, the four-column desktop row and the 390px single-column layout without clipping or horizontal overflow. Inspected and saved desktop and Chinese mobile screenshots, then restored the default desktop viewport and English.
+
+## Blog archive consistency
 
 - Match the homepage's white background, blue headings and links, 1040px content width, serif text, and normal letter spacing. Keep the existing archive layout, cover artwork, series order, and article content. Visual variation 2/10, motion 1/10, information density 6/10: familiar academic styling, quiet interactions, readable summaries.
 - Each article card uses the same sequence and spacing: calendar/date, clock/reading time, series/study number, linked title/subtitle, summary, and topic tags. Quantum cards receive the same calendar and clock icons as diffusion cards. Publication and update dates retain their distinct meanings.
@@ -39,6 +62,7 @@ The site presents Zuodong Zhong's research, publications, experience, and learni
 The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/), inspected on 2026-11-02. Its header moves inward after scrolling and reveals a rounded translucent surface. This site adapts those two actions to its existing light palette. The compact navigation scale (13–14px), 8px spacing rhythm, and restrained border/elevation hierarchy also agree with the Linear reference in the qiaomu design catalog; its dark palette and typography are not applied.
 
 - At the top, the name, section links, and language switch span the content width.
+- The Chinese site name uses 0.12em letter spacing for comfortable separation between the three characters. English retains its existing -0.02em tracking; the rule follows the document language across the shared header's expanded, compact and mobile states.
 - Beyond 48px of scrolling, the name and language control move inward around the stationary navigation. The floating surface appears behind them; returning to 24px from the top expands the header.
 - Desktop compact width targets 840px, with measured space for all controls. On phones, the same surface contains two rows, retaining swipeable navigation and the language control.
 - The header's layout height stays constant. Text is translated without scaling, while only the background surface scales. A 280ms interruptible transition connects the states.
@@ -83,3 +107,5 @@ The requested reference is [DeepSeek Harness](https://www.deepseek.com/harness/)
 ## Header verification
 
 Check expanded and compact states at desktop and phone widths; repeated upward/downward scrolling; both languages; chapter anchors; blog and article navigation; and keyboard focus. Confirm that content does not shift during contraction and controls do not overlap or leave the viewport.
+
+- Chinese-name spacing verified on 2026-11-07: 1.92px at the existing 16px font size in expanded and compact desktop headers, and at 390px without overflow or overlap. English retains -0.32px spacing. The refreshed blog archive uses the same Chinese spacing. Shared stylesheet versions are synchronized in the homepage, archive, article sources and generated article pages.
